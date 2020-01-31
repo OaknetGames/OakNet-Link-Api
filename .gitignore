@@ -1,0 +1,24 @@
+# eclipse
+bin
+.metadata
+*.launch
+
+# gradle
+build
+.gradle
+
+# other
+eclipse
+run
+
+Wrapper-1.12.2/.gradle/
+Wrapper-1.12.2/bin/
+Wrapper-1.12.2/build/
+Wrapper-1.12.2/libs/
+Wrapper-1.12.2/run/
+Wrapper-1.12.2/build.gradle
+Updater/bin/
+Updater/sources.txt
+OakNet-Link-Api/bin/
+OakNet-Link-Api/sources.txt
+
