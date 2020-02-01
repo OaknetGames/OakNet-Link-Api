@@ -10,4 +10,6 @@ public interface IMinecraft {
 	
 	public void logError(String error);
 	
+	public void drawRect(int x, int y, int width, int height, int color);
+	
 }

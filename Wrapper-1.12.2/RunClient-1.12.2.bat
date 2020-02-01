@@ -11,7 +11,7 @@ echo Find Source
 dir /s /B ..\OakNet-Link-Api\*.java > ..\OakNet-Link-Api\sources.txt
 dir /s /B ..\Updater\*.java > ..\Updater\sources.txt
 echo Build source
-javac -cp ..\OakNet-Link-Api\libs\slick-util.jar -d ..\bin\oaknetlink-api\ @..\OakNet-Link-Api\sources.txt
+javac -cp ..\OakNet-Link-Api\libs\slick-util.jar;..\OakNet-Link-Api\libs\log4j-core-2.8.jar;..\OakNet-Link-Api\libs\log4j-api-2.8.jar -d ..\bin\oaknetlink-api\ @..\OakNet-Link-Api\sources.txt
 javac -d ..\bin\updater\ @..\Updater\sources.txt
 echo Build Jar
 jar cvf .\libs\OakNetLink-Api.jar -C ..\bin\oaknetlink-api\ .
