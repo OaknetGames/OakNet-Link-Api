@@ -12,13 +12,16 @@ eclipse
 run
 
 Wrapper-1.12.2/.gradle/
+Wrapper-1.12.2/.classpath
 Wrapper-1.12.2/bin/
 Wrapper-1.12.2/build/
 Wrapper-1.12.2/libs/
 Wrapper-1.12.2/run/
 Wrapper-1.12.2/build.gradle
 Updater/bin/
+Updater/.classpath
 Updater/sources.txt
 OakNet-Link-Api/bin/
+OakNet-Link-Api/.classpath
 OakNet-Link-Api/sources.txt
 
