@@ -21,6 +21,7 @@ public class OakNetLinkLogProvider implements ILogProvider {
 		LocalDateTime now = LocalDateTime.now();		
 		String msg = String.format("[%S] [INFO]: %s\n", dtf.format(now), message);
 		LogWindow.getInstance().getOakNetLinkLogArea().append(msg);
+		LogWindow.getInstance().getOakNetLinkLogArea().setCaretPosition(LogWindow.getInstance().getOakNetLinkLogArea().getText().length());
 		writeToLogFile(msg);
 		}
 
@@ -30,6 +31,7 @@ public class OakNetLinkLogProvider implements ILogProvider {
 		LocalDateTime now = LocalDateTime.now();
 		String msg = String.format("[%S] [WARNING]: %s\n", dtf.format(now), message);
 		LogWindow.getInstance().getOakNetLinkLogArea().append(msg);
+		LogWindow.getInstance().getOakNetLinkLogArea().setCaretPosition(LogWindow.getInstance().getOakNetLinkLogArea().getText().length());
 		writeToLogFile(msg);
 	}
 
@@ -39,6 +41,7 @@ public class OakNetLinkLogProvider implements ILogProvider {
 		LocalDateTime now = LocalDateTime.now();
 		String msg = String.format("[%S] [ERROR]: %s\n", dtf.format(now), message);
 		LogWindow.getInstance().getOakNetLinkLogArea().append(msg);
+		LogWindow.getInstance().getOakNetLinkLogArea().setCaretPosition(LogWindow.getInstance().getOakNetLinkLogArea().getText().length());
 		writeToLogFile(msg);
 	}
 	
@@ -53,7 +56,7 @@ public class OakNetLinkLogProvider implements ILogProvider {
 			if(!Constants.LOGPATH.toFile().exists())
 				Constants.LOGPATH.toFile().mkdirs();
 		}catch(Exception e) {
-			Logger.getInstance().getLogProvider(MinecraftLogProvider.class).logError("Can't create log dir: " + e.getMessage());
+			Logger.instance().logProvider(MinecraftLogProvider.class).logError("Can't create log dir: " + e.getMessage());
 		}
 		
 		try(FileWriter fw = new FileWriter(logFileName, true);
@@ -62,7 +65,7 @@ public class OakNetLinkLogProvider implements ILogProvider {
 			{
 			    out.println(msg);
 			} catch (IOException e) {
-				Logger.getInstance().getLogProvider(MinecraftLogProvider.class).logError("Can't create log file: " + e.getMessage());
+				Logger.instance().logProvider(MinecraftLogProvider.class).logError("Can't create log file: " + e.getMessage());
 			}
 	}
 

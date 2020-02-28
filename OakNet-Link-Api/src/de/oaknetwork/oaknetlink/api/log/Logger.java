@@ -24,11 +24,11 @@ public class Logger {
 		
 	}
 	
-	public static Logger getInstance(){
+	public static Logger instance(){
 		return instance;
 	}
 	
-	public ILogProvider getLogProvider(Class clazz){
+	public ILogProvider logProvider(Class clazz){
 		Optional result = logProvider.stream().filter(element -> clazz.isInstance(element)).findFirst();
 		return result.isPresent()?(ILogProvider)result.get():null;
 	}

@@ -21,13 +21,14 @@ public class Main
     public static final String MODID = "oaknetlink";
     public static final String NAME = "OakNet-Link 1.12.2";
     public static final String VERSION = "2.0.0 DEV";
+    public static final String GAMEVERSION = "1.12.2";
 
     private static Logger logger;
 
     @EventHandler
     public void preInit(FMLPreInitializationEvent event)
     {
-    	Updater.checkForUpdates("1.12.2");
+    	Updater.checkForUpdates(GAMEVERSION);
         logger = event.getModLog();
         MinecraftHooks.preInit(new MinecraftInterface());
         MinecraftForge.EVENT_BUS.register(new OakNetEventHandler());
