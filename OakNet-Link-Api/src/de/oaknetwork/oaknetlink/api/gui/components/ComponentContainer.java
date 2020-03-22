@@ -9,17 +9,26 @@ public class ComponentContainer extends Component {
 	}
 
 	@Override
-	public boolean clickComponent(Vector2i clickPos, int mouseButton) {
+	public boolean mouseDownComponent(Vector2i clickPos, int mouseButton) {
 		return false;
 	}
 
 	@Override
-	public boolean mouseOverComponent(Vector2i mousePos) {
+	public boolean mouseOverComponent(Vector2i mousePos, int mouseWheelDelta) {
 		return false;
 	}
 
 	@Override
 	public void renderComponent(Vector2i position) {
+	}
+
+	@Override
+	public boolean mouseReleasedComponent(Vector2i clickPos, int mouseButton) {
+		return false;
+	}
+
+	@Override
+	public void initComponent() {		
 	}
 
 }

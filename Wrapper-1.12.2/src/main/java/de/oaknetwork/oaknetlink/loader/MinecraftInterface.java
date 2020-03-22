@@ -75,6 +75,11 @@ public class MinecraftInterface implements IMinecraft{
 	public String gameVersion() {
 		return Main.GAMEVERSION;
 	}
+	
+	@Override
+	public String wrapperVersion() {
+		return Main.VERSION;
+	}
 
 
 }

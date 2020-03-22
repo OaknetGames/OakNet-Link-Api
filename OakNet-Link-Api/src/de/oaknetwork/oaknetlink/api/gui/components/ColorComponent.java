@@ -15,18 +15,21 @@ public abstract class ColorComponent extends Component {
 		}
 	}
 
-	public Color backgroundColor = Color.BLACK;
-	public Color backgroundColorHighlight = Color.WHITE;
-	public Color foregroundColor = Color.WHITE;
-	public Color foregroundColorHighlight = Color.BLACK;
-	public Color outlineColor = Color.BLACK;
-	public Color outlineColorHighlight = Color.BLACK;
+	private Color backgroundColor = Color.BLACK;
+	private Color backgroundColorHighlight = Color.WHITE;
+	private Color foregroundColor = Color.WHITE;
+	private Color foregroundColorHighlight = Color.BLACK;
+	private Color outlineColor = Color.WHITE;
+	private Color outlineColorHighlight = Color.WHITE;
 
-	Color renderBackgroundColor = backgroundColor;
-	Color renderForegroundColor = foregroundColor;
-	Color renderOutlineColor = outlineColor;
+	public boolean useHighlights = true;
+	public boolean inheritColorsFromParent = true;
 
-	private void setRenderColor(boolean overThisComponent) {
+	protected Color renderBackgroundColor = backgroundColor;
+	protected Color renderForegroundColor = foregroundColor;
+	protected Color renderOutlineColor = outlineColor;
+
+	protected void setRenderColor(boolean overThisComponent) {
 		renderBackgroundColor = overThisComponent ? backgroundColorHighlight : backgroundColor;
 		renderForegroundColor = overThisComponent ? foregroundColorHighlight : foregroundColor;
 		renderOutlineColor = overThisComponent ? outlineColorHighlight : outlineColor;
@@ -37,13 +40,62 @@ public abstract class ColorComponent extends Component {
 		backgroundColorHighlight = component.backgroundColorHighlight;
 		foregroundColor = component.foregroundColor;
 		foregroundColorHighlight = component.foregroundColorHighlight;
-		outlineColor=component.outlineColor;
-		outlineColorHighlight=component.outlineColorHighlight;
+		outlineColor = component.outlineColor;
+		outlineColorHighlight = component.outlineColorHighlight;
+	}
+
+	private void notifyChildren() {
+		for (Component child : children) {
+			try {
+				if (((ColorComponent) child).inheritColorsFromParent) {
+					((ColorComponent) child).copyColors(this);
+					((ColorComponent) child).setRenderColor(false);
+				}
+			} catch (ClassCastException e) {
+				continue;
+			}
+		}
+	}
+
+	public void setBackgroundColor(Color backgroundColor) {
+		this.backgroundColor = backgroundColor;
+		notifyChildren();
+		setRenderColor(false);
+	}
+
+	public void setBackgroundColorHighlight(Color backgroundColorHighlight) {
+		this.backgroundColorHighlight = backgroundColorHighlight;
+		notifyChildren();
+		setRenderColor(false);
+	}
+
+	public void setForegroundColor(Color foregroundColor) {
+		this.foregroundColor = foregroundColor;
+		notifyChildren();
+		setRenderColor(false);
+	}
+
+	public void setForegroundColorHighlight(Color foregroundColorHighlight) {
+		this.foregroundColorHighlight = foregroundColorHighlight;
+		notifyChildren();
+		setRenderColor(false);
+	}
+
+	public void setOutlineColor(Color outlineColor) {
+		this.outlineColor = outlineColor;
+		notifyChildren();
+		setRenderColor(false);
+	}
+
+	public void setOutlineColorHighlight(Color outlineColorHighlight) {
+		this.outlineColorHighlight = outlineColorHighlight;
+		notifyChildren();
+		setRenderColor(false);
 	}
 
 	@Override
-	public boolean mouseOverComponent(Vector2i mousePos) {
-		setRenderColor(mouseOverThisComponent(mousePos));
+	public boolean mouseOverComponent(Vector2i mousePos, int mouseWheelDelta) {
+		setRenderColor(mouseOverThisComponent(mousePos) && useHighlights);
 		return false;
 	}
 }
