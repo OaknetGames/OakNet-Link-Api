@@ -10,30 +10,52 @@ import java.util.ArrayList;
 import de.oaknetwork.oaknetlink.api.log.Logger;
 import de.oaknetwork.oaknetlink.api.network.PacketException;
 
+/**
+ * This is the heart of the UDP Connection
+ * 
+ * Because it's a peer to peer communication this can be Sender and Receiver.
+ * 
+ * @see UDPProtocol.txt for more info
+ * 
+ * @author Fabian Fila
+ */
 public class UDPCommunicator {
 
 	private static UDPCommunicator instance;
 	private DatagramSocket serverSocket;
 
-	// Mod side
+	/**
+	 * This constructor is used at mod side
+	 * 
+	 * At mod side the Communicator always starts as client to allow
+	 * UDP-Hole-Punching
+	 */
 	public UDPCommunicator() {
 		instance = this;
 		Logger.logInfo("Create new UDPCommunicator", UDPCommunicator.class);
 		try {
 			serverSocket = new DatagramSocket();
 		} catch (SocketException e) {
-			Logger.logException("Can't create UDPDatagrammSocket" , e, UDPCommunicator.class);
+			Logger.logException("Can't create UDPDatagrammSocket", e, UDPCommunicator.class);
 		}
 	}
-	
-	// Server side 
+
+	/**
+	 * This constructor is used at Master-Server side
+	 * 
+	 * Providing a port sets the Communicator automatic in listening mode on a
+	 * distinct endpoint.
+	 * 
+	 * The clients will use the UDP site on the Master Server to exchange their
+	 * addresses.
+	 */
 	public UDPCommunicator(int port) {
 		instance = this;
 		Logger.logInfo("Create new UDPCommunicator on port: " + port, UDPCommunicator.class);
 		try {
 			serverSocket = new DatagramSocket(port);
 		} catch (SocketException e) {
-			Logger.logException("Can't create UDPDatagrammSocket" , e, UDPCommunicator.class);
+			Logger.logException("Can't create UDPDatagrammSocket", e, UDPCommunicator.class);
 		}
 	}
 
@@ -48,12 +70,12 @@ public class UDPCommunicator {
 					try {
 						serverSocket.receive(packet);
 					} catch (IOException eio) {
-						Logger.logException("Error while recieving packet" , eio, UDPCommunicator.class);
+						Logger.logException("Error while recieving packet", eio, UDPCommunicator.class);
 					}
 					try {
 						UDPClientHelper.getClientByPacket(packet).processDPacket(packet);
 					} catch (PacketException e) {
-						Logger.logException("Can't process packet" , e, UDPCommunicator.class);
+						Logger.logException("Can't process packet", e, UDPCommunicator.class);
 					}
 				}
 			}
@@ -61,14 +83,20 @@ public class UDPCommunicator {
 		udpNetworkThread.start();
 	}
 
+	/**
+	 * This sends an UDP DatagramPacket to the specified UDP Client
+	 */
 	public void sendPacketBack(UDPClient client, DatagramPacket packetToSendBack) {
 		try {
 			serverSocket.send(packetToSendBack);
 		} catch (IOException e) {
-			Logger.logException("Can't send packet" , e, UDPCommunicator.class);
+			Logger.logException("Can't send packet", e, UDPCommunicator.class);
 		}
 	}
-	
+
+	/**
+	 * @return the current instance of the UDPCommunicator
+	 */
 	public static UDPCommunicator instance() {
 		return instance;
 	}

@@ -11,6 +11,11 @@ import de.oaknetwork.oaknetlink.api.network.PacketException;
 import de.oaknetwork.oaknetlink.api.network.udp.packets.UDPPacket;
 import de.oaknetwork.oaknetlink.api.network.utils.PacketInDecoder;
 
+/**
+ * This represents an endpoint in the UDP Communication
+ * 
+ * @author Fabian Fila
+ */
 public class UDPClient {
 
 	private InetAddress udpAdress;
@@ -19,12 +24,12 @@ public class UDPClient {
 
 	// incoming
 	private long timeSinceLastPacketIn;
-	private short currentPacketNumber = -1;
+	private short currentIncomingPacketNumber = -1;
 	private short totalSubPacketNumber = 1;
 	private Map<Short, List<Byte>> incomingPacketQueue = new HashMap<Short, List<Byte>>();
 
 	// outgoing
-	private byte packetnumber=1;
+	private byte outgoingPacketNumber = 1;
 	// Status -1 = nothing, 0 = waiting; 1 = OK; 2 = ERROR
 	private byte status = -1;
 	private List<UDPPacket> outgoingPacketQueue = new ArrayList<UDPPacket>();
@@ -38,32 +43,43 @@ public class UDPClient {
 			public void run() {
 				boolean resend = true;
 				while (connected) {
+					// Every second
 					if (System.currentTimeMillis() - timeSinceLastPacketIn % 1000 < 10) {
+						// If we sent a packet and wait for an answer, it probably didn't arrive, so we
+						// resent it.
 						if (resend && status == 0)
 							sendPacket(outgoingPacketQueue.get(0));
-						if (resend && currentPacketNumber != -1) {
+						// If we are waiting for more subPackets but we don't receive more, send an
+						// error out.
+						if (resend && currentIncomingPacketNumber != -1) {
 							sendStatus((byte) 2);
+							incomingPacketQueue.clear();
 						}
 						resend = false;
 					} else
 						resend = true;
 
+					// Every 15 seconds
 					if (System.currentTimeMillis() - timeSinceLastPacketIn % 15000 < 10) {
 						// TODO timeout
 					}
-					if (status == 2) {
+					// We received an error
+					if (status == 2 && outgoingPacketQueue.size() > 0) {
 						sendPacket(outgoingPacketQueue.get(0));
 					}
-					if (status == 1) {
-						packetnumber++;
-						if(packetnumber>100)
-							packetnumber=1;
+					// We received an ok
+					if (status == 1 && outgoingPacketQueue.size() > 0) {
+						outgoingPacketNumber++;
+						if (outgoingPacketNumber > 100)
+							outgoingPacketNumber = 1;
 						outgoingPacketQueue.remove(0);
 						status = -1;
 					}
-					if (status == -1) {
+					// Nothing to do, so sent the next Packet out
+					if (status == -1 && outgoingPacketQueue.size() > 0) {
 						sendPacket(outgoingPacketQueue.get(0));
 					}
+					// Sleep to not waste all the CPU time
 					try {
 						Thread.sleep(1);
 					} catch (InterruptedException e) {
@@ -75,30 +91,56 @@ public class UDPClient {
 		clientThread.start();
 	}
 
-	private void sendPacket(UDPPacket packetToSendPack) {
+	/**
+	 * This method is used to send packets to the endpoint. Usually this is done by
+	 * UDPPacket.java
+	 * 
+	 * @param packetToSend the packet to send
+	 */
+	public void sendPacket(UDPPacket packetToSend) {
 		status = 0;
 
 		// TODO SendPacket
 	}
-	
+
+	/**
+	 * This sends a short status message back to the endpoint.
+	 * 
+	 * 1 = OK: The packet arrived and the next packet could be sent
+	 * 
+	 * 2 = ERROR: There was something wrong with the packet and it should be resent
+	 * 
+	 * @param status
+	 */
 	public void sendStatus(byte status) {
-		byte[] buffer =new byte[1];
-		buffer[0]=status;
-		DatagramPacket errorPacket=new DatagramPacket(buffer, 1, udpAdress, udpPort);
+		byte[] buffer = new byte[1];
+		buffer[0] = status;
+		DatagramPacket errorPacket = new DatagramPacket(buffer, 1, udpAdress, udpPort);
 		UDPCommunicator.instance().sendPacketBack(this, errorPacket);
 	}
 
+	/**
+	 * This is called when the full Packet arrived and we can start processing it.
+	 */
 	public void processFullPacket() {
 		List<Byte> fullPacket = new ArrayList<Byte>();
 		for (short i = 1; i <= totalSubPacketNumber; i++) {
 			fullPacket.addAll(incomingPacketQueue.get(i));
 		}
 		sendStatus((byte) 1);
-		currentPacketNumber = -1;
+		currentIncomingPacketNumber = -1;
 		totalSubPacketNumber = -1;
+		incomingPacketQueue.clear();
 		// TODO Process Packet
 	}
 
+	/**
+	 * This is called when a new DatagramPacket has been received by the UDP
+	 * Communicator
+	 * 
+	 * @param dpacket the packet which arrived
+	 * @throws PacketException
+	 */
 	public void processDPacket(DatagramPacket dpacket) throws PacketException {
 		timeSinceLastPacketIn = System.currentTimeMillis();
 		List<Byte> packetData = new ArrayList<Byte>();
@@ -114,9 +156,9 @@ public class UDPClient {
 			return;
 		}
 		packetData.remove(0);
-		if (currentPacketNumber == -1)
-			currentPacketNumber = packetData.get(0);
-		if (currentPacketNumber != packetData.get(0))
+		if (currentIncomingPacketNumber == -1)
+			currentIncomingPacketNumber = packetData.get(0);
+		if (currentIncomingPacketNumber != packetData.get(0))
 			throw new PacketException("Recieved unexpected packet");
 		packetData.remove(0);
 		short currentSubPacket = PacketInDecoder.decodeShort(packetData);

@@ -1,6 +1,12 @@
 package de.oaknetwork.oaknetlink.api.mcinterface;
 
-// This Interface has to be implemented by the McWrapper
+/**
+ * This Interface has to be implemented by the McWrapper
+ * 
+ * @see MinecraftHooks
+ * 
+ * @author Fabian Fila
+ */
 public interface IMinecraft {
 
 	public void logInfo(String info);

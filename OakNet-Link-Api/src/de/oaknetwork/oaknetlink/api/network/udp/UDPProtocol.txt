@@ -1,0 +1,13 @@
+The UDP Packets have to be split in 512 byte sub Packets
+
+The packets look like this:
+byte status, byte packetNumber, short subPacketNumber, short subPacketsTotal, byte[] packetData
+
+
+status -> 0 sendingData; 1 OK; 2 Error
+packetNumber -> The packet which is currently sent, starts with 1 to 100
+subPacketNumber -> The current sent SubPacket, starts with 1
+subPacketsTotal -> The total number of SubPackets in the current packet
+packetData -> the packetData
+
+The first byte of the reassembled packetData contains the packetID which is used to differ between the packets.

@@ -19,6 +19,11 @@ import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import javax.swing.BoxLayout;
 
+/**
+ * The Window containing some TextAreas for logging
+ * 
+ * @author Fabian Fila
+ */
 public class LogWindow extends JFrame {
 
 	private JPanel contentPane;

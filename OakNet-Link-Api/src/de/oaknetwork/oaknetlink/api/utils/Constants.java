@@ -3,6 +3,11 @@ package de.oaknetwork.oaknetlink.api.utils;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+/**
+ * This class provides some useful constants.
+ * 
+ * @author Fabian Fila
+ */
 public class Constants {
 
 	public static final String APIVERSION = "DEV-2.0.0";

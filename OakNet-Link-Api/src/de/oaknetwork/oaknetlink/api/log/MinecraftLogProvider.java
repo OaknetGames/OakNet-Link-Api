@@ -15,7 +15,11 @@ import org.apache.logging.log4j.core.layout.PatternLayout;
 
 import de.oaknetwork.oaknetlink.api.mcinterface.IMinecraft;
 
-// This LogProvider provides a Logger for the default Minecraft Log
+/**
+ * This LogProvider provides a Logger for the default Minecraft Log
+ * 
+ * @author Fabian Fila
+ */
 public class MinecraftLogProvider implements ILogProvider {
 
 	IMinecraft mcInterface;

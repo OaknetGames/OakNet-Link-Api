@@ -10,69 +10,77 @@ import java.util.ArrayList;
 
 import de.oaknetwork.oaknetlink.api.utils.Constants;
 
-// This LogProvider provides the log system for the api
+/**
+ * This LogProvider provides the log system for the api
+ * 
+ * @author Fabian Fila
+ */
 public class OakNetLinkLogProvider implements ILogProvider {
 
-	static String logFileName="";
-	
+	static String logFileName = "";
+
 	@Override
 	public void logInfo(String message, Class sender) {
-		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss");  
-		LocalDateTime now = LocalDateTime.now();		
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss");
+		LocalDateTime now = LocalDateTime.now();
 		String msg = String.format("[%S] [INFO] [" + sender.getSimpleName() + "]: %s\n", dtf.format(now), message);
 		LogWindow.getInstance().getOakNetLinkLogArea().append(msg);
-		LogWindow.getInstance().getOakNetLinkLogArea().setCaretPosition(LogWindow.getInstance().getOakNetLinkLogArea().getText().length());
+		LogWindow.getInstance().getOakNetLinkLogArea()
+				.setCaretPosition(LogWindow.getInstance().getOakNetLinkLogArea().getText().length());
 		writeToLogFile(msg);
-		}
+	}
 
 	@Override
 	public void logWarning(String message, Class sender) {
-		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss");  
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss");
 		LocalDateTime now = LocalDateTime.now();
 		String msg = String.format("[%S] [WARNING] [" + sender.getSimpleName() + "]: %s\n", dtf.format(now), message);
 		LogWindow.getInstance().getOakNetLinkLogArea().append(msg);
-		LogWindow.getInstance().getOakNetLinkLogArea().setCaretPosition(LogWindow.getInstance().getOakNetLinkLogArea().getText().length());
+		LogWindow.getInstance().getOakNetLinkLogArea()
+				.setCaretPosition(LogWindow.getInstance().getOakNetLinkLogArea().getText().length());
 		writeToLogFile(msg);
 	}
 
 	@Override
 	public void logError(String message, Class sender) {
-		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss");  
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss");
 		LocalDateTime now = LocalDateTime.now();
 		String msg = String.format("[%S] [ERROR] [" + sender.getSimpleName() + "]: %s\n", dtf.format(now), message);
 		LogWindow.getInstance().getOakNetLinkLogArea().append(msg);
-		LogWindow.getInstance().getOakNetLinkLogArea().setCaretPosition(LogWindow.getInstance().getOakNetLinkLogArea().getText().length());
+		LogWindow.getInstance().getOakNetLinkLogArea()
+				.setCaretPosition(LogWindow.getInstance().getOakNetLinkLogArea().getText().length());
 		writeToLogFile(msg);
 	}
-	
+
 	@Override
 	public void logException(String description, Exception except, Class sender) {
 		logError(description + ": " + except.getMessage(), sender);
 		logError(except.getStackTrace().toString(), sender);
 	}
-	
+
 	void writeToLogFile(String msg) {
-		if(logFileName=="") {
-			DateTimeFormatter dtf = DateTimeFormatter.ofPattern("YYYY_MM_dd-HH_mm_ss");  
-			LocalDateTime now = LocalDateTime.now();	
-			logFileName=String.format(Constants.LOGPATH.toString()+"/Oaknet-Link-%s.log", dtf.format(now));
+		if (logFileName == "") {
+			DateTimeFormatter dtf = DateTimeFormatter.ofPattern("YYYY_MM_dd-HH_mm_ss");
+			LocalDateTime now = LocalDateTime.now();
+			logFileName = String.format(Constants.LOGPATH.toString() + "/Oaknet-Link-%s.log", dtf.format(now));
 		}
-		
+
 		try {
-			if(!Constants.LOGPATH.toFile().exists())
+			if (!Constants.LOGPATH.toFile().exists())
 				Constants.LOGPATH.toFile().mkdirs();
-		}catch(Exception e) {
-			Logger.logProvider(MinecraftLogProvider.class).logError("Can't create log dir: " + e.getMessage(), OakNetLinkLogProvider.class);
+		} catch (Exception e) {
+			Logger.logProvider(MinecraftLogProvider.class).logError("Can't create log dir: " + e.getMessage(),
+					OakNetLinkLogProvider.class);
 		}
-		
-		try(FileWriter fw = new FileWriter(logFileName, true);
-			    BufferedWriter bw = new BufferedWriter(fw);
-			    PrintWriter out = new PrintWriter(bw))
-			{
-			    out.println(msg);
-			} catch (IOException e) {
-				Logger.logProvider(MinecraftLogProvider.class).logError("Can't create log file: " + e.getMessage(), OakNetLinkLogProvider.class);
-			}
+
+		try (FileWriter fw = new FileWriter(logFileName, true);
+				BufferedWriter bw = new BufferedWriter(fw);
+				PrintWriter out = new PrintWriter(bw)) {
+			out.println(msg);
+		} catch (IOException e) {
+			Logger.logProvider(MinecraftLogProvider.class).logError("Can't create log file: " + e.getMessage(),
+					OakNetLinkLogProvider.class);
+		}
 	}
 
 }

@@ -11,7 +11,7 @@ public class Main {
 
 	public static void main(String[] args) {
 		Logger.addLogProvider(new ConsoleLogProvider());
-		Logger.setStandardLogProvider(Logger.logProvider(ConsoleLogProvider.class));
+		Logger.setDefaultLogProvider(Logger.logProvider(ConsoleLogProvider.class));
 		
 		if(args.length>0&&args[0].equalsIgnoreCase("nogui"))
 			Logger.logInfo("Starting in nogui mode", Main.class);

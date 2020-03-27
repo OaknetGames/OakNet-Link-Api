@@ -19,7 +19,20 @@ import de.oaknetwork.oaknetlink.api.log.MinecraftServerLogProvider;
 import de.oaknetwork.oaknetlink.api.log.OakNetLinkLogProvider;
 import de.oaknetwork.oaknetlink.api.utils.Vector2i;
 
-// These methods have to be called from the wrapper
+/**
+ * CONCEPT Interfaced Communication
+ * 
+ * The goal is to break the communication with minecraft to a minimum. To achive
+ * this we use two classes as an interface to minecraft.
+ * 
+ * The mod is only a wrapper which wraps the game's logic to this version
+ * independent API
+ * 
+ * 1. IMinecraft: this Interface needs to be implemented by the Minecraft 2.
+ * Minecraft Hooks: These methods have to be called from the wrapper
+ * 
+ * @author Fabian Fila
+ */
 public class MinecraftHooks {
 
 	public static IMinecraft mcInterface;
@@ -30,8 +43,8 @@ public class MinecraftHooks {
 		Logger.addLogProvider(new MinecraftLogProvider(mcInterface));
 		Logger.addLogProvider(new OakNetLinkLogProvider());
 		Logger.addLogProvider(new MinecraftServerLogProvider());
-		Logger.setStandardLogProvider(Logger.logProvider(OakNetLinkLogProvider.class));
-		
+		Logger.setDefaultLogProvider(Logger.logProvider(OakNetLinkLogProvider.class));
+
 		Logger.logProvider(MinecraftLogProvider.class).logInfo("OakNet-Link is starting...", MinecraftHooks.class);
 		Logger.logInfo("OakNet-Link is starting...", MinecraftHooks.class);
 
