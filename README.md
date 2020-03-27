@@ -1,6 +1,8 @@
 # OakNet-Link-New
 This Minecraft Mod allows the creation of peer to peer multiplayer networks 
 
+https://www.curseforge.com/minecraft/mc-mods/oaknetlink
+
 # Basic Concept
 The Mod consist of two parts:
 
