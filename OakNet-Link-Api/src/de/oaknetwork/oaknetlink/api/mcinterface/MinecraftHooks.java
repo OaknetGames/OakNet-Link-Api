@@ -15,6 +15,7 @@ import de.oaknetwork.oaknetlink.api.gui.components.Window;
 import de.oaknetwork.oaknetlink.api.log.LogWindow;
 import de.oaknetwork.oaknetlink.api.log.Logger;
 import de.oaknetwork.oaknetlink.api.log.MinecraftLogProvider;
+import de.oaknetwork.oaknetlink.api.log.MinecraftServerLogProvider;
 import de.oaknetwork.oaknetlink.api.log.OakNetLinkLogProvider;
 import de.oaknetwork.oaknetlink.api.utils.Vector2i;
 
@@ -26,9 +27,13 @@ public class MinecraftHooks {
 	public static void preInit(IMinecraft mcInterfaceIn) {
 		mcInterface = mcInterfaceIn;
 		LogWindow.open();
-		Logger logger = new Logger(mcInterface);
-		logger.logProvider(MinecraftLogProvider.class).logInfo("OakNet-Link is starting...");
-		logger.logProvider(OakNetLinkLogProvider.class).logInfo("OakNet-Link is starting...");
+		Logger.addLogProvider(new MinecraftLogProvider(mcInterface));
+		Logger.addLogProvider(new OakNetLinkLogProvider());
+		Logger.addLogProvider(new MinecraftServerLogProvider());
+		Logger.setStandardLogProvider(Logger.logProvider(OakNetLinkLogProvider.class));
+		
+		Logger.logProvider(MinecraftLogProvider.class).logInfo("OakNet-Link is starting...", MinecraftHooks.class);
+		Logger.logInfo("OakNet-Link is starting...", MinecraftHooks.class);
 
 	}
 
@@ -37,7 +42,7 @@ public class MinecraftHooks {
 	}
 
 	public static void postInit() {
-		Logger.instance().logProvider(OakNetLinkLogProvider.class).logInfo("Init GuiManager...");
+		Logger.logInfo("Init GuiManager...", MinecraftHooks.class);
 		new GuiManager();
 	}
 

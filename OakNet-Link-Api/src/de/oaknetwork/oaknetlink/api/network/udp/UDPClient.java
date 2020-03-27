@@ -1,4 +1,4 @@
-package de.oaknetwork.oaknetlink.masterserver.network.udp;
+package de.oaknetwork.oaknetlink.api.network.udp;
 
 import java.net.DatagramPacket;
 import java.net.InetAddress;
@@ -24,6 +24,7 @@ public class UDPClient {
 	private Map<Short, List<Byte>> incomingPacketQueue = new HashMap<Short, List<Byte>>();
 
 	// outgoing
+	private byte packetnumber=1;
 	// Status -1 = nothing, 0 = waiting; 1 = OK; 2 = ERROR
 	private byte status = -1;
 	private List<UDPPacket> outgoingPacketQueue = new ArrayList<UDPPacket>();
@@ -41,8 +42,7 @@ public class UDPClient {
 						if (resend && status == 0)
 							sendPacket(outgoingPacketQueue.get(0));
 						if (resend && currentPacketNumber != -1) {
-							// TODO send ERROR back
-
+							sendStatus((byte) 2);
 						}
 						resend = false;
 					} else
@@ -55,6 +55,9 @@ public class UDPClient {
 						sendPacket(outgoingPacketQueue.get(0));
 					}
 					if (status == 1) {
+						packetnumber++;
+						if(packetnumber>100)
+							packetnumber=1;
 						outgoingPacketQueue.remove(0);
 						status = -1;
 					}
@@ -77,13 +80,20 @@ public class UDPClient {
 
 		// TODO SendPacket
 	}
+	
+	public void sendStatus(byte status) {
+		byte[] buffer =new byte[1];
+		buffer[0]=status;
+		DatagramPacket errorPacket=new DatagramPacket(buffer, 1, udpAdress, udpPort);
+		UDPCommunicator.instance().sendPacketBack(this, errorPacket);
+	}
 
 	public void processFullPacket() {
 		List<Byte> fullPacket = new ArrayList<Byte>();
 		for (short i = 1; i <= totalSubPacketNumber; i++) {
 			fullPacket.addAll(incomingPacketQueue.get(i));
 		}
-		// TODO Send OK
+		sendStatus((byte) 1);
 		currentPacketNumber = -1;
 		totalSubPacketNumber = -1;
 		// TODO Process Packet

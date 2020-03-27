@@ -1,8 +1,10 @@
-package de.oaknetwork.oaknetlink.masterserver.network.udp;
+package de.oaknetwork.oaknetlink.api.network.udp;
 
 import java.net.DatagramPacket;
 import java.util.ArrayList;
 import java.util.List;
+
+import de.oaknetwork.oaknetlink.api.log.Logger;
 
 public class UDPClientHelper {
 	
@@ -17,7 +19,7 @@ public class UDPClientHelper {
 		if(result==null) {
 			result = new UDPClient(dpacket.getAddress(), dpacket.getPort());
 			connectedClients.add(result);
-			System.out.println(result.udpAdress().toString() + " connected via UDP.");			
+			Logger.logInfo(result.udpAdress().toString() + " connected via UDP.", UDPClientHelper.class);		
 		}
 		return result;
 	}

@@ -6,6 +6,8 @@ import java.net.Socket;
 import java.net.SocketAddress;
 import java.util.ArrayList;
 
+import de.oaknetwork.oaknetlink.api.log.Logger;
+
 public class TCPServerHandler {
 	
 	static TCPServerHandler instance;
@@ -14,7 +16,8 @@ public class TCPServerHandler {
 	
 	public TCPServerHandler(int port) {
 		instance=this;
-		System.out.println("Create new TCPServerHandler on port: " + port);
+		Logger.logInfo("Create new TCPServerHandler on port: " + port, TCPServerHandler.class);
+		System.out.println();
 		try {
 			serverSocket=new ServerSocket(port);
 		} catch (IOException e) {

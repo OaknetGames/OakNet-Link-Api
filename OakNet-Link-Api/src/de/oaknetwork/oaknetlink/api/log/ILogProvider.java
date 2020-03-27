@@ -2,11 +2,19 @@ package de.oaknetwork.oaknetlink.api.log;
 
 import java.util.ArrayList;
 
+
+/**
+ * This class should be implemented by LogProviders
+ * 
+ * @author Fabian
+ */
 public interface ILogProvider {
 		
-	public void logInfo(String message);
+	public void logInfo(String message, Class sender);
 	
-	public void logWarning(String message);
+	public void logWarning(String message, Class sender);
 	
-	public void logError(String message);
+	public void logError(String message, Class sender);
+
+	public void logException(String description, Exception except, Class sender);
 }

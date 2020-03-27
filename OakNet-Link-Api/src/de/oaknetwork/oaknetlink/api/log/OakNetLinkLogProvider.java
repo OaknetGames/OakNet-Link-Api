@@ -16,33 +16,39 @@ public class OakNetLinkLogProvider implements ILogProvider {
 	static String logFileName="";
 	
 	@Override
-	public void logInfo(String message) {
+	public void logInfo(String message, Class sender) {
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss");  
 		LocalDateTime now = LocalDateTime.now();		
-		String msg = String.format("[%S] [INFO]: %s\n", dtf.format(now), message);
+		String msg = String.format("[%S] [INFO] [" + sender.getSimpleName() + "]: %s\n", dtf.format(now), message);
 		LogWindow.getInstance().getOakNetLinkLogArea().append(msg);
 		LogWindow.getInstance().getOakNetLinkLogArea().setCaretPosition(LogWindow.getInstance().getOakNetLinkLogArea().getText().length());
 		writeToLogFile(msg);
 		}
 
 	@Override
-	public void logWarning(String message) {
+	public void logWarning(String message, Class sender) {
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss");  
 		LocalDateTime now = LocalDateTime.now();
-		String msg = String.format("[%S] [WARNING]: %s\n", dtf.format(now), message);
+		String msg = String.format("[%S] [WARNING] [" + sender.getSimpleName() + "]: %s\n", dtf.format(now), message);
 		LogWindow.getInstance().getOakNetLinkLogArea().append(msg);
 		LogWindow.getInstance().getOakNetLinkLogArea().setCaretPosition(LogWindow.getInstance().getOakNetLinkLogArea().getText().length());
 		writeToLogFile(msg);
 	}
 
 	@Override
-	public void logError(String message) {
+	public void logError(String message, Class sender) {
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss");  
 		LocalDateTime now = LocalDateTime.now();
-		String msg = String.format("[%S] [ERROR]: %s\n", dtf.format(now), message);
+		String msg = String.format("[%S] [ERROR] [" + sender.getSimpleName() + "]: %s\n", dtf.format(now), message);
 		LogWindow.getInstance().getOakNetLinkLogArea().append(msg);
 		LogWindow.getInstance().getOakNetLinkLogArea().setCaretPosition(LogWindow.getInstance().getOakNetLinkLogArea().getText().length());
 		writeToLogFile(msg);
+	}
+	
+	@Override
+	public void logException(String description, Exception except, Class sender) {
+		logError(description + ": " + except.getMessage(), sender);
+		logError(except.getStackTrace().toString(), sender);
 	}
 	
 	void writeToLogFile(String msg) {
@@ -56,7 +62,7 @@ public class OakNetLinkLogProvider implements ILogProvider {
 			if(!Constants.LOGPATH.toFile().exists())
 				Constants.LOGPATH.toFile().mkdirs();
 		}catch(Exception e) {
-			Logger.instance().logProvider(MinecraftLogProvider.class).logError("Can't create log dir: " + e.getMessage());
+			Logger.logProvider(MinecraftLogProvider.class).logError("Can't create log dir: " + e.getMessage(), OakNetLinkLogProvider.class);
 		}
 		
 		try(FileWriter fw = new FileWriter(logFileName, true);
@@ -65,7 +71,7 @@ public class OakNetLinkLogProvider implements ILogProvider {
 			{
 			    out.println(msg);
 			} catch (IOException e) {
-				Logger.instance().logProvider(MinecraftLogProvider.class).logError("Can't create log file: " + e.getMessage());
+				Logger.logProvider(MinecraftLogProvider.class).logError("Can't create log file: " + e.getMessage(), OakNetLinkLogProvider.class);
 			}
 	}
 

@@ -1,19 +1,23 @@
 package de.oaknetwork.oaknetlink.masterserver;
 
+import de.oaknetwork.oaknetlink.api.log.Logger;
+import de.oaknetwork.oaknetlink.api.network.udp.UDPCommunicator;
 import de.oaknetwork.oaknetlink.api.utils.Constants;
 import de.oaknetwork.oaknetlink.masterserver.network.tcp.TCPServerHandler;
-import de.oaknetwork.oaknetlink.masterserver.network.udp.UDPCommunicator;
 
 public class Main {
 	
 	public static final String VERSION="DEV-1.0.0";
 
 	public static void main(String[] args) {
+		Logger.addLogProvider(new ConsoleLogProvider());
+		Logger.setStandardLogProvider(Logger.logProvider(ConsoleLogProvider.class));
+		
 		if(args.length>0&&args[0].equalsIgnoreCase("nogui"))
-			System.out.println("Start in nogui mode");
+			Logger.logInfo("Starting in nogui mode", Main.class);
 		else
 			Console.open();
-		System.out.println("Starting MasterServer Version: "+ VERSION + " using API: " + Constants.APIVERSION);
+		Logger.logInfo("Starting MasterServer Version: "+ VERSION + " using API: " + Constants.APIVERSION, Main.class);
 		
 		new TCPServerHandler(1354);
 		new UDPCommunicator(1355);

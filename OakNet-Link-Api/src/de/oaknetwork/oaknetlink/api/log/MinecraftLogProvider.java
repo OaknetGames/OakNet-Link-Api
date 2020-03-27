@@ -16,37 +16,44 @@ import org.apache.logging.log4j.core.layout.PatternLayout;
 import de.oaknetwork.oaknetlink.api.mcinterface.IMinecraft;
 
 // This LogProvider provides a Logger for the default Minecraft Log
-public class MinecraftLogProvider implements ILogProvider{
+public class MinecraftLogProvider implements ILogProvider {
 
 	IMinecraft mcInterface;
-	
+
 	ArrayList<String> mcLog = new ArrayList<String>();
-	
+
 	public MinecraftLogProvider(IMinecraft minecraftInterface) {
 		mcInterface = minecraftInterface;
 
-	    // Create and add the appender
-	    LoggerContext lc = (LoggerContext) LogManager.getContext(false);
-	    MinecraftLogAppender appender = new MinecraftLogAppender("OakNet-Link Log Appender", null, PatternLayout.createDefaultLayout());
-	    appender.start();
-	    lc.getConfiguration().addAppender(appender);
-	    lc.getRootLogger().addAppender(lc.getConfiguration().getAppender(appender.getName()));
-	    lc.updateLoggers();
+		// Create and add the appender
+		LoggerContext lc = (LoggerContext) LogManager.getContext(false);
+		MinecraftLogAppender appender = new MinecraftLogAppender("OakNet-Link Log Appender", null,
+				PatternLayout.createDefaultLayout());
+		appender.start();
+		lc.getConfiguration().addAppender(appender);
+		lc.getRootLogger().addAppender(lc.getConfiguration().getAppender(appender.getName()));
+		lc.updateLoggers();
 	}
 
 	@Override
-	public void logInfo(String message) {
-		mcInterface.logInfo(message);
+	public void logInfo(String message, Class sender) {
+		mcInterface.logInfo("[" + sender.getSimpleName() + "]: " + message);
 	}
 
 	@Override
-	public void logWarning(String message) {
-		mcInterface.logWarning(message);	
+	public void logWarning(String message, Class sender) {
+		mcInterface.logWarning("[" + sender.getSimpleName() + "]: " + message);
 	}
 
 	@Override
-	public void logError(String message) {
-		mcInterface.logError(message);
+	public void logError(String message, Class sender) {
+		mcInterface.logError("[" + sender.getSimpleName() + "]: " + message);
+	}
+
+	@Override
+	public void logException(String description, Exception except, Class sender) {
+		logError(description + ": " + except.getMessage(), sender);
+		logError(except.getStackTrace().toString(), sender);
 	}
 
 }
