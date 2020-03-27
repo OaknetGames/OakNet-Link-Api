@@ -46,6 +46,6 @@ TODO
 # License
 You are allowed to modify the code as you wish and to create pull requests to contribute to the Project.
 
-You may NOT redestribute builds of the code without my permission.
+You may NOT redistribute builds of the code without my permission.
 
 Furthermore you are NOT allowed to host your own Master-Server.
