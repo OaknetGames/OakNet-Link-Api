@@ -48,4 +48,4 @@ You are allowed to modify the code as you wish and to create pull requests to co
 
 You may NOT redestribute builds of the code without my permission.
 
-Furthermore you are NOT allowed to host your own Master-Server
+Furthermore you are NOT allowed to host your own Master-Server.
