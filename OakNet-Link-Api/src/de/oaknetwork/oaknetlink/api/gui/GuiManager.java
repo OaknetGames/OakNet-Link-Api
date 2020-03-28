@@ -15,15 +15,29 @@ import de.oaknetwork.oaknetlink.api.gui.components.ListEntry;
 import de.oaknetwork.oaknetlink.api.gui.components.TextBox;
 import de.oaknetwork.oaknetlink.api.gui.components.TextPane;
 import de.oaknetwork.oaknetlink.api.gui.components.Window;
+import de.oaknetwork.oaknetlink.api.gui.structure.Overlay;
 import de.oaknetwork.oaknetlink.api.mcinterface.MinecraftHooks;
 import de.oaknetwork.oaknetlink.api.utils.Vector2i;
 
+/**
+ * The GuiManager is a ComponentContainer with the size of the GameWindow and
+ * acts as entrypoint for the OakNet-Link GUI System.
+ * 
+ * Every time the GameWindow size changes, the GuiManager will be resized.
+ * 
+ * The GuiManager is created in the PostInit phase
+ * 
+ * @author Fabian Fila
+ */
 public class GuiManager extends ComponentContainer {
 
 	private static Vector2i currentSize = new Vector2i(0, 0);
 	private static GuiManager instance;
 	private static Overlay overlay;
 
+	/**
+	 * The GuiManager is created in the PostInit phase
+	 */
 	public GuiManager() {
 		super(null, new Vector2i(0, 0), new Vector2i(0, 0));
 		instance = this;
@@ -45,8 +59,8 @@ public class GuiManager extends ComponentContainer {
 
 	@Override
 	public void initComponent() {
-		Button button = new Button(getInstance(), new Vector2i(size().X - 102, 2), new Vector2i(100, 20), "OakNet-Link",
-				1, new Runnable() {
+		Button button = new Button(instance(), new Vector2i(size().X - 102, 2), new Vector2i(100, 20), "OakNet-Link", 1,
+				new Runnable() {
 
 					@Override
 					public void run() {
@@ -58,45 +72,6 @@ public class GuiManager extends ComponentContainer {
 		button.setForegroundColorHighlight(Color.BLACK);
 		button.setOutlineColor(Color.BLACK);
 		button.setOutlineColorHighlight(Color.BLACK);
-		/**
-		 * Button button2 = new Button(getInstance(), new Vector2i(120, 2), new
-		 * Vector2i(100, 20), "Open Dialog close!", 1, new Runnable() {
-		 * 
-		 * @Override public void run() { Dialog window = new Dialog(1, "Dialog Test",
-		 *           "Das ist ein Dialogfenster\nund es hat zwei Zeilen.", true, true);
-		 *           } });
-		 * 
-		 *           Button button3 = new Button(this, new Vector2i(120, 32), new
-		 *           Vector2i(100, 20), "Open Dialog!", 1, new Runnable() {
-		 * 
-		 * @Override public void run() { Dialog window = new Dialog(1, "Dialog Test",
-		 *           "Das ist ein Dialogfenster\nund es l‰sst sich nicht schlieﬂen.",
-		 *           false, false); } });
-		 * 
-		 *           TextBox textBox = new TextBox(getInstance(), new Vector2i(20, 50),
-		 *           new Vector2i(150, 20), 1, "Text");
-		 * 
-		 *           CheckBox checkBox = new CheckBox(getInstance(), new Vector2i(20,
-		 *           80), new Vector2i(150, 20), 1, false, "das ist eine Checkbox");
-		 * 
-		 *           List<ListEntry> list = new List<ListEntry>(getInstance(), new
-		 *           Vector2i(20, 110), new Vector2i(150, 100), 1);
-		 * 
-		 *           TextPane textPane = new TextPane(getInstance(), new Vector2i(190,
-		 *           20), new Vector2i(150, 120), 1); textPane.setText( "Lorem ipsum
-		 *           dolor sit amet, vel oratio semper molestiae ei, no has eruditi
-		 *           neglegentur.\nNe periculis erroribus eam, mea ex deleniti
-		 *           comprehensam. Eu usu novum sententiae, ne cum illud debet nemore.
-		 *           Vis cibo voluptatibus cu, oportere ullamcorper pro id.\n\nIn quo
-		 *           ipsum delenit qualisque, eam mentitum torquatos ad. Ne unum
-		 *           adolescens constituam qui, ne sed viris laoreet omnesque. Qui sale
-		 *           dicunt adipiscing id, cu iisque scripta interpretaris eum.");
-		 * 
-		 *           ComboBox comboBox = new ComboBox(getInstance(), new Vector2i(350,
-		 *           20), new Vector2i(150, 20), 1); comboBox.addItem(new
-		 *           ComboBoxItem("Item 1")); comboBox.addItem(new ComboBoxItem("Item
-		 *           2")); comboBox.addItem(new ComboBoxItem("Item 3"));
-		 **/
 	}
 
 	@Override
@@ -118,7 +93,12 @@ public class GuiManager extends ComponentContainer {
 		}
 	}
 
-	public static GuiManager getInstance() {
+	/**
+	 * Returns the current instance of the GuiManager
+	 * 
+	 * @return the instance
+	 */
+	public static GuiManager instance() {
 		return instance;
 	}
 }

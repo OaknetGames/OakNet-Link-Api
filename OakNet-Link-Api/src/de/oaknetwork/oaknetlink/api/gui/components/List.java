@@ -9,6 +9,16 @@ import de.oaknetwork.oaknetlink.api.log.Logger;
 import de.oaknetwork.oaknetlink.api.log.OakNetLinkLogProvider;
 import de.oaknetwork.oaknetlink.api.utils.Vector2i;
 
+/**
+ * This List displays ListEntries and provides an automatic page based system
+ * 
+ * TODO Add multi-selection
+ * 
+ * @author Fabian Fila
+ *
+ * @param <T> The type of the entries which will be displayed, they need to
+ *            extend ListEntry
+ */
 public class List<T extends ListEntry> extends ColorComponent {
 
 	private ArrayList<T> entries = new ArrayList<T>();
@@ -18,11 +28,74 @@ public class List<T extends ListEntry> extends ColorComponent {
 	private int currentSite = 1;
 	private Label siteLabel;
 
+	/**
+	 * Creates a new List
+	 * 
+	 * @param parent      the parent of the component
+	 * @param position    the position relative to its parent
+	 * @param size        the size of the component
+	 * @param outlineSize the thickness of the outline
+	 */
 	public List(Component parent, Vector2i position, Vector2i size, int outlineSize) {
 		super(parent, position, size);
 		this.outlineSize = outlineSize;
 		useHighlights = false;
 		initComponent();
+	}
+
+	/**
+	 * Adds a new ListEntry to the List
+	 * 
+	 * @param entry the entry to add
+	 */
+	public void addEntry(T entry) {
+		entries.add(entry);
+		addEntryToSites(entry);
+	}
+
+	/**
+	 * Removes a ListEntry from the List
+	 * 
+	 * @param entry the entry to remove
+	 */
+	public void removeEntry(T entry) {
+		if (entries.contains(entry)) {
+			entries.remove(entry);
+			sites.clear();
+			entries.forEach((entryToAdd) -> addEntryToSites(entry));
+		}
+	}
+
+	/**
+	 * Recieves all entries
+	 * 
+	 * @return an unmodifiable list of the entries
+	 */
+	public ArrayList<T> getEntries() {
+		return (ArrayList<T>) Collections.unmodifiableList(entries);
+	}
+
+	/**
+	 * is used to deselctAll selections
+	 */
+	public void deselectAll() {
+		entries.forEach((entry) -> entry.selected = false);
+	}
+
+	/**
+	 * Gets the currently selected entry
+	 * 
+	 * returns null if nothing is selected
+	 * 
+	 * @return the selected entry
+	 */
+	public T selected() {
+		T result = null;
+		for (T entry : entries) {
+			if (entry.selected)
+				result = entry;
+		}
+		return result;
 	}
 
 	private void updateCurrentSite() {
@@ -37,11 +110,6 @@ public class List<T extends ListEntry> extends ColorComponent {
 
 			}
 		}
-	}
-
-	public void addEntry(T entry) {
-		entries.add(entry);
-		addEntryToSites(entry);
 	}
 
 	private void addEntryToSites(T entry) {
@@ -59,32 +127,6 @@ public class List<T extends ListEntry> extends ColorComponent {
 			sites.add(new ArrayList<T>());
 			sites.get(sites.size() - 1).add(entry);
 		}
-	}
-
-	public void removeEntry(T entry) {
-		if (entries.contains(entry)) {
-			entries.remove(entry);
-			sites.clear();
-			entries.forEach((entryToAdd) -> addEntryToSites(entry));
-		}
-	}
-
-	public ArrayList<T> getEntries() {
-		return (ArrayList<T>) Collections.unmodifiableList(entries);
-	}
-
-	public void deselectAll() {
-		entries.forEach((entry) -> entry.selected = false);
-	}
-
-	// returns null if nothing is selected
-	public T getSelected() {
-		T result = null;
-		for (T entry : entries) {
-			if (entry.selected)
-				result = entry;
-		}
-		return result;
 	}
 
 	@Override

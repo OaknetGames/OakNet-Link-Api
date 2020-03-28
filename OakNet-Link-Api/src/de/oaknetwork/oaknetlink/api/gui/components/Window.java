@@ -8,8 +8,21 @@ import de.oaknetwork.oaknetlink.api.log.Logger;
 import de.oaknetwork.oaknetlink.api.log.OakNetLinkLogProvider;
 import de.oaknetwork.oaknetlink.api.utils.Vector2i;
 
+/**
+ * A window can be dragged and closed.
+ * 
+ * It contains a ComponentContainer which will be used for each component which
+ * is added to the window.
+ * 
+ * The window can be set topmost, so it will be always rendered above anything.
+ * 
+ * @author Fabian Fila
+ */
 public class Window extends ColorComponent {
 
+	/**
+	 * Decides if the Window is topmost
+	 */
 	public boolean topmost = false;
 
 	private String title;
@@ -22,6 +35,16 @@ public class Window extends ColorComponent {
 
 	protected ComponentContainer componentContainer;
 
+	/**
+	 * Creates an new Window
+	 * 
+	 * @param parent      the parent of the component
+	 * @param position    the position relative to its parent
+	 * @param size        the size of the component
+	 * @param outlineSize the thickness of the outline
+	 * @param title       the string which is showed in the titlebar
+	 * @param closeable   decides if the window can be closed
+	 */
 	public Window(Component parent, Vector2i position, Vector2i size, int outlineSize, String title,
 			boolean closeable) {
 		super(parent, position, size);
@@ -32,15 +55,26 @@ public class Window extends ColorComponent {
 		initComponent();
 	}
 
+	/**
+	 * Brings the window in the foreground
+	 */
 	public void setOnTop() {
 		parent.removeChild(this);
 		parent.addChild(this);
 	}
 
+	/**
+	 * Closes the window
+	 */
 	public void close() {
 		parent.removeChild(this);
 	}
 
+	/**
+	 * Receives the size of the ComponentContainer 
+	 * 
+	 * @return the size
+	 */
 	public Vector2i contentSize() {
 		return componentContainer.size().copy();
 	}

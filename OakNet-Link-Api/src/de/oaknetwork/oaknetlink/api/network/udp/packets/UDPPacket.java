@@ -7,7 +7,9 @@ import java.util.Map;
 import de.oaknetwork.oaknetlink.api.network.udp.UDPClient;
 
 /**
- * CONCEPT UDPPackets UDPPackets need to extend this Class. In order that
+ * CONCEPT UDPPackets 
+ * 
+ * UDPPackets need to extend this Class. In order that
  * packets function correctly they need to be instantiated once at
  * initialization.
  * 

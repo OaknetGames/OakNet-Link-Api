@@ -13,6 +13,11 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 
+/**
+ * In this EventHandler are some more events which are routed to the API
+ * 
+ * @author Fabian Fila
+ */
 public class OakNetEventHandler {
 
 	@SubscribeEvent

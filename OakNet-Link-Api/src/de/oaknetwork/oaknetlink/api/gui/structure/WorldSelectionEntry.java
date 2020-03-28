@@ -1,11 +1,16 @@
-package de.oaknetwork.oaknetlink.api.gui;
+package de.oaknetwork.oaknetlink.api.gui.structure;
 
 import de.oaknetwork.oaknetlink.api.gui.components.ListEntry;
 import de.oaknetwork.oaknetlink.api.utils.Vector2i;
 
-public class ServerSelectionEntry extends ListEntry{
+/**
+ * The ListEntry used for the WorldSelection dialog
+ * 
+ * @author Fabian Fila
+ */
+public class WorldSelectionEntry extends ListEntry {
 
-	public ServerSelectionEntry() {
+	public WorldSelectionEntry() {
 		super(30);
 	}
 
@@ -15,7 +20,7 @@ public class ServerSelectionEntry extends ListEntry{
 	}
 
 	@Override
-	public void initComponent() {		
+	public void initComponent() {
 	}
 
 }

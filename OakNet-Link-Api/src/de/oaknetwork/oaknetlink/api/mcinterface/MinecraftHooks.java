@@ -61,23 +61,23 @@ public class MinecraftHooks {
 
 	// 0 = Left click; 1 = Right click; 2 = Mouse wheel click
 	public static boolean mouseDown(int mouseX, int mouseY, int mouseButton) {
-		return GuiManager.getInstance().mouseDown(new Vector2i(mouseX, mouseY), mouseButton);
+		return GuiManager.instance().mouseDown(new Vector2i(mouseX, mouseY), mouseButton);
 	}
 
 	// 0 = Left click; 1 = Right click; 2 = Mouse wheel click
 	public static boolean mouseReleased(int mouseX, int mouseY, int mouseButton) {
-		return GuiManager.getInstance().mouseReleased(new Vector2i(mouseX, mouseY), mouseButton);
+		return GuiManager.instance().mouseReleased(new Vector2i(mouseX, mouseY), mouseButton);
 	}
 
 	public static boolean mouseOver(int mouseX, int mouseY, int mouseWheelDelta) {
-		return GuiManager.getInstance().mouseOver(new Vector2i(mouseX, mouseY), mouseWheelDelta);
+		return GuiManager.instance().mouseOver(new Vector2i(mouseX, mouseY), mouseWheelDelta);
 	}
 
 	public static boolean keyPressed(char key, int keyCode) {
-		return GuiManager.getInstance().keyPressed(key, keyCode);
+		return GuiManager.instance().keyPressed(key, keyCode);
 	}
 
 	public static void onRender() {
-		GuiManager.getInstance().render(new Vector2i(0, 0));
+		GuiManager.instance().render(new Vector2i(0, 0));
 	}
 }

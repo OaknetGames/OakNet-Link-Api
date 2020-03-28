@@ -1,11 +1,16 @@
-package de.oaknetwork.oaknetlink.api.gui;
+package de.oaknetwork.oaknetlink.api.gui.structure;
 
 import de.oaknetwork.oaknetlink.api.gui.components.ListEntry;
 import de.oaknetwork.oaknetlink.api.utils.Vector2i;
 
-public class WorldSelectionEntry extends ListEntry{
+/**
+ * The ListEntry used for the ServerSelection Window
+ * 
+ * @author Fabian Fila
+ */
+public class ServerSelectionEntry extends ListEntry{
 
-	public WorldSelectionEntry() {
+	public ServerSelectionEntry() {
 		super(30);
 	}
 

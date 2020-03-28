@@ -2,8 +2,20 @@ package de.oaknetwork.oaknetlink.api.gui.components;
 
 import de.oaknetwork.oaknetlink.api.utils.Vector2i;
 
+/**
+ * This Component works as Container for other Components
+ * 
+ * @author Fabian Fila
+ */
 public class ComponentContainer extends Component {
 
+	/**
+	 * Creates a new ComponentContainer
+	 * 
+	 * @param parent   the parent of this ComponentContainer
+	 * @param position the position of this Component relative to its parent
+	 * @param size     the size of the Component
+	 */
 	public ComponentContainer(Component parent, Vector2i position, Vector2i size) {
 		super(parent, position, size);
 	}
@@ -28,7 +40,7 @@ public class ComponentContainer extends Component {
 	}
 
 	@Override
-	public void initComponent() {		
+	public void initComponent() {
 	}
 
 }

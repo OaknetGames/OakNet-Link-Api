@@ -1,7 +1,8 @@
-package de.oaknetwork.oaknetlink.api.gui;
+package de.oaknetwork.oaknetlink.api.gui.structure;
 
 import java.util.ArrayList;
 
+import de.oaknetwork.oaknetlink.api.gui.GuiPrimitives;
 import de.oaknetwork.oaknetlink.api.gui.components.Button;
 import de.oaknetwork.oaknetlink.api.gui.components.Color;
 import de.oaknetwork.oaknetlink.api.gui.components.ColorComponent;
@@ -12,6 +13,11 @@ import de.oaknetwork.oaknetlink.api.mcinterface.MinecraftHooks;
 import de.oaknetwork.oaknetlink.api.utils.Constants;
 import de.oaknetwork.oaknetlink.api.utils.Vector2i;
 
+/**
+ * This class defines the structure of the Overlay
+ * 
+ * @author Fabian Fila
+ */
 public class Overlay extends ColorComponent {
 
 	private Overlay instance;

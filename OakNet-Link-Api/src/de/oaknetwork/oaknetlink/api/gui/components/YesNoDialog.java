@@ -2,6 +2,11 @@ package de.oaknetwork.oaknetlink.api.gui.components;
 
 import de.oaknetwork.oaknetlink.api.utils.Vector2i;
 
+/**
+ * This dialog asks the user for a yes / no decision
+ * 
+ * @author Fabian Fila
+ */
 public class YesNoDialog extends Dialog {
 
 	private Runnable onNo;
@@ -9,8 +14,19 @@ public class YesNoDialog extends Dialog {
 
 	private boolean yesPressed = false;
 
-	public YesNoDialog(int outlineSize, String title, String message, boolean blocking, Runnable onNo,
-			Runnable onYes) {
+	/**
+	 * Create a new yes / no Dialog and displays it to the User
+	 * 
+	 * @param outlineSize the thickness of the outline
+	 * @param title       the string which will be shown in the titlebar
+	 * @param message     the message which is displayed to the user
+	 * @param blocking    decides if the dialog blocks all other input
+	 * @param onNo        a Runnable which will be executed when the no button is
+	 *                    pressed
+	 * @param onYes       a Runnable which will be executed when the yes button is
+	 *                    pressed
+	 */
+	public YesNoDialog(int outlineSize, String title, String message, boolean blocking, Runnable onNo, Runnable onYes) {
 		super(outlineSize, title, message, true, "No", blocking);
 		this.onNo = onNo;
 		this.onYes = onYes;
@@ -30,11 +46,11 @@ public class YesNoDialog extends Dialog {
 					}
 				});
 	}
-	
+
 	@Override
 	public void close() {
 		super.close();
-		if(!yesPressed)
+		if (!yesPressed)
 			onNo.run();
 	}
 }

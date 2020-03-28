@@ -1,4 +1,4 @@
-package de.oaknetwork.oaknetlink.api.gui;
+package de.oaknetwork.oaknetlink.api.gui.structure;
 
 import de.oaknetwork.oaknetlink.api.gui.components.Button;
 import de.oaknetwork.oaknetlink.api.gui.components.Color;
@@ -7,6 +7,11 @@ import de.oaknetwork.oaknetlink.api.gui.components.List;
 import de.oaknetwork.oaknetlink.api.gui.components.Window;
 import de.oaknetwork.oaknetlink.api.utils.Vector2i;
 
+/**
+ * This class defines the structure of the ServerListWindow
+ * 
+ * @author Fabian Fila
+ */
 public class ServerListWindow extends Window{
 	
 	private static final int margin = 2;

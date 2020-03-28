@@ -6,8 +6,16 @@ import de.oaknetwork.oaknetlink.api.log.OakNetLinkLogProvider;
 import de.oaknetwork.oaknetlink.api.mcinterface.MinecraftHooks;
 import de.oaknetwork.oaknetlink.api.utils.Vector2i;
 
+/**
+ * This Component can be used to let user input text in a box.
+ * 
+ * @author Fabian Fila
+ */
 public class TextBox extends ColorComponent {
 
+	/**
+	 * The text of the Textbox
+	 */
 	public String text;
 
 	private boolean activated = false;
@@ -17,6 +25,15 @@ public class TextBox extends ColorComponent {
 	private String allowedChars = "abcdefghijklmnopqrstuvwxyz" + "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 			+ "ôóòâàáûúùîìíêèéÔÓÒÂÁÀÛÚÙÍÌÎÈÉÊ" + "äöüÄÖÜ" + "1234567890" + "!\"§$%&/()=?ß´`*+~'#-_1²³\\{}[]°" + " ";
 
+	/**
+	 * Creates a new TextBox
+	 * 
+	 * @param parent      the parent of the component
+	 * @param position    the position relative to its parent
+	 * @param size        the size of the component
+	 * @param outlineSize the thickness of the outline
+	 * @param defaultText the default text
+	 */
 	public TextBox(Component parent, Vector2i position, Vector2i size, int outlineSize, String defaultText) {
 		super(parent, position, size);
 		text = defaultText;
@@ -51,8 +68,7 @@ public class TextBox extends ColorComponent {
 
 	@Override
 	public void renderComponent(Vector2i position) {
-		GuiPrimitives.drawOutlinedRect(position, size(), outlineSize, renderBackgroundColor,
-				renderOutlineColor);
+		GuiPrimitives.drawOutlinedRect(position, size(), outlineSize, renderBackgroundColor, renderOutlineColor);
 		drawText = text;
 		if (System.currentTimeMillis() - lastBlink > 1000)
 			lastBlink = System.currentTimeMillis();

@@ -1,5 +1,6 @@
-package de.oaknetwork.oaknetlink.api.gui;
+package de.oaknetwork.oaknetlink.api.gui.structure;
 
+import de.oaknetwork.oaknetlink.api.gui.backend.IWorldSelectionResult;
 import de.oaknetwork.oaknetlink.api.gui.components.Button;
 import de.oaknetwork.oaknetlink.api.gui.components.Color;
 import de.oaknetwork.oaknetlink.api.gui.components.Component;
@@ -7,6 +8,11 @@ import de.oaknetwork.oaknetlink.api.gui.components.List;
 import de.oaknetwork.oaknetlink.api.gui.components.Window;
 import de.oaknetwork.oaknetlink.api.utils.Vector2i;
 
+/**
+ * This class defines the structure of the WorldSelectionDialog
+ * 
+ * @author Fabian Fila
+ */
 public class WorldSelectionDialog extends Window{
 
 	private IWorldSelectionResult result;
