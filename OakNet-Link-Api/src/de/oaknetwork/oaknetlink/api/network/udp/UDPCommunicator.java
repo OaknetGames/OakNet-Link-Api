@@ -6,9 +6,11 @@ import java.net.DatagramSocket;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import de.oaknetwork.oaknetlink.api.log.Logger;
 import de.oaknetwork.oaknetlink.api.network.PacketException;
+import de.oaknetwork.oaknetlink.api.utils.Constants;
 
 /**
  * This is the heart of the UDP Connection
@@ -35,6 +37,7 @@ public class UDPCommunicator {
 		Logger.logInfo("Create new UDPCommunicator", UDPCommunicator.class);
 		try {
 			serverSocket = new DatagramSocket();
+			startNetworkThread();
 		} catch (SocketException e) {
 			Logger.logException("Can't create UDPDatagrammSocket", e, UDPCommunicator.class);
 		}
@@ -54,6 +57,7 @@ public class UDPCommunicator {
 		Logger.logInfo("Create new UDPCommunicator on port: " + port, UDPCommunicator.class);
 		try {
 			serverSocket = new DatagramSocket(port);
+			startNetworkThread();
 		} catch (SocketException e) {
 			Logger.logException("Can't create UDPDatagrammSocket", e, UDPCommunicator.class);
 		}
@@ -72,8 +76,15 @@ public class UDPCommunicator {
 					} catch (IOException eio) {
 						Logger.logException("Error while recieving packet", eio, UDPCommunicator.class);
 					}
+					
+					if(Constants.NETWORKDEBUG) {
+						Logger.logInfo("Got new Packet from: " + packet.getAddress() + ":" + packet.getPort(), UDPCommunicator.class);
+						Logger.logInfo("DATA:" + Arrays.toString(packet.getData()), UDPCommunicator.class);
+					}
+					
 					try {
-						UDPClientHelper.getClientByPacket(packet).processDPacket(packet);
+						
+						UDPEndpointHelper.getClientByPacket(packet).processDPacket(packet);
 					} catch (PacketException e) {
 						Logger.logException("Can't process packet", e, UDPCommunicator.class);
 					}
@@ -86,7 +97,7 @@ public class UDPCommunicator {
 	/**
 	 * This sends an UDP DatagramPacket to the specified UDP Client
 	 */
-	public void sendPacketBack(UDPClient client, DatagramPacket packetToSendBack) {
+	public void sendPacketBack(UDPEndpoint client, DatagramPacket packetToSendBack) {
 		try {
 			serverSocket.send(packetToSendBack);
 		} catch (IOException e) {

@@ -1,5 +1,9 @@
 package de.oaknetwork.oaknetlink.api.mcinterface;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.util.HashMap;
+
 import de.oaknetwork.oaknetlink.api.gui.GuiManager;
 import de.oaknetwork.oaknetlink.api.gui.components.Button;
 import de.oaknetwork.oaknetlink.api.gui.components.CheckBox;
@@ -17,6 +21,12 @@ import de.oaknetwork.oaknetlink.api.log.Logger;
 import de.oaknetwork.oaknetlink.api.log.MinecraftLogProvider;
 import de.oaknetwork.oaknetlink.api.log.MinecraftServerLogProvider;
 import de.oaknetwork.oaknetlink.api.log.OakNetLinkLogProvider;
+import de.oaknetwork.oaknetlink.api.network.udp.UDPCommunicator;
+import de.oaknetwork.oaknetlink.api.network.udp.UDPEndpoint;
+import de.oaknetwork.oaknetlink.api.network.udp.UDPEndpointHelper;
+import de.oaknetwork.oaknetlink.api.network.udp.packets.UDPPacketHelper;
+import de.oaknetwork.oaknetlink.api.network.udp.packets.UDPPingPacket;
+import de.oaknetwork.oaknetlink.api.network.udp.packets.UDPPongPacket;
 import de.oaknetwork.oaknetlink.api.utils.Vector2i;
 
 /**
@@ -51,7 +61,17 @@ public class MinecraftHooks {
 	}
 
 	public static void init() {
-
+		// UDP Network
+		UDPPacketHelper.registerPackets();
+		new UDPCommunicator();
+		
+		try {
+			UDPEndpoint e = new UDPEndpoint(InetAddress.getByName("127.0.0.1"), 1355);
+			e.debug=true;
+			UDPEndpointHelper.addEndpoint(e);
+		} catch (UnknownHostException e) {
+			Logger.logException("", e, MinecraftHooks.class);
+		}
 	}
 
 	public static void postInit() {

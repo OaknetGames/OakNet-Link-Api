@@ -2,6 +2,9 @@ package de.oaknetwork.oaknetlink.masterserver;
 
 import de.oaknetwork.oaknetlink.api.log.Logger;
 import de.oaknetwork.oaknetlink.api.network.udp.UDPCommunicator;
+import de.oaknetwork.oaknetlink.api.network.udp.packets.UDPPacketHelper;
+import de.oaknetwork.oaknetlink.api.network.udp.packets.UDPPingPacket;
+import de.oaknetwork.oaknetlink.api.network.udp.packets.UDPPongPacket;
 import de.oaknetwork.oaknetlink.api.utils.Constants;
 import de.oaknetwork.oaknetlink.masterserver.network.tcp.TCPServerHandler;
 
@@ -19,6 +22,10 @@ public class Main {
 			Console.open();
 		Logger.logInfo("Starting MasterServer Version: "+ VERSION + " using API: " + Constants.APIVERSION, Main.class);
 		
+		// Packets
+		UDPPacketHelper.registerPackets();
+		
+		// Communicators 
 		new TCPServerHandler(1354);
 		new UDPCommunicator(1355);
 		
