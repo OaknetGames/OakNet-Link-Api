@@ -8,6 +8,11 @@ import de.oaknetwork.oaknetlink.api.network.udp.packets.UDPPongPacket;
 import de.oaknetwork.oaknetlink.api.utils.Constants;
 import de.oaknetwork.oaknetlink.masterserver.network.tcp.TCPServerHandler;
 
+/**
+ * The main class of the Master-Server
+ * 
+ * @author Fabian Fila
+ */
 public class Main {
 	
 	public static final String VERSION="DEV-1.0.0";

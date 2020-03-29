@@ -12,7 +12,7 @@ import de.oaknetwork.oaknetlink.api.utils.Vector2i;
 /**
  * CONCEPT Components
  * 
- * A component is a thing which can be place in the OakNet-Link GUI System.
+ * A component is a thing which can be placed in the OakNet-Link GUI System.
  * 
  * A component has a parent and it can have as many children as desired.
  * 

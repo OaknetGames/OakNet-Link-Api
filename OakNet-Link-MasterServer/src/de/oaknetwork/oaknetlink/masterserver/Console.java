@@ -11,6 +11,11 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.JTextArea;
 import javax.swing.JScrollPane;
 
+/**
+ * This class creates the ConsoleWindow for the Master-Server
+ * 
+ * @author Fabian Fila
+ */
 public class Console extends JFrame {
 
 	/**

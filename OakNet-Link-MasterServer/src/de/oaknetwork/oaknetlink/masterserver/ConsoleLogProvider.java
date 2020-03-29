@@ -5,6 +5,11 @@ import java.time.format.DateTimeFormatter;
 
 import de.oaknetwork.oaknetlink.api.log.ILogProvider;
 
+/**
+ * This LogProvider logs to the Master-Server Console Window
+ * 
+ * @author Fabian
+ */
 public class ConsoleLogProvider implements ILogProvider{
 
 	@Override
