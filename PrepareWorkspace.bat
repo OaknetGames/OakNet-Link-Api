@@ -21,9 +21,9 @@ powershell -Command %command1%
 powershell -Command %command2%
 
 echo Building Workspace Wrapper-1.12.2
-mkdir .\Wrapper1.12.2\libs\
-mkdir .\Wrapper1.12.2\run\
-mkdir .\Wrapper1.12.2\run\mods
+mkdir .\Wrapper-1.12.2\libs\
+mkdir .\Wrapper-1.12.2\run\
+mkdir .\Wrapper-1.12.2\run\mods
 echo Find Source
 dir /s /B .\OakNet-Link-Api\*.java > .\OakNet-Link-Api\sources.txt
 dir /s /B .\Updater\*.java > .\Updater\sources.txt
