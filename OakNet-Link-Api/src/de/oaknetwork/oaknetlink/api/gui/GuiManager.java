@@ -3,17 +3,9 @@ package de.oaknetwork.oaknetlink.api.gui;
 import java.util.ArrayList;
 
 import de.oaknetwork.oaknetlink.api.gui.components.Button;
-import de.oaknetwork.oaknetlink.api.gui.components.CheckBox;
 import de.oaknetwork.oaknetlink.api.gui.components.Color;
-import de.oaknetwork.oaknetlink.api.gui.components.ComboBox;
-import de.oaknetwork.oaknetlink.api.gui.components.ComboBoxItem;
 import de.oaknetwork.oaknetlink.api.gui.components.Component;
 import de.oaknetwork.oaknetlink.api.gui.components.ComponentContainer;
-import de.oaknetwork.oaknetlink.api.gui.components.Dialog;
-import de.oaknetwork.oaknetlink.api.gui.components.List;
-import de.oaknetwork.oaknetlink.api.gui.components.ListEntry;
-import de.oaknetwork.oaknetlink.api.gui.components.TextBox;
-import de.oaknetwork.oaknetlink.api.gui.components.TextPane;
 import de.oaknetwork.oaknetlink.api.gui.components.Window;
 import de.oaknetwork.oaknetlink.api.gui.structure.Overlay;
 import de.oaknetwork.oaknetlink.api.mcinterface.MinecraftHooks;

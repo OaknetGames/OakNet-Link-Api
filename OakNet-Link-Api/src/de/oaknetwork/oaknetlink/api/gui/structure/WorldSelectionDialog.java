@@ -41,17 +41,17 @@ public class WorldSelectionDialog extends Window{
 	@Override
 	public void initComponent() {
 		super.initComponent();
-		List worldSelectionList = new List<WorldSelectionEntry>(this, new Vector2i(margin, margin), contentSize().add(new Vector2i(-2*margin, -3*margin-20)), outlineSize);
+		List<WorldSelectionEntry> worldSelectionList = new List<WorldSelectionEntry>(this, new Vector2i(margin, margin), contentSize().add(new Vector2i(-2*margin, -3*margin-20)), outlineSize);
 		worldSelectionList.inheritColorsFromParent=false;
 		worldSelectionList.setOutlineColor(Color.WHITE);
-		Button closeButton = new Button(this, contentSize().add(new Vector2i(-100-margin, -20-margin)), new Vector2i(100, 20), "Close", outlineSize, new Runnable() {
+		new Button(this, contentSize().add(new Vector2i(-100-margin, -20-margin)), new Vector2i(100, 20), "Close", outlineSize, new Runnable() {
 			
 			@Override
 			public void run() {
 				close();
 			}
 		});
-		Button okButton = new Button(this, new Vector2i(margin, contentSize().Y-margin-20), new Vector2i(100, 20), "Choose World", outlineSize, new Runnable() {
+		new Button(this, new Vector2i(margin, contentSize().Y-margin-20), new Vector2i(100, 20), "Choose World", outlineSize, new Runnable() {
 	
 			@Override
 			public void run() {

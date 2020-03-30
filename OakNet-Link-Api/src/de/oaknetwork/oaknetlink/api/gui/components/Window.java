@@ -2,10 +2,7 @@ package de.oaknetwork.oaknetlink.api.gui.components;
 
 import java.util.ArrayList;
 
-import de.oaknetwork.oaknetlink.api.gui.GuiManager;
 import de.oaknetwork.oaknetlink.api.gui.GuiPrimitives;
-import de.oaknetwork.oaknetlink.api.log.Logger;
-import de.oaknetwork.oaknetlink.api.log.OakNetLinkLogProvider;
 import de.oaknetwork.oaknetlink.api.utils.Vector2i;
 
 /**
@@ -117,7 +114,6 @@ public class Window extends ColorComponent {
 
 	@Override
 	public boolean mouseOverComponent(Vector2i mousePos, int mouseWheelDelta) {
-		boolean result = super.mouseOverComponent(mousePos, mouseWheelDelta);
 		if (dragging) {
 			Vector2i deltaDrag = mousePos.copy().add(dragVector.copy().negate());
 			componentPosition.add(deltaDrag);

@@ -1,7 +1,5 @@
 package de.oaknetwork.oaknetlink.api.gui.components;
 
-import de.oaknetwork.oaknetlink.api.gui.GuiPrimitives;
-import de.oaknetwork.oaknetlink.api.mcinterface.MinecraftHooks;
 import de.oaknetwork.oaknetlink.api.utils.Vector2i;
 
 /**

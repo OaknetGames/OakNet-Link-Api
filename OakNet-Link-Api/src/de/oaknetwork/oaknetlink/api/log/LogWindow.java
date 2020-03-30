@@ -1,23 +1,13 @@
 package de.oaknetwork.oaknetlink.api.log;
 
 import java.awt.BorderLayout;
-import java.awt.EventQueue;
-import java.util.ArrayList;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import java.awt.GridLayout;
 import javax.swing.JTextArea;
-import javax.swing.JTextField;
-import javax.swing.DropMode;
-import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JLabel;
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
-import javax.swing.BoxLayout;
 
 /**
  * The Window containing some TextAreas for logging
@@ -25,6 +15,11 @@ import javax.swing.BoxLayout;
  * @author Fabian Fila
  */
 public class LogWindow extends JFrame {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4552258156990333427L;
 
 	private JPanel contentPane;
 

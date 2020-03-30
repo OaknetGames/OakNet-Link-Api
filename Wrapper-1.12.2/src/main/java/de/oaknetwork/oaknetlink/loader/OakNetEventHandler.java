@@ -5,13 +5,8 @@ import org.lwjgl.input.Mouse;
 
 import de.oaknetwork.oaknetlink.api.mcinterface.MinecraftHooks;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiScreen;
 import net.minecraftforge.client.event.GuiScreenEvent;
-import net.minecraftforge.client.event.MouseEvent;
-import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 
 /**
  * In this EventHandler are some more events which are routed to the API

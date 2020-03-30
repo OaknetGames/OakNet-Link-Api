@@ -3,7 +3,6 @@ package de.oaknetwork.oaknetlink.api.network.udp;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,7 +24,7 @@ import de.oaknetwork.oaknetlink.api.utils.Constants;
  */
 public class UDPEndpoint {
 	
-	public static boolean debug = false;
+	public boolean debug = false;
 
 	UDPEndpoint instance;
 

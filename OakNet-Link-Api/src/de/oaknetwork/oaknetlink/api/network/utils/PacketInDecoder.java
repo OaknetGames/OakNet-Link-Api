@@ -1,9 +1,6 @@
 package de.oaknetwork.oaknetlink.api.network.utils;
 
 import java.nio.charset.StandardCharsets;
-import java.util.List;
-
-import de.oaknetwork.oaknetlink.api.log.Logger;
 import de.oaknetwork.oaknetlink.api.network.PacketException;
 
 /**

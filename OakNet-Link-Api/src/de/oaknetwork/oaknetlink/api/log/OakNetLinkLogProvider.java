@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 
 import de.oaknetwork.oaknetlink.api.utils.Constants;
 
@@ -20,7 +19,7 @@ public class OakNetLinkLogProvider implements ILogProvider {
 	static String logFileName = "";
 
 	@Override
-	public void logInfo(String message, Class sender) {
+	public void logInfo(String message, Class<?> sender) {
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss");
 		LocalDateTime now = LocalDateTime.now();
 		String msg = String.format("[%S] [INFO] [" + sender.getSimpleName() + "]: %s\n", dtf.format(now), message);
@@ -31,7 +30,7 @@ public class OakNetLinkLogProvider implements ILogProvider {
 	}
 
 	@Override
-	public void logWarning(String message, Class sender) {
+	public void logWarning(String message, Class<?> sender) {
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss");
 		LocalDateTime now = LocalDateTime.now();
 		String msg = String.format("[%S] [WARNING] [" + sender.getSimpleName() + "]: %s\n", dtf.format(now), message);
@@ -42,7 +41,7 @@ public class OakNetLinkLogProvider implements ILogProvider {
 	}
 
 	@Override
-	public void logError(String message, Class sender) {
+	public void logError(String message, Class<?> sender) {
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss");
 		LocalDateTime now = LocalDateTime.now();
 		String msg = String.format("[%S] [ERROR] [" + sender.getSimpleName() + "]: %s\n", dtf.format(now), message);
@@ -53,7 +52,7 @@ public class OakNetLinkLogProvider implements ILogProvider {
 	}
 
 	@Override
-	public void logException(String description, Exception except, Class sender) {
+	public void logException(String description, Exception except, Class<?> sender) {
 		logError(description + ": " + except.getMessage(), sender);
 		logError(except.getStackTrace().toString(), sender);
 	}

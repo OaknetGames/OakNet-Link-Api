@@ -1,16 +1,9 @@
 package de.oaknetwork.oaknetlink.api.log;
 
-import java.io.FileNotFoundException;
-import java.io.PrintStream;
-import java.nio.file.FileSystems;
-import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.LoggerContext;
-import org.apache.logging.log4j.core.config.AbstractConfiguration;
-import org.apache.logging.log4j.core.config.AppenderRef;
 import org.apache.logging.log4j.core.layout.PatternLayout;
 
 import de.oaknetwork.oaknetlink.api.mcinterface.IMinecraft;
@@ -40,22 +33,22 @@ public class MinecraftLogProvider implements ILogProvider {
 	}
 
 	@Override
-	public void logInfo(String message, Class sender) {
+	public void logInfo(String message, Class<?> sender) {
 		mcInterface.logInfo("[" + sender.getSimpleName() + "]: " + message);
 	}
 
 	@Override
-	public void logWarning(String message, Class sender) {
+	public void logWarning(String message, Class<?> sender) {
 		mcInterface.logWarning("[" + sender.getSimpleName() + "]: " + message);
 	}
 
 	@Override
-	public void logError(String message, Class sender) {
+	public void logError(String message, Class<?> sender) {
 		mcInterface.logError("[" + sender.getSimpleName() + "]: " + message);
 	}
 
 	@Override
-	public void logException(String description, Exception except, Class sender) {
+	public void logException(String description, Exception except, Class<?> sender) {
 		logError(description + ": " + except.getMessage(), sender);
 		logError(except.getStackTrace().toString(), sender);
 	}

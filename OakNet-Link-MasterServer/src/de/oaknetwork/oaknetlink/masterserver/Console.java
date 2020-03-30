@@ -3,7 +3,6 @@ package de.oaknetwork.oaknetlink.masterserver;
 import java.awt.BorderLayout;
 import java.io.PrintStream;
 
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -36,12 +35,11 @@ public class Console extends JFrame {
 		try {
 			frame = new Console();
 			frame.setVisible(true);
-					
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-
 
 	/**
 	 * Create the frame.
@@ -56,7 +54,7 @@ public class Console extends JFrame {
 		contentPane.setLayout(new BorderLayout(0, 0));
 		JScrollPane scrollPane = new JScrollPane();
 		contentPane.add(scrollPane);
-		
+
 		JTextArea textArea = new JTextArea();
 		scrollPane.setViewportView(textArea);
 
@@ -64,32 +62,30 @@ public class Console extends JFrame {
 		oldErrStream = System.err;
 		someOtherStream = new PrintStream(System.out) {
 
-            @Override
-            public void println(String s) {
-            	textArea.append(s+"\n");
-            	textArea.setCaretPosition(textArea.getText().length());
+			@Override
+			public void println(String s) {
+				textArea.append(s + "\n");
+				textArea.setCaretPosition(textArea.getText().length());
 				System.setOut(oldStream);
 				System.out.println(s);
 				System.setOut(Console.someOtherStream);
-            }
-        };
-        
+			}
+		};
+
 		someOtherErrStream = new PrintStream(System.err) {
 
-            @Override
-            public void println(String s) {
-            	textArea.append(s+"\n");
-            	textArea.setCaretPosition(textArea.getText().length());
+			@Override
+			public void println(String s) {
+				textArea.append(s + "\n");
+				textArea.setCaretPosition(textArea.getText().length());
 				System.setErr(oldErrStream);
 				System.err.println(s);
 				System.setErr(Console.someOtherErrStream);
-            }
-        };
-        
-        
+			}
+		};
 
-        // System.out umlenken:
-        System.setOut(someOtherStream);
-        System.setErr(someOtherErrStream);
-    }
+		// System.out umlenken:
+		System.setOut(someOtherStream);
+		System.setErr(someOtherErrStream);
+	}
 }

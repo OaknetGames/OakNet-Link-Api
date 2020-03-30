@@ -1,13 +1,10 @@
 package de.oaknetwork.oaknetlink.api.network.udp.packets;
 
-import java.io.ObjectInputStream.GetField;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import de.oaknetwork.oaknetlink.api.log.ILogProvider;
 import de.oaknetwork.oaknetlink.api.log.Logger;
 import de.oaknetwork.oaknetlink.api.network.PacketException;
 import de.oaknetwork.oaknetlink.api.network.udp.UDPEndpoint;
@@ -16,7 +13,6 @@ import de.oaknetwork.oaknetlink.api.network.utils.PacketData;
 import de.oaknetwork.oaknetlink.api.network.utils.PacketInDecoder;
 import de.oaknetwork.oaknetlink.api.network.utils.PacketOutEncoder;
 import de.oaknetwork.oaknetlink.api.utils.Constants;
-import de.oaknetwork.oaknetlink.api.utils.Tuple;
 
 /**
  * CONCEPT UDPPackets
@@ -90,9 +86,9 @@ public abstract class UDPPacket {
 	 *                 need to be the actual objects.
 	 * 
 	 */
-	public static void sendPacket(Class clazz, UDPEndpoint receiver, Map<String, Object> data) {
+	public static void sendPacket(Class<?> clazz, UDPEndpoint receiver, Map<String, Object> data) {
 		// get the expected packet
-		Optional result = registeredPackets.stream().filter(element -> clazz.isInstance(element)).findFirst();
+		Optional<UDPPacket> result = registeredPackets.stream().filter(element -> clazz.isInstance(element)).findFirst();
 		if (!result.isPresent())
 			throw new RuntimeException("Error while sending packet: Can't find given UDPPacket");
 		UDPPacket expectedPacket = (UDPPacket) result.get();

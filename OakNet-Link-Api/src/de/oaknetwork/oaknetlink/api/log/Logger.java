@@ -3,8 +3,6 @@ package de.oaknetwork.oaknetlink.api.log;
 import java.util.ArrayList;
 import java.util.Optional;
 
-import de.oaknetwork.oaknetlink.api.mcinterface.IMinecraft;
-
 /**
  * This class will be used to log to the various levels. Also there are
  * shortcuts for logging to a default LogProvider.
@@ -41,7 +39,7 @@ public class Logger {
 	 * @param message the Message which will be logged
 	 * @param sender  the class which logged
 	 */
-	public static void logInfo(String message, Class sender) {
+	public static void logInfo(String message, Class<?> sender) {
 		if (defaultLogProvider == null)
 			throw new RuntimeException("Default LogProvider not set");
 		defaultLogProvider.logInfo(message, sender);
@@ -53,7 +51,7 @@ public class Logger {
 	 * @param message the Message which will be logged
 	 * @param sender  the class which logged
 	 */
-	public static void logWarning(String message, Class sender) {
+	public static void logWarning(String message, Class<?> sender) {
 		if (defaultLogProvider == null)
 			throw new RuntimeException("Default LogProvider not set");
 		defaultLogProvider.logWarning(message, sender);
@@ -65,7 +63,7 @@ public class Logger {
 	 * @param message the Message which will be logged
 	 * @param sender  the class which logged
 	 */
-	public static void logError(String message, Class sender) {
+	public static void logError(String message, Class<?> sender) {
 		if (defaultLogProvider == null)
 			throw new RuntimeException("Default LogProvider not set");
 		defaultLogProvider.logError(message, sender);
@@ -77,7 +75,7 @@ public class Logger {
 	 * @param message the Message which will be logged
 	 * @param sender  the class which logged
 	 */
-	public static void logException(String description, Exception except, Class sender) {
+	public static void logException(String description, Exception except, Class<?> sender) {
 		if (defaultLogProvider == null)
 			throw new RuntimeException("Default LogProvider not set");
 		defaultLogProvider.logException(description, except, sender);
@@ -89,8 +87,8 @@ public class Logger {
 	 * @param clazz the class of the LogProvider
 	 * @return the registered instance of the LogProvider
 	 */
-	public static ILogProvider logProvider(Class clazz) {
-		Optional result = logProvider.stream().filter(element -> clazz.isInstance(element)).findFirst();
+	public static ILogProvider logProvider(Class<?> clazz) {
+		Optional<ILogProvider> result = logProvider.stream().filter(element -> clazz.isInstance(element)).findFirst();
 		return result.isPresent() ? (ILogProvider) result.get() : null;
 	}
 

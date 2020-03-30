@@ -45,7 +45,7 @@ public abstract class ListEntry extends ColorComponent {
 		if (!mouseOverThisComponent(clickPos))
 			return false;
 		try {
-			List parentList = (List) parent;
+			List<?> parentList = (List<?>) parent;
 			parentList.deselectAll();
 			selected = true;
 		} catch (Exception e) {

@@ -2,20 +2,7 @@ package de.oaknetwork.oaknetlink.api.mcinterface;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.HashMap;
-
 import de.oaknetwork.oaknetlink.api.gui.GuiManager;
-import de.oaknetwork.oaknetlink.api.gui.components.Button;
-import de.oaknetwork.oaknetlink.api.gui.components.CheckBox;
-import de.oaknetwork.oaknetlink.api.gui.components.Color;
-import de.oaknetwork.oaknetlink.api.gui.components.ComboBox;
-import de.oaknetwork.oaknetlink.api.gui.components.ComboBoxItem;
-import de.oaknetwork.oaknetlink.api.gui.components.Dialog;
-import de.oaknetwork.oaknetlink.api.gui.components.List;
-import de.oaknetwork.oaknetlink.api.gui.components.ListEntry;
-import de.oaknetwork.oaknetlink.api.gui.components.TextBox;
-import de.oaknetwork.oaknetlink.api.gui.components.TextPane;
-import de.oaknetwork.oaknetlink.api.gui.components.Window;
 import de.oaknetwork.oaknetlink.api.log.LogWindow;
 import de.oaknetwork.oaknetlink.api.log.Logger;
 import de.oaknetwork.oaknetlink.api.log.MinecraftLogProvider;
@@ -25,8 +12,6 @@ import de.oaknetwork.oaknetlink.api.network.udp.UDPCommunicator;
 import de.oaknetwork.oaknetlink.api.network.udp.UDPEndpoint;
 import de.oaknetwork.oaknetlink.api.network.udp.UDPEndpointHelper;
 import de.oaknetwork.oaknetlink.api.network.udp.packets.UDPPacketHelper;
-import de.oaknetwork.oaknetlink.api.network.udp.packets.UDPPingPacket;
-import de.oaknetwork.oaknetlink.api.network.udp.packets.UDPPongPacket;
 import de.oaknetwork.oaknetlink.api.utils.Vector2i;
 
 /**

@@ -1,6 +1,6 @@
 @echo off
 echo Clean Old Stuff
-rmdir /s/q ..\bin\
+rmdir /s/q .\bin\
 del .\Wrapper-1.12.2\build.gradle
 
 echo Make Dirs
@@ -41,5 +41,6 @@ copy .\Wrapper-1.12.2\libs\OakNetLink-Updater.jar .\Wrapper-1.12.2\run\mods\OakN
 echo "Running ForgeGradle"
 cd .\Wrapper-1.12.2\
 .\gradlew.bat setupDecompWorkspace
+.\gradlew.bat eclipse
 
 pause

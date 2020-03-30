@@ -78,7 +78,7 @@ public class CreateServerWindow extends Window {
 		Label worldLabel = new Label(this, leftColPos.copy(), rightColSize, "World: No world selected");
 		worldLabel.centered = false;
 		worldLabel.useHighlights = false;
-		Button selectWorldButton = new Button(this, leftColPos.copy().add(new Vector2i(rightColSize.X + margin + 1, 0)),
+		new Button(this, leftColPos.copy().add(new Vector2i(rightColSize.X + margin + 1, 0)),
 				leftColSize, "Select World", outlineSize, new Runnable() {
 
 					@Override
@@ -101,7 +101,7 @@ public class CreateServerWindow extends Window {
 		leftColPos.add(new Vector2i(0, margin + 20));
 		rightColPos.add(new Vector2i(0, margin + 20));
 
-		Button startServerButton = new Button(this,
+		new Button(this,
 				leftColPos.copy().add(new Vector2i(((contentSize().X - 3 * margin) / 2) + margin, 0)),
 				new Vector2i((contentSize().X - 3 * margin) / 2, 20), "Start Server", outlineSize, new Runnable() {
 

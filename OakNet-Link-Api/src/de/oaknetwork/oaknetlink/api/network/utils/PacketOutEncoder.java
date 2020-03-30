@@ -1,10 +1,6 @@
 package de.oaknetwork.oaknetlink.api.network.utils;
 
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Stream;
 
 /**
  * This class provides useful methods to encodes primitives in a byte list.

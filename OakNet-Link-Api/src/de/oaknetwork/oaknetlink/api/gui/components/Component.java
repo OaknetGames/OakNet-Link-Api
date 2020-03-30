@@ -1,12 +1,9 @@
 package de.oaknetwork.oaknetlink.api.gui.components;
 
 import java.util.ArrayList;
-import java.util.Vector;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import de.oaknetwork.oaknetlink.api.log.Logger;
-import de.oaknetwork.oaknetlink.api.log.OakNetLinkLogProvider;
 import de.oaknetwork.oaknetlink.api.utils.Vector2i;
 
 /**

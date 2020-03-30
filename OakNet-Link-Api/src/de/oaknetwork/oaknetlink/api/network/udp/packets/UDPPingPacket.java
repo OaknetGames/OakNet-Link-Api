@@ -3,7 +3,6 @@ package de.oaknetwork.oaknetlink.api.network.udp.packets;
 import java.util.HashMap;
 import java.util.Map;
 
-import de.oaknetwork.oaknetlink.api.log.Logger;
 import de.oaknetwork.oaknetlink.api.network.udp.UDPEndpoint;
 
 /**

@@ -1,7 +1,5 @@
 package de.oaknetwork.oaknetlink.api.log;
 
-import java.util.ArrayList;
-
 /**
  * This class should be implemented by LogProviders The LogProviders need to be
  * added to the Logger at init
@@ -10,11 +8,11 @@ import java.util.ArrayList;
  */
 public interface ILogProvider {
 
-	public void logInfo(String message, Class sender);
+	public void logInfo(String message, Class<?> sender);
 
-	public void logWarning(String message, Class sender);
+	public void logWarning(String message, Class<?> sender);
 
-	public void logError(String message, Class sender);
+	public void logError(String message, Class<?> sender);
 
-	public void logException(String description, Exception except, Class sender);
+	public void logException(String description, Exception except, Class<?> sender);
 }
