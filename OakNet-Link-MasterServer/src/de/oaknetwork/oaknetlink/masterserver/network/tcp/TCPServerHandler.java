@@ -17,7 +17,6 @@ public class TCPServerHandler {
 	public TCPServerHandler(int port) {
 		instance=this;
 		Logger.logInfo("Create new TCPServerHandler on port: " + port, TCPServerHandler.class);
-		System.out.println();
 		try {
 			serverSocket=new ServerSocket(port);
 		} catch (IOException e) {

@@ -77,6 +77,6 @@ processResources {
     
     runClient {
     jvmArgs "-Xmx2G", "-Xms1024m"
-    args "--username", "username", "--password", "password"
+    args "--username", "{username}", "--password", "{password}"
     }    
 }
