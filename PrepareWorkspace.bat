@@ -4,13 +4,10 @@ rmdir /s/q ..\bin\
 del .\Wrapper-1.12.2\build.gradle
 
 echo Make Dirs
-mkdir \libs\
-mkdir \run\
-mkdir \run\mods
-mkdir ..\bin\
-mkdir ..\bin\oaknetlink-api\
-mkdir ..\bin\oaknetlink-api\assets\
-mkdir ..\bin\updater\
+mkdir .\bin\
+mkdir .\bin\oaknetlink-api\
+mkdir .\bin\oaknetlink-api\assets\
+mkdir .\bin\updater\
 set /p username="Enter Minecraft-Username (E-Mail): "
 set /p pass="Enter Minecraft-Password: "
 
@@ -24,7 +21,9 @@ powershell -Command %command1%
 powershell -Command %command2%
 
 echo Building Workspace Wrapper-1.12.2
-mkdir .\bin\updater\
+mkdir .\Wrapper1-12-3\libs\
+mkdir .\Wrapper1-12-3\run\
+mkdir .\Wrapper1-12-3\run\mods
 echo Find Source
 dir /s /B .\OakNet-Link-Api\*.java > .\OakNet-Link-Api\sources.txt
 dir /s /B .\Updater\*.java > .\Updater\sources.txt

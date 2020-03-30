@@ -1,9 +1,9 @@
 @echo off
 echo Make Dirs
 rmdir /s/q ..\bin\
-mkdir \libs\
-mkdir \run\
-mkdir \run\mods
+mkdir .\libs\
+mkdir .\run\
+mkdir .\run\mods
 mkdir ..\bin\
 mkdir ..\bin\oaknetlink-api\
 mkdir ..\bin\oaknetlink-api\assets\
