@@ -43,7 +43,48 @@ In detail:
 
 # How to setup the IDE
 
-TODO
+Note: You need a working installation of a JDK which is added to the path enviroment variables.
+Also you need to install Eclipse as IDE.
+
+- Clone this Repository
+- Run PrepareWorkspace.bat and enter your Minecraft credentials when asked.
+- Open the Folder in Eclipse
+- Import the projects
+
+![Import Project 1](http://daten.oaknetwork.de/data/onl/ImportIntoEclipse.png)
+
+1. Click on "Import projects..."
+2. Click on "Existing Projects into Workspace"
+3. Click on Next
+
+![Import Project 2](http://daten.oaknetwork.de/data/onl/ImportIntoEclipse2.png)
+
+1. Click on "Browse..." and choose the root of the repository
+2. Click on "Select All"
+3. Click on Finish
+
+- For each Wrapper Project you need to add Run Configurations
+
+![Run Configuration 1](http://daten.oaknetwork.de/data/onl/RunConfigurationMinecraft.png)
+
+1. Click on "Configure External Tools" 
+2. Choose a Name
+3. Location; Click on "Browse Workspace"
+4. Choose the desired Wrapper Project
+5. Choose the RunClient batch file and click OK
+
+![Run Configuration 2](http://daten.oaknetwork.de/data/onl/RunConfigurationMinecraft2.png)
+
+1. Working Directory; Click on "Browse Workspace"
+2. Choose the desired Wrapper Project
+3. Click OK
+3. Click Apply
+3. Click Close
+
+Now you can make the desired changes and open a pull request.
+
+Thanks for contributing.
+
 
 # License
 You are allowed to modify the code as you wish and to create pull requests to contribute to the Project.
