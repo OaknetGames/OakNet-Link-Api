@@ -1,6 +1,19 @@
 @echo off
-set /p username="Enter Minecraft-Username: "
+echo Clean Old Stuff
+rmdir /s/q ..\bin\
+del .\Wrapper-1.12.2\build.gradle
+
+echo Make Dirs
+mkdir \libs\
+mkdir \run\
+mkdir \run\mods
+mkdir ..\bin\
+mkdir ..\bin\oaknetlink-api\
+mkdir ..\bin\oaknetlink-api\assets\
+mkdir ..\bin\updater\
+set /p username="Enter Minecraft-Username (E-Mail): "
 set /p pass="Enter Minecraft-Password: "
+
 echo Copy Configs
 copy .\Wrapper-1.12.2\build.gradle.example .\Wrapper-1.12.2\build.gradle
 
