@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.oaknetwork.oaknetlink.api.log.Logger;
+import de.oaknetwork.oaknetlink.api.network.udp.packets.UDPHandshakePacket;
 import de.oaknetwork.oaknetlink.api.utils.Constants;
 
 /**
@@ -49,11 +50,18 @@ public class UDPEndpointHelper {
 		return result;
 	}
 	
+	/**
+	 * Calling this method will create a MasterServer endpoint and connects to it;
+	 * 
+	 * @return the created endpoint
+	 */
 	public static UDPEndpoint createMasterServerEndpoint() {
 		UDPEndpoint masterServerEndpoint;
 		try {
 			masterServerEndpoint = new UDPEndpoint(InetAddress.getByName(Constants.MASTERSERVERADDRESS), Constants.UDPPORT);
+			masterServerEndpoint.userName = "MasterServer";
 			addEndpoint(masterServerEndpoint);
+			UDPHandshakePacket.sendPacket(masterServerEndpoint);
 			return masterServerEndpoint;
 		} catch (UnknownHostException e) {
 			Logger.logException("Can't create MasterServerEndpoint", e, UDPEndpointHelper.class);

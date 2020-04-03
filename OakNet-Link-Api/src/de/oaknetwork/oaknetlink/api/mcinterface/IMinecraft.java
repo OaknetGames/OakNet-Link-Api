@@ -22,6 +22,10 @@ public interface IMinecraft {
 	public String gameVersion();
 	
 	public String wrapperVersion();
+	
+	public String userName();
+	
+	public String uuid();
 
 	public void drawRect(int x, int y, int width, int height, int r, int g, int b, int alpha);
 

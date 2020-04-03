@@ -8,6 +8,7 @@ import de.oaknetwork.oaknetlink.api.gui.components.Component;
 import de.oaknetwork.oaknetlink.api.gui.components.Label;
 import de.oaknetwork.oaknetlink.api.gui.components.TextBox;
 import de.oaknetwork.oaknetlink.api.gui.components.Window;
+import de.oaknetwork.oaknetlink.api.mcinterface.MinecraftHooks;
 import de.oaknetwork.oaknetlink.api.utils.Vector2i;
 
 /**
@@ -35,7 +36,7 @@ public class CreateServerWindow extends Window {
 		Label serverNameLabel = new Label(this, leftColPos.copy(), leftColSize, "Server Name: ");
 		serverNameLabel.centered = false;
 		serverNameLabel.useHighlights = false;
-		new TextBox(this, rightColPos.copy(), rightColSize, outlineSize, "Username's Game");
+		new TextBox(this, rightColPos.copy(), rightColSize, outlineSize, MinecraftHooks.mcInterface.userName() + "'s Game");
 		leftColPos.add(new Vector2i(0, margin + 20));
 		rightColPos.add(new Vector2i(0, margin + 20));
 

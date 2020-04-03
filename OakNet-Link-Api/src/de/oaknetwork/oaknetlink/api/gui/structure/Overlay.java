@@ -60,7 +60,8 @@ public class Overlay extends ColorComponent {
 
 	@Override
 	public void initComponent() {
-		Label headerLabel = new Label(this, new Vector2i(0, 0), new Vector2i(size.X, 15), "OakNet-Link");
+		Label headerLabel = new Label(this, new Vector2i(0, 0), new Vector2i(size.X, 15),
+				"Welcome to OakNet-Link, " + MinecraftHooks.mcInterface.userName() + "!");
 		headerLabel.useHighlights = false;
 		headerLabel.setForegroundColor(Color.WHITE);
 

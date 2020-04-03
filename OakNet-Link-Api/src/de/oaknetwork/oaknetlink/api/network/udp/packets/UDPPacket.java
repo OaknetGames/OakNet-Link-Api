@@ -164,7 +164,7 @@ public abstract class UDPPacket {
 			} else if (expectedType == Long.class) {
 				data.put(key, new Long(PacketInDecoder.decodeLong(packetData)));
 			} else if (expectedType == String.class) {
-				data.put(key, PacketInDecoder.decodeInt(packetData));
+				data.put(key, PacketInDecoder.decodeString(packetData));
 			} else if (expectedType == BytePackage.class) {
 				data.put(key, PacketInDecoder.decodeBytePackage(packetData));
 			} else {

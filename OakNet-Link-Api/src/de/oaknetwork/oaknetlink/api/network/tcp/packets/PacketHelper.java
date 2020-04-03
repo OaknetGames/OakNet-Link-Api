@@ -1,8 +1,10 @@
 package de.oaknetwork.oaknetlink.api.network.tcp.packets;
 
 import de.oaknetwork.oaknetlink.api.network.tcp.packets.client.CDisconnectionPacket;
+import de.oaknetwork.oaknetlink.api.network.tcp.packets.client.CHandshackePacket;
 import de.oaknetwork.oaknetlink.api.network.tcp.packets.client.CPingPacket;
 import de.oaknetwork.oaknetlink.api.network.tcp.packets.server.SDisconnectionPacket;
+import de.oaknetwork.oaknetlink.api.network.tcp.packets.server.SHandshakeResponsePacket;
 import de.oaknetwork.oaknetlink.api.network.tcp.packets.server.SPongPacket;
 
 /**
@@ -21,6 +23,8 @@ public class PacketHelper {
 		new SPongPacket();
 		new CDisconnectionPacket();
 		new SDisconnectionPacket();
+		new CHandshackePacket();
+		new SHandshakeResponsePacket();
 		
 	}
 }

@@ -11,6 +11,7 @@ public class UDPPacketHelper {
 		new UDPPingPacket();
 		new UDPPongPacket();
 		new UDPDisconnectionPacket();
+		new UDPHandshakePacket();
 	}
 
 }

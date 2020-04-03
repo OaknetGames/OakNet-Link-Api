@@ -95,4 +95,14 @@ public class MinecraftInterface implements IMinecraft {
 		return Main.VERSION;
 	}
 
+	@Override
+	public String userName() {
+		return Minecraft.getMinecraft().getSession().getProfile().getName();
+	}
+
+	@Override
+	public String uuid() {
+		return Minecraft.getMinecraft().getSession().getProfile().getId().toString();
+	}
+
 }

@@ -35,6 +35,7 @@ public class Client {
 			public void run() {
 				// Try Catch surrounding anything to catch errors which kill the network thread
 				try {
+					connected = true;
 					// Create the InputStream
 					BufferedInputStream in = null;
 					try {
@@ -44,7 +45,6 @@ public class Client {
 						return;
 					}
 					// Network loop below
-					connected = true;
 					while (connected) {
 						try {
 							// Decode Packet Length

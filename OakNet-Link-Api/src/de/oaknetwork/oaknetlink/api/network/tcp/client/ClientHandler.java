@@ -10,6 +10,7 @@ import de.oaknetwork.oaknetlink.api.log.Logger;
 import de.oaknetwork.oaknetlink.api.network.PacketException;
 import de.oaknetwork.oaknetlink.api.network.tcp.packets.Packet;
 import de.oaknetwork.oaknetlink.api.network.tcp.packets.client.CDisconnectionPacket;
+import de.oaknetwork.oaknetlink.api.network.tcp.packets.client.CHandshackePacket;
 import de.oaknetwork.oaknetlink.api.network.tcp.packets.client.CPingPacket;
 import de.oaknetwork.oaknetlink.api.network.tcp.server.Client;
 import de.oaknetwork.oaknetlink.api.network.utils.PacketData;
@@ -49,7 +50,9 @@ public class ClientHandler {
 						server = new Socket(InetAddress.getByName(Constants.MASTERSERVERADDRESS), Constants.TCPPORT);
 					} catch (IOException e) {
 						Logger.logException("Can't connect to MasterServer", e, ClientHandler.class);
+						return;
 					}
+					connected = true;
 
 					// Create the InputStream
 					BufferedInputStream in = null;
@@ -59,8 +62,11 @@ public class ClientHandler {
 						Logger.logException("Can't get Inputstream", e1, ClientHandler.class);
 						return;
 					}
+					
+					// Send HandshakePacket
+					CHandshackePacket.sendPacket();
+
 					// Network loop below
-					connected = true;
 					// Ping Loop
 					Thread pingThread = new Thread(new Runnable() {
 
