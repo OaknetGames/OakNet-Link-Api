@@ -1,5 +1,7 @@
 package de.oaknetwork.oaknetlink.api.log;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.ArrayList;
 
 import org.apache.logging.log4j.LogManager;
@@ -50,7 +52,10 @@ public class MinecraftLogProvider implements ILogProvider {
 	@Override
 	public void logException(String description, Exception except, Class<?> sender) {
 		logError(description + ": " + except.getMessage(), sender);
-		logError(except.getStackTrace().toString(), sender);
+		StringWriter sw = new StringWriter();
+		PrintWriter pw = new PrintWriter(sw);
+		except.printStackTrace(pw);
+		logError(sw.toString().toString(), sender);
 	}
 
 }

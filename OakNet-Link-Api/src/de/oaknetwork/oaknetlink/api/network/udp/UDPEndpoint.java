@@ -55,7 +55,13 @@ public class UDPEndpoint {
 			public void run() {
 				boolean resend = true;
 				boolean ping = true;
-				while (connected) {
+				while (connected) {						
+					// If we recieved a fullPacket we can process it now
+					if (canPacketBeProcessed) {
+						canPacketBeProcessed = false;
+						sendStatus((byte) 1);
+						processFullPacket();
+					}
 					// We received an error
 					if (status == 2 && outgoingPacketQueue.size() > 0) {
 						sendPacket(outgoingPacketQueue.get(0));
@@ -71,12 +77,6 @@ public class UDPEndpoint {
 					// Nothing to do, so sent the next Packet out
 					if (status == -1 && outgoingPacketQueue.size() > 0) {
 						sendPacket(outgoingPacketQueue.get(0));
-					}
-					// If we recieved a fullPacket we can process it now
-					if (canPacketBeProcessed) {
-						canPacketBeProcessed = false;
-						sendStatus((byte) 1);
-						processFullPacket();
 					}
 					// Ping
 					if (System.currentTimeMillis() % 1000 < 10 &&debug) {

@@ -1,10 +1,11 @@
 package de.oaknetwork.oaknetlink.masterserver;
 
 import de.oaknetwork.oaknetlink.api.log.Logger;
+import de.oaknetwork.oaknetlink.api.network.tcp.packets.PacketHelper;
+import de.oaknetwork.oaknetlink.api.network.tcp.server.ServerHandler;
 import de.oaknetwork.oaknetlink.api.network.udp.UDPCommunicator;
 import de.oaknetwork.oaknetlink.api.network.udp.packets.UDPPacketHelper;
 import de.oaknetwork.oaknetlink.api.utils.Constants;
-import de.oaknetwork.oaknetlink.masterserver.network.tcp.TCPServerHandler;
 
 /**
  * The main class of the Master-Server
@@ -27,10 +28,11 @@ public class Main {
 
 		// Packets
 		UDPPacketHelper.registerPackets();
+		PacketHelper.registerPackets();
 
 		// Communicators
-		new TCPServerHandler(1354);
-		new UDPCommunicator(1355);
+		new ServerHandler(Constants.TCPPORT);
+		new UDPCommunicator(Constants.UDPPORT);
 
 	}
 

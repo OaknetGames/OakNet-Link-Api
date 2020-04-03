@@ -1,0 +1,3 @@
+A TCP Packet looks like that:
+
+Short packetLength, byte packetID, byte[] packetData

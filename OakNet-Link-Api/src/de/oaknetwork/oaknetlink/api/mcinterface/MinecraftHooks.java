@@ -1,13 +1,13 @@
 package de.oaknetwork.oaknetlink.api.mcinterface;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import de.oaknetwork.oaknetlink.api.gui.GuiManager;
 import de.oaknetwork.oaknetlink.api.log.LogWindow;
 import de.oaknetwork.oaknetlink.api.log.Logger;
 import de.oaknetwork.oaknetlink.api.log.MinecraftLogProvider;
 import de.oaknetwork.oaknetlink.api.log.MinecraftServerLogProvider;
 import de.oaknetwork.oaknetlink.api.log.OakNetLinkLogProvider;
+import de.oaknetwork.oaknetlink.api.network.tcp.client.ClientHandler;
+import de.oaknetwork.oaknetlink.api.network.tcp.packets.PacketHelper;
 import de.oaknetwork.oaknetlink.api.network.udp.UDPCommunicator;
 import de.oaknetwork.oaknetlink.api.network.udp.UDPEndpoint;
 import de.oaknetwork.oaknetlink.api.network.udp.UDPEndpointHelper;
@@ -23,8 +23,9 @@ import de.oaknetwork.oaknetlink.api.utils.Vector2i;
  * The mod is only a wrapper which wraps the game's logic to this version
  * independent API
  * 
- * 1. IMinecraft: this Interface needs to be implemented by the Minecraft 2.
- * Minecraft Hooks: These methods have to be called from the wrapper
+ * 1. IMinecraft: this Interface needs to be implemented by the Minecraft
+ * 
+ * 2. Minecraft Hooks: These methods have to be called from the wrapper
  * 
  * @author Fabian Fila
  */
@@ -49,14 +50,12 @@ public class MinecraftHooks {
 		// UDP Network
 		UDPPacketHelper.registerPackets();
 		new UDPCommunicator();
-		
-		try {
-			UDPEndpoint e = new UDPEndpoint(InetAddress.getByName("127.0.0.1"), 1355);
-			e.debug=true;
-			UDPEndpointHelper.addEndpoint(e);
-		} catch (UnknownHostException e) {
-			Logger.logException("", e, MinecraftHooks.class);
-		}
+		UDPEndpoint masterServer = UDPEndpointHelper.createMasterServerEndpoint();
+		masterServer.debug = true;
+
+		// TCP Network
+		PacketHelper.registerPackets();
+		ClientHandler.connect();
 	}
 
 	public static void postInit() {

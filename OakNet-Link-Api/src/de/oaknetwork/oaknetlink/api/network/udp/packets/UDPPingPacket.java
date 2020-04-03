@@ -35,5 +35,4 @@ public class UDPPingPacket extends UDPPacket {
 		data.put("timestamp", System.currentTimeMillis());
 		sendPacket(UDPPingPacket.class, receiver, data);
 	}
-
 }

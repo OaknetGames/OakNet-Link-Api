@@ -4,6 +4,7 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -54,7 +55,10 @@ public class OakNetLinkLogProvider implements ILogProvider {
 	@Override
 	public void logException(String description, Exception except, Class<?> sender) {
 		logError(description + ": " + except.getMessage(), sender);
-		logError(except.getStackTrace().toString(), sender);
+		StringWriter sw = new StringWriter();
+		PrintWriter pw = new PrintWriter(sw);
+		except.printStackTrace(pw);
+		logError(sw.toString().toString(), sender);
 	}
 
 	void writeToLogFile(String msg) {

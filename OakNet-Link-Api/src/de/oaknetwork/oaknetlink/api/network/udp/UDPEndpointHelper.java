@@ -1,10 +1,13 @@
 package de.oaknetwork.oaknetlink.api.network.udp;
 
 import java.net.DatagramPacket;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
 import de.oaknetwork.oaknetlink.api.log.Logger;
+import de.oaknetwork.oaknetlink.api.utils.Constants;
 
 /**
  * This class manages all the UDP endpoint handling.
@@ -17,6 +20,7 @@ public class UDPEndpointHelper {
 
 	public static void addEndpoint(UDPEndpoint endpointToAdd) {
 		connectedClients.add(endpointToAdd);
+		Logger.logInfo(endpointToAdd.udpAdress().toString() + " connected via UDP.", UDPEndpointHelper.class);
 	}
 
 	public static void removeEndpoint(UDPEndpoint endpointToRemove) {
@@ -40,10 +44,21 @@ public class UDPEndpointHelper {
 		}
 		if (result == null) {
 			result = new UDPEndpoint(dpacket.getAddress(), dpacket.getPort());
-			connectedClients.add(result);
-			Logger.logInfo(result.udpAdress().toString() + " connected via UDP.", UDPEndpointHelper.class);
+			addEndpoint(result);
 		}
 		return result;
+	}
+	
+	public static UDPEndpoint createMasterServerEndpoint() {
+		UDPEndpoint masterServerEndpoint;
+		try {
+			masterServerEndpoint = new UDPEndpoint(InetAddress.getByName(Constants.MASTERSERVERADDRESS), Constants.UDPPORT);
+			addEndpoint(masterServerEndpoint);
+			return masterServerEndpoint;
+		} catch (UnknownHostException e) {
+			Logger.logException("Can't create MasterServerEndpoint", e, UDPEndpointHelper.class);
+		}
+		return null;
 	}
 
 }
