@@ -82,6 +82,70 @@ public class Logger {
 	}
 
 	/**
+	 * Log info to multiple LogProviders
+	 * 
+	 * @param message   the Message which will be logged
+	 * @param sender    the class which logged
+	 * @param providers the providers to which should be logged
+	 */
+	public static void logInfo(String message, Class<?> sender, Class<?>... providers) {
+		for (Class<?> clazz : providers) {
+			ILogProvider logProvider = logProvider(clazz);
+			if (logProvider == null)
+				throw new RuntimeException("Invalid LogProvider");
+			logProvider.logInfo(message, sender);
+		}
+	}
+
+	/**
+	 * Log warning to multiple LogProviders
+	 * 
+	 * @param message   the Message which will be logged
+	 * @param sender    the class which logged
+	 * @param providers the providers to which should be logged
+	 */
+	public static void logWarning(String message, Class<?> sender, Class<?>... providers) {
+		for (Class<?> clazz : providers) {
+			ILogProvider logProvider = logProvider(clazz);
+			if (logProvider == null)
+				throw new RuntimeException("Invalid LogProvider");
+			logProvider.logWarning(message, sender);
+		}
+	}
+
+	/**
+	 * Log errors to multiple LogProviders
+	 * 
+	 * @param message   the Message which will be logged
+	 * @param sender    the class which logged
+	 * @param providers the providers to which should be logged
+	 */
+	public static void logError(String message, Class<?> sender, Class<?>... providers) {
+		for (Class<?> clazz : providers) {
+			ILogProvider logProvider = logProvider(clazz);
+			if (logProvider == null)
+				throw new RuntimeException("Invalid LogProvider");
+			logProvider.logError(message, sender);
+		}
+	}
+
+	/**
+	 * Log exceptions to multiple LogProviders
+	 * 
+	 * @param message   the Message which will be logged
+	 * @param sender    the class which logged
+	 * @param providers the providers to which should be logged
+	 */
+	public static void logException(String description, Exception except, Class<?> sender, Class<?>... providers) {
+		for (Class<?> clazz : providers) {
+			ILogProvider logProvider = logProvider(clazz);
+			if (logProvider == null)
+				throw new RuntimeException("Invalid LogProvider");
+			logProvider.logException(description, except, sender);
+		}
+	}
+
+	/**
 	 * Used to get a registered LogProvider by its class
 	 * 
 	 * @param clazz the class of the LogProvider

@@ -40,9 +40,8 @@ public class MinecraftHooks {
 		Logger.addLogProvider(new OakNetLinkLogProvider());
 		Logger.addLogProvider(new MinecraftServerLogProvider());
 		Logger.setDefaultLogProvider(Logger.logProvider(OakNetLinkLogProvider.class));
-
-		Logger.logProvider(MinecraftLogProvider.class).logInfo("OakNet-Link is starting...", MinecraftHooks.class);
-		Logger.logInfo("OakNet-Link is starting...", MinecraftHooks.class);
+		
+		Logger.logInfo("OakNet-Link is starting...", MinecraftHooks.class, OakNetLinkLogProvider.class, MinecraftLogProvider.class);
 
 	}
 
