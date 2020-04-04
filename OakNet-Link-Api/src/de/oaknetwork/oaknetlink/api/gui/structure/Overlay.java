@@ -3,6 +3,7 @@ package de.oaknetwork.oaknetlink.api.gui.structure;
 import java.util.ArrayList;
 
 import de.oaknetwork.oaknetlink.api.gui.GuiPrimitives;
+import de.oaknetwork.oaknetlink.api.gui.backend.ServerListWindowBackend;
 import de.oaknetwork.oaknetlink.api.gui.components.Button;
 import de.oaknetwork.oaknetlink.api.gui.components.Color;
 import de.oaknetwork.oaknetlink.api.gui.components.ColorComponent;
@@ -32,6 +33,7 @@ public class Overlay extends ColorComponent {
 		chatWindow = new ChatWindow(this);
 		chatWindow.close();
 		serverListWindow = new ServerListWindow(this);
+		ServerListWindowBackend.setWindow(serverListWindow);
 		serverListWindow.close();
 		initComponent();
 		useHighlights = false;

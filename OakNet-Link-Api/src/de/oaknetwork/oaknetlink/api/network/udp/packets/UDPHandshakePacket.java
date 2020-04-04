@@ -3,8 +3,10 @@ package de.oaknetwork.oaknetlink.api.network.udp.packets;
 import java.util.HashMap;
 import java.util.Map;
 
+import de.oaknetwork.oaknetlink.api.game.GameHelper;
 import de.oaknetwork.oaknetlink.api.log.Logger;
 import de.oaknetwork.oaknetlink.api.mcinterface.MinecraftHooks;
+import de.oaknetwork.oaknetlink.api.network.tcp.server.ClientHelper;
 import de.oaknetwork.oaknetlink.api.network.udp.UDPEndpoint;
 import de.oaknetwork.oaknetlink.api.utils.AuthHelper;
 import de.oaknetwork.oaknetlink.api.utils.Constants;
@@ -32,17 +34,23 @@ public class UDPHandshakePacket extends UDPPacket {
 		short protocolVersion = (short) data.get("protocolVersion");
 		String userName = (String) data.get("userName");
 		String uuid = (String) data.get("uuid");
-		if(protocolVersion != Constants.ProtocolVersion) {
+		if (protocolVersion != Constants.ProtocolVersion) {
 			sender.disconnect("Outdated mod version, try updating OakNet-Link!");
 			return;
 		}
-		if(!AuthHelper.authenticated(userName, uuid)) {
+		if (!AuthHelper.authenticated(userName, uuid)) {
 			sender.disconnect("Not authentificated with the Mojang Servers!");
 			return;
 		}
 		sender.userName = userName;
 		sender.uuid = uuid;
 		Logger.logInfo(userName + " logged in.", UDPHandshakePacket.class);
+		
+		if (ClientHelper.clientByUDPEndpoint(sender) != null
+				&& GameHelper.gameByOwner(ClientHelper.clientByUDPEndpoint(sender)) != null
+				&& GameHelper.gameByOwner(ClientHelper.clientByUDPEndpoint(sender)).gameState == 1) {
+			GameHelper.gameByOwner(ClientHelper.clientByUDPEndpoint(sender)).gameState = 2;
+		}
 
 	}
 

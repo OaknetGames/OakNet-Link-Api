@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.oaknetwork.oaknetlink.api.log.Logger;
+import de.oaknetwork.oaknetlink.api.network.tcp.server.Client;
 import de.oaknetwork.oaknetlink.api.network.udp.packets.UDPHandshakePacket;
 import de.oaknetwork.oaknetlink.api.utils.Constants;
 
@@ -16,6 +17,8 @@ import de.oaknetwork.oaknetlink.api.utils.Constants;
  * @author Fabian Fila
  */
 public class UDPEndpointHelper {
+	
+	public static UDPEndpoint masterServerEndpoint;
 
 	private static List<UDPEndpoint> connectedClients = new ArrayList<UDPEndpoint>();
 
@@ -36,12 +39,11 @@ public class UDPEndpointHelper {
 		}
 	}
 
-	public static UDPEndpoint getClientByPacket(DatagramPacket dpacket) {
+	public static UDPEndpoint endpointByPacket(DatagramPacket dpacket) {
 		UDPEndpoint result = null;
 		for (UDPEndpoint client : connectedClients) {
 			if (client.udpAdress().equals(dpacket.getAddress()) && client.udpPort() == dpacket.getPort())
 				result = client;
-			// result = client;
 		}
 		if (result == null) {
 			result = new UDPEndpoint(dpacket.getAddress(), dpacket.getPort());
@@ -50,13 +52,22 @@ public class UDPEndpointHelper {
 		return result;
 	}
 	
+	public static UDPEndpoint endpointByClient(Client client) {
+		UDPEndpoint result = null;
+		for(UDPEndpoint endpoint : connectedClients) {
+			if(client.name.equals(endpoint.userName)&&client.uuid.equals(endpoint.uuid))
+				result=endpoint;
+		}
+		return result;
+	}
+	
+	
 	/**
 	 * Calling this method will create a MasterServer endpoint and connects to it;
 	 * 
 	 * @return the created endpoint
 	 */
 	public static UDPEndpoint createMasterServerEndpoint() {
-		UDPEndpoint masterServerEndpoint;
 		try {
 			masterServerEndpoint = new UDPEndpoint(InetAddress.getByName(Constants.MASTERSERVERADDRESS), Constants.UDPPORT);
 			masterServerEndpoint.userName = "MasterServer";

@@ -61,6 +61,15 @@ public class List<T extends ListEntry> extends ColorComponent {
 			entries.forEach((entryToAdd) -> addEntryToSites(entry));
 		}
 	}
+	
+	/**
+	 * Clears the List
+	 */
+	public void clear() {
+		for(T entry : entries) {
+			removeEntry(entry);
+		}
+	}
 
 	/**
 	 * Recieves all entries

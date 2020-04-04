@@ -3,6 +3,7 @@ package de.oaknetwork.oaknetlink.api.network.tcp.server;
 import java.util.ArrayList;
 
 import de.oaknetwork.oaknetlink.api.log.Logger;
+import de.oaknetwork.oaknetlink.api.network.udp.UDPEndpoint;
 
 /**
  * This helper handles the TCP client management stuff
@@ -23,5 +24,14 @@ public class ClientHelper {
 			return;
 		connectedClients.remove(client);
 		Logger.logInfo(client.client.getInetAddress().toString() + " disconnected from TCP.", ClientHelper.class);
+	}
+	
+	public static Client clientByUDPEndpoint(UDPEndpoint endpoint) {
+		Client result = null;
+		for(Client client : connectedClients) {
+			if(client.name.equals(endpoint.userName)&&client.uuid.equals(endpoint.uuid))
+				result=client;
+		}
+		return result;
 	}
 }

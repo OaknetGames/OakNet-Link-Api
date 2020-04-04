@@ -17,6 +17,8 @@ public class ServerListWindow extends Window{
 	private static final int margin = 2;
 	private static final int outlineSize = 1;
 	
+	public List<ServerSelectionEntry> serverSelectionList;
+	
 	public ServerListWindow(Component parent) {
 		super(parent, new Vector2i(0, 0), new Vector2i(220, 250), 1, "Server List", true);
 	}
@@ -24,7 +26,7 @@ public class ServerListWindow extends Window{
 	@Override
 	public void initComponent() {
 		super.initComponent();
-		List<ServerSelectionEntry> serverSelectionList = new List<ServerSelectionEntry>(this, new Vector2i(margin, margin), contentSize().add(new Vector2i(-2*margin, -3*margin-20)), outlineSize);
+		serverSelectionList = new List<ServerSelectionEntry>(this, new Vector2i(margin, margin), contentSize().add(new Vector2i(-2*margin, -3*margin-20)), outlineSize);
 		serverSelectionList.inheritColorsFromParent=false;
 		serverSelectionList.setOutlineColor(Color.WHITE);
 		new Button(this, contentSize().add(new Vector2i(-100-margin, -20-margin)), new Vector2i(100, 20), "Close", outlineSize, new Runnable() {

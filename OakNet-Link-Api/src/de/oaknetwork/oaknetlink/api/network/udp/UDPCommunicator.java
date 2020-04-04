@@ -82,7 +82,7 @@ public class UDPCommunicator {
 					
 					try {
 						
-						UDPEndpointHelper.getClientByPacket(packet).processDPacket(packet);
+						UDPEndpointHelper.endpointByPacket(packet).processDPacket(packet);
 					} catch (PacketException e) {
 						Logger.logException("Can't process packet", e, UDPCommunicator.class);
 					}

@@ -130,6 +130,11 @@ public abstract class UDPPacket {
 	}
 
 	public static void decodePacket(PacketData packetData, UDPEndpoint sender) throws PacketException {
+		// Check if packet is valid
+		if(packetData.data.length == 0) {
+			Logger.logWarning("Received invalid packet, ignoring...", UDPPacket.class);
+			return;
+		}
 		// Get PacketID
 		byte packetId = packetData.data[0];
 		packetData.removeBytes(1);
