@@ -23,6 +23,10 @@ public class UDPEndpointHelper {
 	private static List<UDPEndpoint> connectedClients = new ArrayList<UDPEndpoint>();
 
 	public static void addEndpoint(UDPEndpoint endpointToAdd) {
+		for(UDPEndpoint endpoint : connectedClients) {
+			if(endpoint.udpAdress().equals(endpointToAdd.udpAdress())&&endpoint.udpPort() == endpointToAdd.udpPort())
+				return;
+		}
 		connectedClients.add(endpointToAdd);
 		Logger.logInfo(endpointToAdd.udpAdress().toString() + ":" + endpointToAdd.udpPort() + " connected via UDP.", UDPEndpointHelper.class);
 	}
