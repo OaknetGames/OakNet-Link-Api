@@ -24,7 +24,7 @@ public class UDPEndpointHelper {
 
 	public static void addEndpoint(UDPEndpoint endpointToAdd) {
 		connectedClients.add(endpointToAdd);
-		Logger.logInfo(endpointToAdd.udpAdress().toString() + " connected via UDP.", UDPEndpointHelper.class);
+		Logger.logInfo(endpointToAdd.udpAdress().toString() + ":" + endpointToAdd.udpPort() + " connected via UDP.", UDPEndpointHelper.class);
 	}
 
 	public static void removeEndpoint(UDPEndpoint endpointToRemove) {

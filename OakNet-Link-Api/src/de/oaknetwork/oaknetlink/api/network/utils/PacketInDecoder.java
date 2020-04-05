@@ -50,8 +50,11 @@ public class PacketInDecoder {
 		if (packetData.data.length < 4) {
 			throw new PacketException("Can't decode Packet, expected more bytes than recieved");
 		}
-		int result = (packetData.data[0] << 24) | (packetData.data[1] << 16) | (packetData.data[2] << 8)
-				| (packetData.data[3]);
+		int result = 0x00000000;
+		result |=  0xFF000000 & ((packetData.data[0]) << 24);
+		result |=  0x00FF0000 & ((packetData.data[1]) << 16);
+		result |=  0x0000FF00 & ((packetData.data[2]) << 8);
+		result |=  0x000000FF & (packetData.data[3]);
 		packetData.removeBytes(4);
 		return result;
 	}
@@ -68,7 +71,9 @@ public class PacketInDecoder {
 		if (packetData.data.length < 2) {
 			throw new PacketException("Can't decode Packet, expected more bytes than recieved");
 		}
-		short result = (short) ((packetData.data[0] << 8) | (packetData.data[1]));
+		short result = 0x0000;
+		result |=  0xFF00 & ((packetData.data[0]) << 8);
+		result |=  0x00FF & (packetData.data[1]);
 		packetData.removeBytes(2);
 		return result;
 	}
