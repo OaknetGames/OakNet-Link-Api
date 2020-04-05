@@ -14,6 +14,7 @@ public class UDPPacketHelper {
 		new UDPHandshakePacket();
 		new UDPRequestJoinPacket();
 		new UDPDeclinedJoinPacket();
+		new UDPEstablishTunnelPacket();
 	}
 
 }

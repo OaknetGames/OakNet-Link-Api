@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.net.Socket;
 import java.net.SocketException;
 
+import de.oaknetwork.oaknetlink.api.game.GameHelper;
 import de.oaknetwork.oaknetlink.api.log.Logger;
 import de.oaknetwork.oaknetlink.api.network.PacketException;
 import de.oaknetwork.oaknetlink.api.network.tcp.packets.Packet;
@@ -95,6 +96,10 @@ public class Client {
 		Logger.logInfo("Disconnected from MasterServer: " + reason, Client.class);
 		connected = false;
 		ClientHelper.removeClient(this);
+		if(GameHelper.gameByOwner(instance)!= null) {
+			Logger.logWarning("had a running game, closing... ", Client.class);
+			GameHelper.gameByOwner(instance).closeGame();
+		}
 	}
 
 	/**

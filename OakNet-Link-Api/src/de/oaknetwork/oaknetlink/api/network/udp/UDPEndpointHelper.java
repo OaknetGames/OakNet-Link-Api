@@ -55,6 +55,8 @@ public class UDPEndpointHelper {
 	public static UDPEndpoint endpointByClient(Client client) {
 		UDPEndpoint result = null;
 		for(UDPEndpoint endpoint : connectedClients) {
+			Logger.logInfo("Client: " + client.name + "/" + client.uuid, UDPEndpointHelper.class);
+			Logger.logInfo("Endpoint: " + endpoint.userName + "/" + endpoint.uuid, UDPEndpointHelper.class);
 			if(client.name.equals(endpoint.userName)&&client.uuid.equals(endpoint.uuid))
 				result=endpoint;
 		}

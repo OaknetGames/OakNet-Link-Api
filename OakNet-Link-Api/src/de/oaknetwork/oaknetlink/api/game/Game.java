@@ -31,5 +31,10 @@ public class Game {
 		this.gameVersion = gameVersion;
 		this.maxUsers = maxUsers;
 	}
+
+	public void closeGame() {
+		GameHelper.removeGame(this);
+		
+	}
 	
 }

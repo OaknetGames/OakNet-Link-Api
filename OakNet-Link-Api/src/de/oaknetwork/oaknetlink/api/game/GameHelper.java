@@ -67,4 +67,12 @@ public class GameHelper {
 		}
 		return result;
 	}
+
+	public static void removeGame(Game game) {
+		if(runningGames.contains(game)) {
+			runningGames.remove(game);
+			Logger.logInfo(game.owner.name + "'s game: " + game.gameName + " has been closed.", GameHelper.class);
+		}
+		
+	}
 }

@@ -7,6 +7,7 @@ import de.oaknetwork.oaknetlink.api.game.Game;
 import de.oaknetwork.oaknetlink.api.game.GameHelper;
 import de.oaknetwork.oaknetlink.api.log.Logger;
 import de.oaknetwork.oaknetlink.api.network.udp.UDPEndpoint;
+import de.oaknetwork.oaknetlink.api.network.udp.UDPEndpointHelper;
 
 /**
  * Using this packet, the client asks for a connection to the given Game.
@@ -15,7 +16,7 @@ import de.oaknetwork.oaknetlink.api.network.udp.UDPEndpoint;
  * 
  * @author Fabian Fila
  */
-public class UDPRequestJoinPacket extends UDPPacket{
+public class UDPRequestJoinPacket extends UDPPacket {
 
 	@Override
 	public Map<String, Class<?>> expectedTypes() {
@@ -29,21 +30,32 @@ public class UDPRequestJoinPacket extends UDPPacket{
 	protected void processPacket(Map<String, Object> data, UDPEndpoint sender) {
 		String gameName = (String) data.get("gameName");
 		Game game = GameHelper.gameByName(gameName);
-		if(game == null) {
+		if (game == null) {
 			UDPDeclinedJoinPacket.sendPacket(sender, "Game not found!");
 			return;
 		}
-		if(!game.password.equals("")){
+		if (!game.password.equals("")) {
 			String password = (String) data.get("Password");
-			if(!game.password.equals(password)) {
+			if (!game.password.equals(password)) {
 				UDPDeclinedJoinPacket.sendPacket(sender, "Wrong password!");
 				return;
 			}
 		}
 		Logger.logInfo(sender.userName + " connects to " + game.owner.name, UDPRequestJoinPacket.class);
-		// TODO send establishTunnelPacket to the two peers
+		if (UDPEndpointHelper.endpointByClient(game.owner) == sender) {
+			UDPDeclinedJoinPacket.sendPacket(sender, "You cannot connect to your own game!");
+			return;
+		}
+		if (UDPEndpointHelper.endpointByClient(game.owner) == null) {
+			UDPDeclinedJoinPacket.sendPacket(sender, "Peer is not connected!");
+			return;
+		}
+		UDPEstablishTunnelPacket.sendPacket(UDPEndpointHelper.endpointByClient(game.owner), sender.udpAdress().getHostAddress(),
+				sender.udpPort());
+		UDPEstablishTunnelPacket.sendPacket(sender, UDPEndpointHelper.endpointByClient(game.owner).udpAdress().getHostAddress(),
+				UDPEndpointHelper.endpointByClient(game.owner).udpPort());
 	}
-	
+
 	public static void sendPacket(UDPEndpoint receiver, String gameName, String password) {
 		Map<String, Object> data = new HashMap<String, Object>();
 		data.put("gameName", gameName);

@@ -1,6 +1,7 @@
 package de.oaknetwork.oaknetlink.api.mcinterface;
 
 import de.oaknetwork.oaknetlink.api.gui.GuiManager;
+import de.oaknetwork.oaknetlink.api.gui.structure.TestWindow;
 import de.oaknetwork.oaknetlink.api.log.LogWindow;
 import de.oaknetwork.oaknetlink.api.log.Logger;
 import de.oaknetwork.oaknetlink.api.log.MinecraftLogProvider;
@@ -49,8 +50,8 @@ public class MinecraftHooks {
 		// UDP Network
 		UDPPacketHelper.registerPackets();
 		new UDPCommunicator();
-		UDPEndpoint masterServer = UDPEndpointHelper.createMasterServerEndpoint();
-		masterServer.debug = true;
+		//UDPEndpoint masterServer = UDPEndpointHelper.createMasterServerEndpoint();
+		//masterServer.debug = true;
 
 		// TCP Network
 		PacketHelper.registerPackets();
@@ -60,6 +61,7 @@ public class MinecraftHooks {
 	public static void postInit() {
 		Logger.logInfo("Init GuiManager...", MinecraftHooks.class);
 		new GuiManager();
+		new TestWindow();
 	}
 
 	// 0 = Left click; 1 = Right click; 2 = Mouse wheel click

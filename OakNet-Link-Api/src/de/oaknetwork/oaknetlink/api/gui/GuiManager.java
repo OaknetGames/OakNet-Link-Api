@@ -25,7 +25,8 @@ public class GuiManager extends ComponentContainer {
 
 	private static Vector2i currentSize = new Vector2i(0, 0);
 	private static GuiManager instance;
-	private static Overlay overlay;
+	// TODO Set private after testing
+	public static Overlay overlay;
 
 	/**
 	 * The GuiManager is created in the PostInit phase

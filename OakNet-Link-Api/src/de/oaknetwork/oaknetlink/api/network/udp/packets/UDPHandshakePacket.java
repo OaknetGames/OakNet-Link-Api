@@ -58,7 +58,7 @@ public class UDPHandshakePacket extends UDPPacket {
 		Map<String, Object> data = new HashMap<String, Object>();
 		data.put("protocolVersion", Constants.ProtocolVersion);
 		data.put("userName", MinecraftHooks.mcInterface.userName());
-		data.put("uuid", MinecraftHooks.mcInterface.userName());
+		data.put("uuid", MinecraftHooks.mcInterface.uuid());
 		sendPacket(UDPHandshakePacket.class, receiver, data);
 	}
 
