@@ -34,7 +34,7 @@ public class UDPCommunicator {
 		instance = this;
 		Logger.logInfo("Create new UDPCommunicator", UDPCommunicator.class);
 		try {
-			serverSocket = new DatagramSocket();
+			serverSocket = new DatagramSocket(5289);
 			startNetworkThread();
 		} catch (SocketException e) {
 			Logger.logException("Can't create UDPDatagrammSocket", e, UDPCommunicator.class);

@@ -24,6 +24,7 @@ public class UDPEstablishTunnelPacket extends UDPPacket{
 		Map<String, Class<?>> expectedTypes = new HashMap<String, Class<?>>();
 		expectedTypes.put("address", String.class);
 		expectedTypes.put("port", Integer.class);
+		
 		return expectedTypes;
 	}
 
