@@ -40,6 +40,7 @@ public class UDPEstablishTunnelPacket extends UDPPacket{
 				peerEndpoint = new UDPEndpoint(InetAddress.getByName(address), port);
 				UDPEndpointHelper.addEndpoint(peerEndpoint);
 			}
+			peerEndpoint.debug = true;
 			UDPHandshakePacket.sendPacket(peerEndpoint);
 		} catch (UnknownHostException e) {
 			Logger.logException("Can't connect to peer", e, UDPEstablishTunnelPacket.class);

@@ -27,7 +27,7 @@ public class UDPPongPacket extends UDPPacket {
 	protected void processPacket(Map<String, Object> data, UDPEndpoint sender) {
 		long timestamp = (long) data.get("timestamp");
 		int ping = (int) (System.currentTimeMillis() - timestamp);
-		//Logger.logInfo("Ping: " + ping, UDPPongPacket.class);
+		Logger.logInfo("[" + sender.userName + "] Ping: " + ping, UDPPongPacket.class);
 	}
 
 	// Send Packet
