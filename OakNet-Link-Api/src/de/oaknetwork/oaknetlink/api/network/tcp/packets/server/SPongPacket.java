@@ -25,7 +25,7 @@ public class SPongPacket extends SPacket{
 		public void processPacket(Map<String, Object> data) {
 			long timestamp = (long) data.get("timestamp");
 			int ping = (int) (System.currentTimeMillis() - timestamp);
-			Logger.logInfo("Ping: " + ping, SPongPacket.class);
+			//Logger.logInfo("Ping: " + ping, SPongPacket.class);
 		}
 
 		public static void sendPacket(Client receiver, long timestamp) {

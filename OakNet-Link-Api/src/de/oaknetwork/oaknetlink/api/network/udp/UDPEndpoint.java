@@ -36,7 +36,7 @@ public class UDPEndpoint {
 	private boolean connected = true;
 
 	// incoming
-	private long timeSinceLastPacketIn;
+	private long timeSinceLastPacketIn = System.currentTimeMillis();
 	private short currentIncomingPacketNumber = -1;
 	private short totalSubPacketNumber = 1;
 	private Map<Short, byte[]> incomingPacketQueue = new HashMap<Short, byte[]>();
