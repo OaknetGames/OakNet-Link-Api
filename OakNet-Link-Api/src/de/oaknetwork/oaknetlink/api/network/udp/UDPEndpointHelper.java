@@ -75,7 +75,7 @@ public class UDPEndpointHelper {
 			UDPHandshakePacket.sendPacket(masterServerEndpoint);
 			return masterServerEndpoint;
 		} catch (UnknownHostException e) {
-			Logger.logException("Can't create MasterServerEndpoint", e, UDPEndpointHelper.class);
+			Logger.logException("Can't create MasterServer Endpoint", e, UDPEndpointHelper.class);
 		}
 		return null;
 	}

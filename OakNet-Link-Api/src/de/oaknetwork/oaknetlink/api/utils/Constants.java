@@ -20,7 +20,7 @@ public class Constants {
 	
 	// Network
 	public static final boolean NETWORKDEBUG = false;
-	public static final String MASTERSERVERADDRESS = "daten.oaknetwork.de";
+	public static final String MASTERSERVERADDRESS = "onl.oaknetwork.de";
 	public static final int TCPPORT = 1354;
 	public static final int UDPPORT = 1355;
 }
