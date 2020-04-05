@@ -31,7 +31,7 @@ public class UDPEndpoint {
 
 	UDPEndpoint instance;
 
-	private InetAddress udpAdress;
+	private InetAddress udpAddress;
 	private int udpPort;
 	private boolean connected = true;
 
@@ -49,7 +49,7 @@ public class UDPEndpoint {
 	private List<PacketData> outgoingPacketQueue = new ArrayList<PacketData>();
 
 	public UDPEndpoint(InetAddress iaddress, int port) {
-		this.udpAdress = iaddress;
+		this.udpAddress = iaddress;
 		this.udpPort = port;
 		instance = this;
 		Thread clientThread = new Thread(new Runnable() {
@@ -160,7 +160,7 @@ public class UDPEndpoint {
 					packetData.data.length > 506 ? 506 : packetData.data.length);
 			packetData.removeBytes(packetData.data.length > 506 ? 506 : packetData.data.length);
 			// Prepare and send the Packet
-			DatagramPacket packetToSend = new DatagramPacket(buffer, 512, udpAdress, udpPort);
+			DatagramPacket packetToSend = new DatagramPacket(buffer, 512, udpAddress, udpPort);
 			UDPCommunicator.instance().sendPacketBack(instance, packetToSend);
 			currentSubPackage++;
 		}
@@ -200,7 +200,7 @@ public class UDPEndpoint {
 	public void sendStatus(byte status) {
 		byte[] buffer = new byte[1];
 		buffer[0] = status;
-		DatagramPacket errorPacket = new DatagramPacket(buffer, 1, udpAdress, udpPort);
+		DatagramPacket errorPacket = new DatagramPacket(buffer, 1, udpAddress, udpPort);
 		UDPCommunicator.instance().sendPacketBack(this, errorPacket);
 	}
 
@@ -266,8 +266,8 @@ public class UDPEndpoint {
 
 	}
 
-	public InetAddress udpAdress() {
-		return udpAdress;
+	public InetAddress udpAddress() {
+		return udpAddress;
 	}
 
 	public int udpPort() {

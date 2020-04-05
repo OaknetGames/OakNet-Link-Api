@@ -50,9 +50,9 @@ public class UDPRequestJoinPacket extends UDPPacket {
 			UDPDeclinedJoinPacket.sendPacket(sender, "Peer is not connected!");
 			return;
 		}
-		UDPEstablishTunnelPacket.sendPacket(UDPEndpointHelper.endpointByClient(game.owner), sender.udpAdress().getHostAddress(),
+		UDPEstablishTunnelPacket.sendPacket(UDPEndpointHelper.endpointByClient(game.owner), sender.udpAddress().getHostAddress(),
 				sender.udpPort());
-		UDPEstablishTunnelPacket.sendPacket(sender, UDPEndpointHelper.endpointByClient(game.owner).udpAdress().getHostAddress(),
+		UDPEstablishTunnelPacket.sendPacket(sender, UDPEndpointHelper.endpointByClient(game.owner).udpAddress().getHostAddress(),
 				UDPEndpointHelper.endpointByClient(game.owner).udpPort());
 	}
 

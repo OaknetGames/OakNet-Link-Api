@@ -24,21 +24,21 @@ public class UDPEndpointHelper {
 
 	public static void addEndpoint(UDPEndpoint endpointToAdd) {
 		for(UDPEndpoint endpoint : connectedClients) {
-			if(endpoint.udpAdress().equals(endpointToAdd.udpAdress())&&endpoint.udpPort() == endpointToAdd.udpPort())
+			if(endpoint.udpAddress().equals(endpointToAdd.udpAddress())&&endpoint.udpPort() == endpointToAdd.udpPort())
 				return;
 		}
 		connectedClients.add(endpointToAdd);
-		Logger.logInfo(endpointToAdd.udpAdress().toString() + ":" + endpointToAdd.udpPort() + " connected via UDP.", UDPEndpointHelper.class);
+		Logger.logInfo(endpointToAdd.udpAddress().toString() + ":" + endpointToAdd.udpPort() + " connected via UDP.", UDPEndpointHelper.class);
 	}
 
 	public static void removeEndpoint(UDPEndpoint endpointToRemove) {
 		if (connectedClients.contains(endpointToRemove)) {
 			connectedClients.remove(endpointToRemove);
-			Logger.logInfo(endpointToRemove.udpAdress().toString() + " was removed from the endpoint list.",
+			Logger.logInfo(endpointToRemove.udpAddress().toString() + " was removed from the endpoint list.",
 					UDPEndpointHelper.class);
 		} else {
 			Logger.logInfo(
-					endpointToRemove.udpAdress().toString() + " cannot be removed, because they are not in the list.",
+					endpointToRemove.udpAddress().toString() + " cannot be removed, because they are not in the list.",
 					UDPEndpointHelper.class);
 		}
 	}
@@ -46,7 +46,7 @@ public class UDPEndpointHelper {
 	public static UDPEndpoint endpointByPacket(DatagramPacket dpacket) {
 		UDPEndpoint result = null;
 		for (UDPEndpoint client : connectedClients) {
-			if (client.udpAdress().equals(dpacket.getAddress()) && client.udpPort() == dpacket.getPort())
+			if (client.udpAddress().equals(dpacket.getAddress()) && client.udpPort() == dpacket.getPort())
 				result = client;
 		}
 		if (result == null) {
@@ -60,6 +60,15 @@ public class UDPEndpointHelper {
 		UDPEndpoint result = null;
 		for(UDPEndpoint endpoint : connectedClients) {
 			if(client.name.equals(endpoint.userName)&&client.uuid.equals(endpoint.uuid))
+				result=endpoint;
+		}
+		return result;
+	}
+	
+	public static UDPEndpoint endpointByAdressPort(String address, int port) {
+		UDPEndpoint result = null;
+		for(UDPEndpoint endpoint : connectedClients) {
+			if(endpoint.udpAddress().getHostAddress().equals(address)&&endpoint.udpPort()==port)
 				result=endpoint;
 		}
 		return result;
