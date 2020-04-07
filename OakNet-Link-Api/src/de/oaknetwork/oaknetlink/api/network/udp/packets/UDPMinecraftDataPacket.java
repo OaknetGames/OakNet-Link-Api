@@ -3,6 +3,7 @@ package de.oaknetwork.oaknetlink.api.network.udp.packets;
 import java.util.HashMap;
 import java.util.Map;
 
+import de.oaknetwork.oaknetlink.api.log.Logger;
 import de.oaknetwork.oaknetlink.api.mcinterface.DummyServer;
 import de.oaknetwork.oaknetlink.api.network.udp.UDPEndpoint;
 import de.oaknetwork.oaknetlink.api.network.utils.BytePackage;
@@ -36,7 +37,7 @@ public class UDPMinecraftDataPacket extends UDPPacket{
 	public static void sendPacket(UDPEndpoint host, BytePackage bytePackage) {
 		Map<String, Object> data = new HashMap<String, Object>(); 
 		data.put("data", bytePackage);
-		sendPacket(host, bytePackage);
+		sendPacket(UDPMinecraftDataPacket.class, host, data);
 	}
 
 }
