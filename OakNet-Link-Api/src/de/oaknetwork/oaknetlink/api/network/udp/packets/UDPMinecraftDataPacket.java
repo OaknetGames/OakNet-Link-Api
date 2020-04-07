@@ -20,7 +20,7 @@ public class UDPMinecraftDataPacket extends UDPPacket{
 	public Map<String, Class<?>> expectedTypes() {
 		Map<String , Class<?>> expectedTypes = new HashMap<String, Class<?>>();
 		expectedTypes.put("data", BytePackage.class);
-		return expectedTypes();
+		return expectedTypes;
 	}
 
 	@Override
