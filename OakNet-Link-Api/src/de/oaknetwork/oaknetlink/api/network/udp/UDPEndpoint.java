@@ -176,6 +176,8 @@ public class UDPEndpoint {
 	 */
 	public void closeConnection(String reason) {
 		Logger.logInfo(userName + " lost connection: " + reason, UDPEndpoint.class);
+		if(dummyClient != null)
+			dummyClient.closeConnection("Endpoint closed connection.");
 		UDPEndpointHelper.removeEndpoint(instance);
 		connected = false;
 	}

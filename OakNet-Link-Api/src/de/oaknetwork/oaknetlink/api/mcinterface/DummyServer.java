@@ -67,6 +67,7 @@ public class DummyServer {
 							try {
 								// Decode Packet Length
 								int packetLength = MinecraftPacketInDecoder.decodeVarInt(in);
+								Logger.logInfo("Blub", DummyServer.class);
 
 								byte[] data = new byte[packetLength];
 								if (in.read(data, 0, packetLength) != packetLength)

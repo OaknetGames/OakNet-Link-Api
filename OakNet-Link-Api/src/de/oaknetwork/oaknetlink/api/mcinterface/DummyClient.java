@@ -61,7 +61,7 @@ public class DummyClient {
 						try {
 							// Decode Packet Length
 							int packetLength = MinecraftPacketInDecoder.decodeVarInt(in);
-
+							Logger.logInfo("Blub", DummyClient.class);
 							byte[] data = new byte[packetLength];
 							if (in.read(data, 0, packetLength) != packetLength)
 								throw new IOException("Received to few bytes, expected " + packetLength);
@@ -105,6 +105,14 @@ public class DummyClient {
 	 * @param packetData the Packet to send
 	 */
 	public void sendPacket(byte[] data) {
+		if (!connected) {
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		if (!connected) {
 			Logger.logError("Can't send packets to MasterServer while not connected", Client.class);
 			return;
