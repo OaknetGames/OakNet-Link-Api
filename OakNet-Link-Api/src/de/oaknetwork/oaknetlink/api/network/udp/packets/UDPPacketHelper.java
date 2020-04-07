@@ -15,6 +15,7 @@ public class UDPPacketHelper {
 		new UDPRequestJoinPacket();
 		new UDPDeclinedJoinPacket();
 		new UDPEstablishTunnelPacket();
+		new UDPMinecraftDataPacket();
 	}
 
 }

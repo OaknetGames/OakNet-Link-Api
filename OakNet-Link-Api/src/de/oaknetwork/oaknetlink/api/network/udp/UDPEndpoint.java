@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import de.oaknetwork.oaknetlink.api.log.Logger;
+import de.oaknetwork.oaknetlink.api.mcinterface.DummyClient;
 import de.oaknetwork.oaknetlink.api.network.PacketException;
 import de.oaknetwork.oaknetlink.api.network.tcp.server.Client;
 import de.oaknetwork.oaknetlink.api.network.udp.packets.UDPDisconnectionPacket;
@@ -34,6 +35,7 @@ public class UDPEndpoint {
 	private InetAddress udpAddress;
 	private int udpPort;
 	private boolean connected = true;
+	private DummyClient dummyClient;
 
 	// incoming
 	private long timeSinceLastPacketIn = System.currentTimeMillis();
@@ -272,6 +274,17 @@ public class UDPEndpoint {
 
 	public int udpPort() {
 		return udpPort;
+	}
+	
+	/**
+	 * gets the dummyClient which is associated with this endpoint
+	 * 
+	 * @return
+	 */
+	public DummyClient dummyClient() {
+		if(dummyClient == null || !dummyClient.connected)
+			dummyClient = new DummyClient(instance);
+		return dummyClient;
 	}
 
 	/**

@@ -7,8 +7,11 @@ import java.util.Map;
 
 import de.oaknetwork.oaknetlink.api.gui.components.Dialog;
 import de.oaknetwork.oaknetlink.api.log.Logger;
+import de.oaknetwork.oaknetlink.api.mcinterface.DummyServer;
+import de.oaknetwork.oaknetlink.api.mcinterface.MinecraftHooks;
 import de.oaknetwork.oaknetlink.api.network.udp.UDPEndpoint;
 import de.oaknetwork.oaknetlink.api.network.udp.UDPEndpointHelper;
+import de.oaknetwork.oaknetlink.api.server.ServerHelper;
 
 /**
  * This Packet contains information about the other peer.
@@ -42,6 +45,10 @@ public class UDPEstablishTunnelPacket extends UDPPacket{
 			}
 			peerEndpoint.debug = true;
 			UDPHandshakePacket.sendPacket(peerEndpoint);
+			if(!ServerHelper.isServerRunning) {
+				DummyServer.startServer(peerEndpoint);
+				MinecraftHooks.mcInterface.connectToServer("127.0.0.1", DummyServer.port());
+			}
 		} catch (UnknownHostException e) {
 			Logger.logException("Can't connect to peer", e, UDPEstablishTunnelPacket.class);
 			new Dialog(1, "Can't connect to peer", "Can't connect to peer: \n" + e.getMessage(), true, true);
