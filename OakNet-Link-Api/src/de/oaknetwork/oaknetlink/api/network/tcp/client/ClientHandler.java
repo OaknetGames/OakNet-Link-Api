@@ -2,7 +2,6 @@ package de.oaknetwork.oaknetlink.api.network.tcp.client;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
-import java.net.InetAddress;
 import java.net.Socket;
 import java.net.SocketException;
 

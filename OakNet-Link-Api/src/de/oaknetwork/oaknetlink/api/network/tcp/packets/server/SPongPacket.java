@@ -3,7 +3,6 @@ package de.oaknetwork.oaknetlink.api.network.tcp.packets.server;
 import java.util.HashMap;
 import java.util.Map;
 
-import de.oaknetwork.oaknetlink.api.log.Logger;
 import de.oaknetwork.oaknetlink.api.network.tcp.server.Client;
 
 /**

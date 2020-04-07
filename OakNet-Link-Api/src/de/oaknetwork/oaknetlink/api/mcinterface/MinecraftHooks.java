@@ -10,8 +10,6 @@ import de.oaknetwork.oaknetlink.api.log.OakNetLinkLogProvider;
 import de.oaknetwork.oaknetlink.api.network.tcp.client.ClientHandler;
 import de.oaknetwork.oaknetlink.api.network.tcp.packets.PacketHelper;
 import de.oaknetwork.oaknetlink.api.network.udp.UDPCommunicator;
-import de.oaknetwork.oaknetlink.api.network.udp.UDPEndpoint;
-import de.oaknetwork.oaknetlink.api.network.udp.UDPEndpointHelper;
 import de.oaknetwork.oaknetlink.api.network.udp.packets.UDPPacketHelper;
 import de.oaknetwork.oaknetlink.api.utils.Vector2i;
 
