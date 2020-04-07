@@ -17,6 +17,7 @@ import de.oaknetwork.oaknetlink.api.network.utils.PacketData;
 import de.oaknetwork.oaknetlink.api.network.utils.PacketInDecoder;
 import de.oaknetwork.oaknetlink.api.network.utils.PacketOutEncoder;
 import de.oaknetwork.oaknetlink.api.utils.Constants;
+import de.oaknetwork.oaknetlink.api.utils.HostnameHelper;
 
 /**
  * This is the client side of the TCP communication
@@ -47,7 +48,7 @@ public class ClientHandler {
 				try {
 					// Connect to Server
 					try {
-						server = new Socket(InetAddress.getByName(Constants.MASTERSERVERADDRESS), Constants.TCPPORT);
+						server = new Socket(HostnameHelper.getIPAddress(), Constants.TCPPORT);
 					} catch (IOException e) {
 						Logger.logException("Can't connect to MasterServer", e, ClientHandler.class);
 						return;

@@ -10,6 +10,7 @@ import de.oaknetwork.oaknetlink.api.log.Logger;
 import de.oaknetwork.oaknetlink.api.network.tcp.server.Client;
 import de.oaknetwork.oaknetlink.api.network.udp.packets.UDPHandshakePacket;
 import de.oaknetwork.oaknetlink.api.utils.Constants;
+import de.oaknetwork.oaknetlink.api.utils.HostnameHelper;
 
 /**
  * This class manages all the UDP endpoint handling.
@@ -82,7 +83,7 @@ public class UDPEndpointHelper {
 	 */
 	public static UDPEndpoint createMasterServerEndpoint() {
 		try {
-			masterServerEndpoint = new UDPEndpoint(InetAddress.getByName(Constants.MASTERSERVERADDRESS), Constants.UDPPORT);
+			masterServerEndpoint = new UDPEndpoint(HostnameHelper.getIPAddress(), Constants.UDPPORT);
 			masterServerEndpoint.userName = "MasterServer";
 			addEndpoint(masterServerEndpoint);
 			UDPHandshakePacket.sendPacket(masterServerEndpoint);
