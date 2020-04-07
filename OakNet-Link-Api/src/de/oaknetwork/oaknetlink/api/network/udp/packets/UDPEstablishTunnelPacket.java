@@ -47,7 +47,7 @@ public class UDPEstablishTunnelPacket extends UDPPacket{
 			UDPHandshakePacket.sendPacket(peerEndpoint);
 			if(!ServerHelper.isServerRunning) {
 				DummyServer.startServer(peerEndpoint);
-				MinecraftHooks.mcInterface.connectToServer("127.0.0.1", DummyServer.port());
+				//MinecraftHooks.mcInterface.connectToServer("127.0.0.1", DummyServer.port());
 			}
 		} catch (UnknownHostException e) {
 			Logger.logException("Can't connect to peer", e, UDPEstablishTunnelPacket.class);

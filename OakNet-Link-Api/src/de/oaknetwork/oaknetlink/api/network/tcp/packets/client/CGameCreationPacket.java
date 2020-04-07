@@ -5,6 +5,7 @@ import java.util.Map;
 
 import de.oaknetwork.oaknetlink.api.game.GameHelper;
 import de.oaknetwork.oaknetlink.api.network.tcp.server.Client;
+import de.oaknetwork.oaknetlink.api.server.ServerHelper;
 
 /**
  * This Packet is sent when the client wants to host a new server.
@@ -39,6 +40,8 @@ public class CGameCreationPacket extends CPacket{
 		data.put("gameVersion", gameVersion);
 		data.put("maxUsers", maxUsers);
 		sendPacket(CGameCreationPacket.class, data);
+		//TODO this does not go here
+		ServerHelper.isServerRunning= true;
 	}
 
 }
