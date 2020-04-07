@@ -12,7 +12,7 @@ import de.oaknetwork.oaknetlink.api.utils.Vector2i;
 public class TestWindow extends Window {
 
 	public TestWindow() {
-		super(GuiManager.overlay, new Vector2i(0, 0), new Vector2i(406, 68), 1, "OakNet-Link Test Window", false);
+		super(GuiManager.overlay, new Vector2i(0, 0), new Vector2i(408, 69), 1, "OakNet-Link Test Window", false);
 	}
 
 	@Override

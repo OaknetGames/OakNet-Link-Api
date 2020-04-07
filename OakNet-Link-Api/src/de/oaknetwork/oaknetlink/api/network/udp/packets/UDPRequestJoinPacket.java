@@ -1,5 +1,7 @@
 package de.oaknetwork.oaknetlink.api.network.udp.packets;
 
+import java.net.Inet4Address;
+import java.net.InetAddress;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -48,6 +50,16 @@ public class UDPRequestJoinPacket extends UDPPacket {
 		}
 		if (UDPEndpointHelper.endpointByClient(game.owner) == null) {
 			UDPDeclinedJoinPacket.sendPacket(sender, "Peer is not connected!");
+			return;
+		}
+		boolean senderIPv4 = sender.udpAddress() instanceof Inet4Address;
+		boolean hostIPv4 = UDPEndpointHelper.endpointByClient(game.owner).udpAddress() instanceof Inet4Address;
+		if (senderIPv4 && !hostIPv4) {
+			UDPDeclinedJoinPacket.sendPacket(sender, "You are connected via IPv4, but the host is using IPv6. \nTry to disable \"Force IPv4\" or ask the Host to enable it!");
+			return;
+		}
+		if (!senderIPv4 && hostIPv4) {
+			UDPDeclinedJoinPacket.sendPacket(sender, "You are connected via IPv6, but the host is using IPv4. \nTry to enable \"Force IPv4\" or ask the Host to disable it!");
 			return;
 		}
 		UDPEstablishTunnelPacket.sendPacket(UDPEndpointHelper.endpointByClient(game.owner), sender.udpAddress().getHostAddress(),
