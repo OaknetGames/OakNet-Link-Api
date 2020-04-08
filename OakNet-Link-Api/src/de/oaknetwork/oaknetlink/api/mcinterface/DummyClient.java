@@ -1,7 +1,7 @@
 package de.oaknetwork.oaknetlink.api.mcinterface;
 
-import java.io.BufferedInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.SocketException;
@@ -31,7 +31,7 @@ public class DummyClient {
 	private Thread networkThread;
 
 	/**
-	 * Tries to establish a connection to the MasterServer
+	 * Creates a new DummyClient
 	 */
 	public DummyClient(UDPEndpoint host) {
 		if (networkThread != null && networkThread.isAlive())
@@ -46,15 +46,15 @@ public class DummyClient {
 					try {
 						server = new Socket(InetAddress.getByName("127.0.0.1"), 25565);
 					} catch (IOException e) {
-						Logger.logException("Can't connect to MasterServer", e, DummyClient.class);
+						Logger.logException("Can't connect to MinecraftServer", e, DummyClient.class);
 						return;
 					}
 					connected = true;
 
 					// Create the InputStream
-					BufferedInputStream in = null;
+					InputStream in = null;
 					try {
-						in = new BufferedInputStream(server.getInputStream());
+						in = server.getInputStream();
 					} catch (IOException e1) {
 						Logger.logException("Can't get Inputstream", e1, DummyClient.class);
 						return;
@@ -77,10 +77,10 @@ public class DummyClient {
 								closeConnection("Reset by peer");
 								return;
 							} else
-								Logger.logException("Error while communicating with Master Server", e, DummyClient.class);
+								Logger.logException("Error while communicating with MinecraftServer", e, DummyClient.class);
 							break;
 						} catch (IOException e) {
-							Logger.logException("Error while communicating with Master Server", e, DummyClient.class);
+							Logger.logException("Error while communicating with MinecraftServer", e, DummyClient.class);
 							break;
 						}
 					}

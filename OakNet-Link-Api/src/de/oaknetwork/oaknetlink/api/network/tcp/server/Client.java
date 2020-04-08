@@ -1,7 +1,7 @@
 package de.oaknetwork.oaknetlink.api.network.tcp.server;
 
-import java.io.BufferedInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.Socket;
 import java.net.SocketException;
 
@@ -38,9 +38,9 @@ public class Client {
 				try {
 					connected = true;
 					// Create the InputStream
-					BufferedInputStream in = null;
+					InputStream in = null;
 					try {
-						in = new BufferedInputStream(client.getInputStream());
+						in = client.getInputStream();
 					} catch (IOException e1) {
 						Logger.logException("Can't get Inputstream", e1, Client.class);
 						return;

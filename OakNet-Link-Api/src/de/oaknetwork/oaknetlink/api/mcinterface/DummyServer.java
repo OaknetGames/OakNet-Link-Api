@@ -1,7 +1,7 @@
 package de.oaknetwork.oaknetlink.api.mcinterface;
 
-import java.io.BufferedInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
@@ -57,9 +57,9 @@ public class DummyServer {
 					try {
 						connected = true;
 						// Create the InputStream
-						BufferedInputStream in = null;
+						InputStream in = null;
 						try {
-							in = new BufferedInputStream(client.getInputStream());
+							in = client.getInputStream();
 						} catch (IOException e1) {
 							Logger.logException("Can't get Inputstream", e1, DummyServer.class);
 							return;
@@ -130,7 +130,7 @@ public class DummyServer {
 	 */
 	public static void sendPacket(byte[] data) {
 		if (!connected) {
-			Logger.logError("Can't send packets to MasterServer while not connected", Client.class);
+			Logger.logError("Can't send packets to Minecraft while not connected", Client.class);
 			return;
 		}
 		try {
