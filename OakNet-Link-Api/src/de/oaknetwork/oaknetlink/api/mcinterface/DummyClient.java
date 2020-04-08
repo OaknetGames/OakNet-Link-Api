@@ -1,7 +1,7 @@
 package de.oaknetwork.oaknetlink.api.mcinterface;
 
-import java.io.DataInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.SocketException;
@@ -11,8 +11,6 @@ import de.oaknetwork.oaknetlink.api.network.tcp.server.Client;
 import de.oaknetwork.oaknetlink.api.network.udp.UDPEndpoint;
 import de.oaknetwork.oaknetlink.api.network.udp.packets.UDPMinecraftDataPacket;
 import de.oaknetwork.oaknetlink.api.network.utils.BytePackage;
-import de.oaknetwork.oaknetlink.api.network.utils.PacketData;
-import de.oaknetwork.oaknetlink.api.utils.Tuple;
 
 /**
  * This Client connects to a Minecraft Server and redirects packets from our UDP
@@ -52,27 +50,21 @@ public class DummyClient {
 					connected = true;
 
 					// Create the InputStream
-					DataInputStream in = null;
+					InputStream in = null;
 					try {
-						in = new DataInputStream(server.getInputStream());
+						in = server.getInputStream();
 					} catch (IOException e1) {
 						Logger.logException("Can't get Inputstream", e1, DummyClient.class);
 						return;
 					}
 					while (connected) {
 						try {
-
-							Logger.logInfo("Blib", DummyServer.class);
-							// Decode Packet Length
-							Tuple<Integer, PacketData> decodedData = MinecraftPacketInDecoder.decodeVarInt(in);
-							int packetLength = decodedData.value1;
-							Logger.logInfo("Blub", DummyClient.class);
-							byte[] data = new byte[packetLength];
-							
-							in.readFully(data, 0, packetLength);
-		
-							decodedData.value2.appendBytes(data);
-							UDPMinecraftDataPacket.sendPacket(host, new BytePackage(decodedData.value2.data));
+							if(in.available()>0) {
+								byte[] data = new byte[in.available()];
+								in.read(data);
+								UDPMinecraftDataPacket.sendPacket(host, new BytePackage(data));
+							}
+							Thread.sleep(1);
 						} catch (SocketException e) {
 							if (e.getMessage().contains("Connection reset")) {
 								closeConnection("Reset by peer");
