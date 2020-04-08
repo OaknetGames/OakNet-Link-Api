@@ -1,7 +1,7 @@
 package de.oaknetwork.oaknetlink.api.mcinterface;
 
+import java.io.DataInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.SocketException;
@@ -52,9 +52,9 @@ public class DummyClient {
 					connected = true;
 
 					// Create the InputStream
-					InputStream in = null;
+					DataInputStream in = null;
 					try {
-						in = server.getInputStream();
+						in = new DataInputStream(server.getInputStream());
 					} catch (IOException e1) {
 						Logger.logException("Can't get Inputstream", e1, DummyClient.class);
 						return;
@@ -68,8 +68,9 @@ public class DummyClient {
 							int packetLength = decodedData.value1;
 							Logger.logInfo("Blub", DummyClient.class);
 							byte[] data = new byte[packetLength];
-							if (in.read(data, 0, packetLength) != packetLength)
-								throw new IOException("Received to few bytes, expected " + packetLength);
+							
+							in.readFully(data, 0, packetLength);
+		
 							decodedData.value2.appendBytes(data);
 							UDPMinecraftDataPacket.sendPacket(host, new BytePackage(decodedData.value2.data));
 						} catch (SocketException e) {

@@ -1,7 +1,7 @@
 package de.oaknetwork.oaknetlink.api.network.tcp.server;
 
+import java.io.DataInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.Socket;
 import java.net.SocketException;
 
@@ -38,9 +38,9 @@ public class Client {
 				try {
 					connected = true;
 					// Create the InputStream
-					InputStream in = null;
+					DataInputStream in = null;
 					try {
-						in = client.getInputStream();
+						in = new DataInputStream(client.getInputStream());
 					} catch (IOException e1) {
 						Logger.logException("Can't get Inputstream", e1, Client.class);
 						return;
@@ -56,10 +56,8 @@ public class Client {
 							short packetLength = PacketInDecoder.decodeShort(packetData);
 
 							packetData.data = new byte[packetLength];
-							if (in.read(packetData.data, 0, packetLength) != packetLength)
-								throw new IOException("Received to few bytes, expected " + packetLength);
-
-
+							in.readFully(packetData.data, 0, packetLength);
+							
 							Packet.decodePacket(packetData, instance);
 						} catch (SocketException e) {
 							if(e.getMessage().contains("Connection reset")) {
