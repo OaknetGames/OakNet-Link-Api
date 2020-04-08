@@ -11,6 +11,8 @@ import de.oaknetwork.oaknetlink.api.network.tcp.server.Client;
 import de.oaknetwork.oaknetlink.api.network.udp.UDPEndpoint;
 import de.oaknetwork.oaknetlink.api.network.udp.packets.UDPMinecraftDataPacket;
 import de.oaknetwork.oaknetlink.api.network.utils.BytePackage;
+import de.oaknetwork.oaknetlink.api.network.utils.PacketData;
+import de.oaknetwork.oaknetlink.api.utils.Tuple;
 
 /**
  * This is a Server which accepts connections from Minecraft Clients and routes
@@ -65,15 +67,16 @@ public class DummyServer {
 						// Network loop below
 						while (connected) {
 							try {
+								Logger.logInfo("Blib", DummyServer.class);
 								// Decode Packet Length
-								int packetLength = MinecraftPacketInDecoder.decodeVarInt(in);
-								Logger.logInfo("Blub", DummyServer.class);
-
+								Tuple<Integer, PacketData> decodedData = MinecraftPacketInDecoder.decodeVarInt(in);
+								int packetLength = decodedData.value1;
+								Logger.logInfo("Blub", DummyClient.class);
 								byte[] data = new byte[packetLength];
 								if (in.read(data, 0, packetLength) != packetLength)
 									throw new IOException("Received to few bytes, expected " + packetLength);
-
-								UDPMinecraftDataPacket.sendPacket(host, new BytePackage(data));
+								decodedData.value2.appendBytes(data);
+								UDPMinecraftDataPacket.sendPacket(host, new BytePackage(decodedData.value2.data));
 							} catch (SocketException e) {
 								if (e.getMessage().contains("Connection reset")) {
 									closeConnection("Reset by peer");

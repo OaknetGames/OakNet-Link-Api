@@ -3,6 +3,9 @@ package de.oaknetwork.oaknetlink.api.mcinterface;
 import java.io.IOException;
 import java.io.InputStream;
 
+import de.oaknetwork.oaknetlink.api.network.utils.PacketData;
+import de.oaknetwork.oaknetlink.api.utils.Tuple;
+
 /**
  * Ported from the first OakNet-Link version
  * 
@@ -10,17 +13,23 @@ import java.io.InputStream;
  */
 public class MinecraftPacketInDecoder {
 	
-	/** Decodes an Integer with variable size.
-	** IN: InputStream 
-	** OUT: Int-Array; First index is the decoded int, Second is how many bytes were used
+	/** 
+	 * Decodes an Integer with variable size.
 	**/
-	public static int decodeVarInt(InputStream istream) throws IOException {
+	public static Tuple<Integer, PacketData> decodeVarInt(InputStream istream) throws IOException {
 		int numRead = 0;
 		int result = 0;
 		byte read;
+		int tempRead;
+		PacketData packetData = new PacketData();
+		packetData.data = new byte[0];
 		do {
 			
-			read = (byte) istream.read();
+			tempRead = (byte) istream.read();
+			if(tempRead == -1)
+				throw new IOException("Socket closed");
+			read = (byte) tempRead;
+			packetData.appendBytes(read);
 			int value = (read & 0b01111111);
 			result |= (value << (7 * numRead));
 
@@ -29,6 +38,6 @@ public class MinecraftPacketInDecoder {
 				throw new RuntimeException("VarInt is too big");
 			}
 		} while ((read & 0b10000000) != 0);
-		return result;
+		return new Tuple<Integer, PacketData>(result, packetData);
 	}
 }
