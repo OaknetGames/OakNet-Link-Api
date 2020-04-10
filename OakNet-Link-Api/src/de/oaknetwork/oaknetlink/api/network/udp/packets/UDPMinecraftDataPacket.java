@@ -28,10 +28,10 @@ public class UDPMinecraftDataPacket extends UDPPacket{
 		BytePackage bytePackage = (BytePackage) data.get("data");
 		if(ServerHelper.isServerRunning) {
 			sender.dummyClient().sendPacket(bytePackage.data);
-			Logger.logInfo("Host", UDPMinecraftDataPacket.class);
+			//Logger.logInfo("Host", UDPMinecraftDataPacket.class);
 		}else {
 
-			Logger.logInfo("Client", UDPMinecraftDataPacket.class);
+			//Logger.logInfo("Client", UDPMinecraftDataPacket.class);
 			DummyServer.sendPacket(bytePackage.data);
 		}
 		
@@ -42,7 +42,7 @@ public class UDPMinecraftDataPacket extends UDPPacket{
 		data.put("data", bytePackage);
 		sendPacket(UDPMinecraftDataPacket.class, host, data);
 
-		Logger.logInfo("SentPacket", UDPMinecraftDataPacket.class);
+		//Logger.logInfo("SentPacket", UDPMinecraftDataPacket.class);
 	}
 
 }

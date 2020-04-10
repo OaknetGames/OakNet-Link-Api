@@ -36,6 +36,15 @@ public class UDPEndpoint {
 	private int udpPort;
 	private boolean connected = true;
 	private DummyClient dummyClient;
+	
+	// blocks
+	Object inBlock = new Object();
+	Object outBlock = new Object();
+	
+	// Threads
+	Thread loopThread;
+	Thread receiveThread;
+	Thread sendThread;
 
 	// incoming
 	private long timeSinceLastPacketIn = System.currentTimeMillis();
@@ -54,83 +63,126 @@ public class UDPEndpoint {
 		this.udpAddress = iaddress;
 		this.udpPort = port;
 		instance = this;
-		Thread clientThread = new Thread(new Runnable() {
+		loopThread = new Thread(new Runnable() {
 
 			@Override
 			public void run() {
-				boolean resend = true;
-				boolean ping = true;
+				int timer = 0;
 				// Try Catch surrounding anything to catch errors which kill the network thread
 				try {
 					while (connected) {
-						// If we recieved a fullPacket we can process it now
-						if (canPacketBeProcessed) {
-							canPacketBeProcessed = false;
-							sendStatus((byte) 1);
-							processFullPacket();
-						}
-						// We received an error
-						if (status == 2 && outgoingPacketQueue.size() > 0) {
-							sendPacket(outgoingPacketQueue.get(0));
-						}
-						// We received an ok
-						if (status == 1 && outgoingPacketQueue.size() > 0) {
-							outgoingPacketNumber++;
-							if (outgoingPacketNumber > 100)
-								outgoingPacketNumber = 1;
-							outgoingPacketQueue.remove(0);
-							status = -1;
-						}
-						// Nothing to do, so sent the next Packet out
-						if (status == -1 && outgoingPacketQueue.size() > 0) {
-							sendPacket(outgoingPacketQueue.get(0));
-						}
 						// Ping
-						if (System.currentTimeMillis() % 1000 < 10 && debug) {
-							if (ping) {
-								ping = false;
-								UDPPingPacket.sendPacket(instance);
-							}
-						} else
-							ping = true;
-
+						if (debug) {
+							UDPPingPacket.sendPacket(instance);
+							
+						}
 						// Every 2 seconds
-						if ((System.currentTimeMillis() - timeSinceLastPacketIn) % 2000 < 10
+						if (timer % 2 == 0
 								&& System.currentTimeMillis() - timeSinceLastPacketIn > 2000) {
 							// If we sent a packet and wait for an answer, it probably didn't arrive, so we
 							// resent it.
-							if (resend && status == 0) {
+							if (status == 0) {
 								sendPacket(outgoingPacketQueue.get(0));
 							}
 							// If we are waiting for more subPackets but we don't receive more, send an
 							// error out.
-							if (resend && currentIncomingPacketNumber != -1) {
+							if (currentIncomingPacketNumber != -1) {
 								sendStatus((byte) 2);
 								incomingPacketQueue.clear();
 							}
-							resend = false;
-						} else
-							resend = true;
+						}
 
-						// Every 15 seconds
-						if ((System.currentTimeMillis() - timeSinceLastPacketIn) % 15000 < 10
-								&& System.currentTimeMillis() - timeSinceLastPacketIn > 15000) {
+						// After 15 seconds without a Packet
+						if (System.currentTimeMillis() - timeSinceLastPacketIn > 15000) {
 							closeConnection("timed out");
 						}
+						if(timer==99)
+							timer=0;
+						else
+							timer++;
 						// Sleep to not waste all the CPU time
 						try {
-							Thread.sleep(1);
+							Thread.sleep(1000);
 						} catch (InterruptedException e) {
-							e.printStackTrace();
+							Logger.logWarning("Network Loop Thread stopped", UDPEndpoint.class);
 						}
 					}
 				} catch (Exception e) {
-					Logger.logException("Error in Network Thread", e, Client.class);
+					Logger.logException("Error in Network Loop Thread", e, Client.class);
 					closeConnection("Fatal error occured.");
 				}
 			}
 		});
-		clientThread.start();
+		loopThread.start();
+		
+		receiveThread = new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+				while(connected) {
+					// Block until a new Packet arrives
+					synchronized (inBlock) {
+						try {
+							inBlock.wait();
+						} catch (InterruptedException e) {
+							Logger.logWarning("Network Receive Thread stopped", UDPEndpoint.class);
+						}
+						try {
+							// If we recieved a fullPacket we can process it now
+							if (canPacketBeProcessed) {
+								canPacketBeProcessed = false;
+								sendStatus((byte) 1);
+								processFullPacket();
+							}
+							// We received an error
+							if (status == 2 && outgoingPacketQueue.size() > 0) {
+								sendPacket(outgoingPacketQueue.get(0));
+							}
+							// We received an ok
+							if (status == 1 && outgoingPacketQueue.size() > 0) {
+								outgoingPacketNumber++;
+								if (outgoingPacketNumber > 100)
+									outgoingPacketNumber = 1;
+								outgoingPacketQueue.remove(0);
+								status = -1;
+							}
+						}catch(Exception e) {
+							Logger.logException("Error in Network Receive Thread", e, Client.class);
+							closeConnection("Fatal error occured.");
+						}
+					}
+				}
+				
+			}
+		});
+		receiveThread.start();
+		
+		sendThread = new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+				while(connected) {
+					// Block until a new Packet has to be sent out or we received an OK
+					synchronized (outBlock) {
+						try {
+							outBlock.wait();
+						} catch (InterruptedException e) {
+							Logger.logWarning("Network Send Thread stopped", UDPEndpoint.class);
+						}
+						try {
+							if (status == -1 && outgoingPacketQueue.size() > 0) {
+								sendPacket(outgoingPacketQueue.get(0));
+							}
+						}catch(Exception e) {
+							Logger.logException("Error in Network Send Thread", e, Client.class);
+							closeConnection("Fatal error occured.");
+						}
+					}
+				}
+				
+			}
+		});
+		sendThread.start();
 	}
 
 	/**
@@ -180,6 +232,9 @@ public class UDPEndpoint {
 			dummyClient.closeConnection("Endpoint closed connection.");
 		UDPEndpointHelper.removeEndpoint(instance);
 		connected = false;
+		loopThread.interrupt();
+		receiveThread.interrupt();
+		sendThread.interrupt();
 	}
 
 	/**
@@ -244,6 +299,12 @@ public class UDPEndpoint {
 			} else {
 				throw new PacketException("Recieved illegal status");
 			}
+			synchronized (inBlock) {
+				inBlock.notify();
+			}
+			synchronized (outBlock) {
+				outBlock.notify();
+			}
 			return;
 		}
 		packetData.removeBytes(1);
@@ -266,6 +327,9 @@ public class UDPEndpoint {
 		if (incomingPacketQueue.size() == totalSubPackets) {
 			canPacketBeProcessed = true;
 			currentIncomingPacketNumber = -1;
+		}
+		synchronized (inBlock) {
+			inBlock.notify();
 		}
 
 	}
@@ -296,5 +360,8 @@ public class UDPEndpoint {
 	 */
 	public void addToOutgoingQueue(PacketData packetData) {
 		outgoingPacketQueue.add(packetData);
+		synchronized (outBlock) {
+			outBlock.notify();
+		}
 	}
 }
