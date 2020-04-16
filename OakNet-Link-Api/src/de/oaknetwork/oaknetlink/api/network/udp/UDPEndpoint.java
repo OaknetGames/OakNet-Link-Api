@@ -48,6 +48,7 @@ public class UDPEndpoint {
 	private short currentIncomingPacketNumber = -1;
 	private short totalSubPacketNumber = 1;
 	private byte[] incomingPacket;
+	private List<PacketData> incomingPacketQueue = new ArrayList<PacketData>();
 	private int incomingSubPacketNumber=0;
 	private boolean canPacketBeProcessed = false;
 
@@ -131,8 +132,10 @@ public class UDPEndpoint {
 							// If we recieved a fullPacket we can process it now
 							if (canPacketBeProcessed) {
 								canPacketBeProcessed = false;
-								sendStatus((byte) 1);
-								processFullPacket();
+								while(incomingPacketQueue.size()>0){
+									processFullPacket(incomingPacketQueue.get(0));
+									incomingPacketQueue.remove(0);
+								}
 							}
 							// We received an error
 							if (status == 2 && outgoingPacketQueue.size() > 0) {
@@ -266,12 +269,7 @@ public class UDPEndpoint {
 	/**
 	 * This is called when the full Packet arrived and we can start processing it.
 	 */
-	public void processFullPacket() {
-		PacketData packetData = new PacketData();
-		packetData.appendBytes(incomingPacket);
-		totalSubPacketNumber = -1;
-		incomingPacket=null;
-		incomingSubPacketNumber=0;
+	public void processFullPacket(PacketData packetData) {
 		try {
 			UDPPacket.decodePacket(packetData, this);
 		} catch (PacketException e) {
@@ -328,9 +326,15 @@ public class UDPEndpoint {
 		incomingSubPacketNumber++;
 		System.arraycopy(packetData.data, 0, incomingPacket, (currentSubPacket - 1) * 506, 506);
 		if (incomingSubPacketNumber == totalSubPackets) {
+			PacketData pData = new PacketData();
+			pData.appendBytes(incomingPacket);
+			incomingPacket=null;
+			incomingPacketQueue.add(pData);
 			canPacketBeProcessed = true;
 			currentIncomingPacketNumber = -1;
 			incomingSubPacketNumber = 0;
+			totalSubPacketNumber = -1;
+			sendStatus((byte) 1);
 		}
 		synchronized (inBlock) {
 			inBlock.notify();
