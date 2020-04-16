@@ -330,6 +330,7 @@ public class UDPEndpoint {
 		if (incomingSubPacketNumber == totalSubPackets) {
 			canPacketBeProcessed = true;
 			currentIncomingPacketNumber = -1;
+			incomingSubPacketNumber = 0;
 		}
 		synchronized (inBlock) {
 			inBlock.notify();
