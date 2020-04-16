@@ -70,7 +70,7 @@ public class DummyServer {
 									in.read(data);
 									UDPMinecraftDataPacket.sendPacket(host, new BytePackage(data));
 								}
-								Thread.sleep(1);
+								Thread.sleep(4);
 							} catch (SocketException e) {
 								if (e.getMessage().contains("Connection reset")) {
 									closeConnection("Reset by peer");

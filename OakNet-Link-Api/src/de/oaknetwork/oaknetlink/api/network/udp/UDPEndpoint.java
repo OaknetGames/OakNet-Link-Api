@@ -3,10 +3,7 @@ package de.oaknetwork.oaknetlink.api.network.udp;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
 import de.oaknetwork.oaknetlink.api.log.Logger;
 import de.oaknetwork.oaknetlink.api.mcinterface.DummyClient;
 import de.oaknetwork.oaknetlink.api.network.PacketException;
@@ -50,7 +47,8 @@ public class UDPEndpoint {
 	private long timeSinceLastPacketIn = System.currentTimeMillis();
 	private short currentIncomingPacketNumber = -1;
 	private short totalSubPacketNumber = 1;
-	private Map<Short, byte[]> incomingPacketQueue = new HashMap<Short, byte[]>();
+	private byte[] incomingPacket;
+	private int incomingSubPacketNumber=0;
 	private boolean canPacketBeProcessed = false;
 
 	// outgoing
@@ -88,7 +86,8 @@ public class UDPEndpoint {
 							// error out.
 							if (currentIncomingPacketNumber != -1) {
 								sendStatus((byte) 2);
-								incomingPacketQueue.clear();
+								incomingPacket=null;
+								incomingSubPacketNumber=0;
 							}
 						}
 
@@ -100,6 +99,7 @@ public class UDPEndpoint {
 							timer=0;
 						else
 							timer++;
+						
 						// Sleep to not waste all the CPU time
 						try {
 							Thread.sleep(1000);
@@ -268,11 +268,10 @@ public class UDPEndpoint {
 	 */
 	public void processFullPacket() {
 		PacketData packetData = new PacketData();
-		for (short i = 1; i <= totalSubPacketNumber; i++) {
-			packetData.appendBytes(incomingPacketQueue.get(i));
-		}
+		packetData.appendBytes(incomingPacket);
 		totalSubPacketNumber = -1;
-		incomingPacketQueue.clear();
+		incomingPacket=null;
+		incomingSubPacketNumber=0;
 		try {
 			UDPPacket.decodePacket(packetData, this);
 		} catch (PacketException e) {
@@ -310,21 +309,25 @@ public class UDPEndpoint {
 		packetData.removeBytes(1);
 
 		// decode the packetNumber
-		if (currentIncomingPacketNumber == -1)
+		if (currentIncomingPacketNumber == -1) 
 			currentIncomingPacketNumber = packetData.data[0];
 		if (currentIncomingPacketNumber != packetData.data[0])
 			throw new PacketException("Recieved unexpected packet");
 		packetData.removeBytes(1);
-
+		
 		short currentSubPacket = PacketInDecoder.decodeShort(packetData);
 		short totalSubPackets = PacketInDecoder.decodeShort(packetData);
+		
+		if(incomingPacket==null)
+			incomingPacket=new byte[totalSubPackets*506];
 
 		if (Constants.NETWORKDEBUG)
 			Logger.logInfo("SubPackage " + currentSubPacket + "/" + totalSubPackets, UDPEndpoint.class);
 
 		totalSubPacketNumber = totalSubPackets;
-		incomingPacketQueue.put(currentSubPacket, packetData.data);
-		if (incomingPacketQueue.size() == totalSubPackets) {
+		incomingSubPacketNumber++;
+		System.arraycopy(packetData.data, 0, incomingPacket, (currentSubPacket - 1) * 506, 506);
+		if (incomingSubPacketNumber == totalSubPackets) {
 			canPacketBeProcessed = true;
 			currentIncomingPacketNumber = -1;
 		}
