@@ -136,14 +136,14 @@ public class UDPEndpoint {
 							}
 							// We received an error
 							if (status == 2 && outgoingPacketQueue.size() > 0) {
-								if(payLoad == currentIncomingPacketNumber)
+								if(payLoad == outgoingPacketNumber)
 									sendPacket(outgoingPacketQueue.get(0));
 								else 
 									Logger.logWarning("Received an error but packet is not current. Ignoring...", UDPEndpoint.class);
 							}
 							// We received an ok
 							if(status == 1 ) {
-								if(payLoad == currentIncomingPacketNumber) {
+								if(payLoad == outgoingPacketNumber) {
 									if (outgoingPacketQueue.size() > 0) {
 										outgoingPacketNumber++;
 										if (outgoingPacketNumber > 100)
@@ -266,7 +266,7 @@ public class UDPEndpoint {
 	 * @param status
 	 */
 	public void sendStatus(byte status, byte payload) {
-		byte[] buffer = new byte[1];
+		byte[] buffer = new byte[2];
 		buffer[0] = status;
 		buffer[1] = payload;
 		DatagramPacket errorPacket = new DatagramPacket(buffer, 2, udpAddress, udpPort);
@@ -316,7 +316,7 @@ public class UDPEndpoint {
 
 		// decode the packetNumber
 		// We already processed this packet
-		if (currentIncomingPacketNumber-1 == packetData.data[0]) {
+		if (previousIncomingPacketNumber == packetData.data[0]) {
 			Logger.logWarning("Already received this packet", UDPEndpoint.class);
 			incomingSubPacketNumber = 0;
 			incomingPacket=null;
