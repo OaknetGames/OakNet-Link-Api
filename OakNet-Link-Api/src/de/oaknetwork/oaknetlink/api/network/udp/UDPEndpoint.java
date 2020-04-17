@@ -155,6 +155,13 @@ public class UDPEndpoint {
 									Logger.logWarning("Received an ok but packet is not current. Ignoring...", UDPEndpoint.class);
 								}
 							}
+							// flush in and out threads
+							synchronized (inBlock) {
+								inBlock.notify();
+							}
+							synchronized (outBlock) {
+								outBlock.notify();
+							}
 						}catch(Exception e) {
 							Logger.logException("Error in Network Receive Thread", e, Client.class);
 							closeConnection("Fatal error occured.");
