@@ -45,17 +45,17 @@ public class UDPEndpoint {
 
 	// incoming
 	private long timeSinceLastPacketIn = System.currentTimeMillis();
-	private short currentIncomingPacketNumber = -1;
-	private short totalSubPacketNumber = 1;
+	private byte currentIncomingPacketNumber = 1;
+	private byte previousIncomingPacketNumber = 100;
 	private byte[] incomingPacket;
 	private List<PacketData> incomingPacketQueue = new ArrayList<PacketData>();
 	private int incomingSubPacketNumber=0;
-	private boolean canPacketBeProcessed = false;
 
 	// outgoing
 	private byte outgoingPacketNumber = 1;
 	// Status -1 = nothing, 0 = waiting; 1 = OK; 2 = ERROR
 	private byte status = -1;
+	private byte payLoad = -1;
 	private List<PacketData> outgoingPacketQueue = new ArrayList<PacketData>();
 
 	public UDPEndpoint(InetAddress iaddress, int port) {
@@ -72,8 +72,8 @@ public class UDPEndpoint {
 					while (connected) {
 						// Ping
 						if (debug) {
+							Logger.logInfo("Status: " + status, UDPEndpoint.class);
 							UDPPingPacket.sendPacket(instance);
-							
 						}
 						// Every 2 seconds
 						if (timer % 2 == 0
@@ -85,8 +85,8 @@ public class UDPEndpoint {
 							}
 							// If we are waiting for more subPackets but we don't receive more, send an
 							// error out.
-							if (currentIncomingPacketNumber != -1) {
-								sendStatus((byte) 2);
+							if (incomingPacket !=null) {
+								sendStatus((byte) 2, currentIncomingPacketNumber);
 								incomingPacket=null;
 								incomingSubPacketNumber=0;
 							}
@@ -130,24 +130,30 @@ public class UDPEndpoint {
 						}
 						try {
 							// If we recieved a fullPacket we can process it now
-							if (canPacketBeProcessed) {
-								canPacketBeProcessed = false;
-								while(incomingPacketQueue.size()>0){
-									processFullPacket(incomingPacketQueue.get(0));
-									incomingPacketQueue.remove(0);
-								}
+							while(incomingPacketQueue.size()>0){
+								processFullPacket(incomingPacketQueue.get(0));
+								incomingPacketQueue.remove(0);
 							}
 							// We received an error
 							if (status == 2 && outgoingPacketQueue.size() > 0) {
-								sendPacket(outgoingPacketQueue.get(0));
+								if(payLoad == currentIncomingPacketNumber)
+									sendPacket(outgoingPacketQueue.get(0));
+								else 
+									Logger.logWarning("Received an error but packet is not current. Ignoring...", UDPEndpoint.class);
 							}
 							// We received an ok
-							if (status == 1 && outgoingPacketQueue.size() > 0) {
-								outgoingPacketNumber++;
-								if (outgoingPacketNumber > 100)
-									outgoingPacketNumber = 1;
-								outgoingPacketQueue.remove(0);
-								status = -1;
+							if(status == 1 ) {
+								if(payLoad == currentIncomingPacketNumber) {
+									if (outgoingPacketQueue.size() > 0) {
+										outgoingPacketNumber++;
+										if (outgoingPacketNumber > 100)
+											outgoingPacketNumber = 1;
+										outgoingPacketQueue.remove(0);
+										status = -1;
+									}
+								} else {
+									Logger.logWarning("Received an ok but packet is not current. Ignoring...", UDPEndpoint.class);
+								}
 							}
 						}catch(Exception e) {
 							Logger.logException("Error in Network Receive Thread", e, Client.class);
@@ -259,10 +265,11 @@ public class UDPEndpoint {
 	 * 
 	 * @param status
 	 */
-	public void sendStatus(byte status) {
+	public void sendStatus(byte status, byte payload) {
 		byte[] buffer = new byte[1];
 		buffer[0] = status;
-		DatagramPacket errorPacket = new DatagramPacket(buffer, 1, udpAddress, udpPort);
+		buffer[1] = payload;
+		DatagramPacket errorPacket = new DatagramPacket(buffer, 2, udpAddress, udpPort);
 		UDPCommunicator.instance().sendPacketBack(this, errorPacket);
 	}
 
@@ -293,6 +300,7 @@ public class UDPEndpoint {
 		if (packetData.data[0] != 0) {
 			if (packetData.data[0] == 1 || packetData.data[0] == 2) {
 				status = packetData.data[0];
+				payLoad = packetData.data[1];
 			} else {
 				throw new PacketException("Recieved illegal status");
 			}
@@ -307,8 +315,13 @@ public class UDPEndpoint {
 		packetData.removeBytes(1);
 
 		// decode the packetNumber
-		if (currentIncomingPacketNumber == -1) 
-			currentIncomingPacketNumber = packetData.data[0];
+		// We already processed this packet
+		if (currentIncomingPacketNumber-1 == packetData.data[0]) {
+			Logger.logWarning("Already received this packet", UDPEndpoint.class);
+			incomingSubPacketNumber = 0;
+			incomingPacket=null;
+			sendStatus((byte) 1, previousIncomingPacketNumber);
+		}
 		if (currentIncomingPacketNumber != packetData.data[0])
 			throw new PacketException("Recieved unexpected packet");
 		packetData.removeBytes(1);
@@ -322,7 +335,6 @@ public class UDPEndpoint {
 		if (Constants.NETWORKDEBUG)
 			Logger.logInfo("SubPackage " + currentSubPacket + "/" + totalSubPackets, UDPEndpoint.class);
 
-		totalSubPacketNumber = totalSubPackets;
 		incomingSubPacketNumber++;
 		System.arraycopy(packetData.data, 0, incomingPacket, (currentSubPacket - 1) * 506, 506);
 		if (incomingSubPacketNumber == totalSubPackets) {
@@ -330,11 +342,12 @@ public class UDPEndpoint {
 			pData.appendBytes(incomingPacket);
 			incomingPacket=null;
 			incomingPacketQueue.add(pData);
-			canPacketBeProcessed = true;
-			currentIncomingPacketNumber = -1;
+			previousIncomingPacketNumber=currentIncomingPacketNumber;
+			currentIncomingPacketNumber++;
+			if(currentIncomingPacketNumber > 100)
+				currentIncomingPacketNumber = 1;
 			incomingSubPacketNumber = 0;
-			totalSubPacketNumber = -1;
-			sendStatus((byte) 1);
+			sendStatus((byte) 1, previousIncomingPacketNumber);
 		}
 		synchronized (inBlock) {
 			inBlock.notify();
