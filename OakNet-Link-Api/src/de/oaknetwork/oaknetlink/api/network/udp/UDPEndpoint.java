@@ -72,7 +72,7 @@ public class UDPEndpoint {
 					while (connected) {
 						// Ping
 						if (debug) {
-							Logger.logInfo("Status: " + status, UDPEndpoint.class);
+							Logger.logInfo("Status: " + outgoingPacketQueue.size(), UDPEndpoint.class);
 							UDPPingPacket.sendPacket(instance);
 						}
 						// Every 2 seconds
@@ -186,8 +186,10 @@ public class UDPEndpoint {
 							Logger.logWarning("Network Send Thread stopped", UDPEndpoint.class);
 						}
 						try {
-							if (status == -1 && outgoingPacketQueue.size() > 0) {
-								sendPacket(outgoingPacketQueue.get(0));
+							while(outgoingPacketQueue.size() > 0) {
+								if (status == -1 ) {
+									sendPacket(outgoingPacketQueue.get(0));
+								}
 							}
 						}catch(Exception e) {
 							Logger.logException("Error in Network Send Thread", e, Client.class);
