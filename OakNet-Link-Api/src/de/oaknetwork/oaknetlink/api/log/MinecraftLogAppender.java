@@ -26,8 +26,11 @@ public class MinecraftLogAppender extends AbstractAppender {
 		LocalDateTime now = LocalDateTime.now();
 		LogWindow.getInstance().getMcLogArea().append("[" + dtf.format(now) + "] [" + e.getLevel().name() + "] ["
 				+ e.getLoggerName() + "]: " + e.getMessage().getFormattedMessage() + "\n");
-		LogWindow.getInstance().getMcLogArea()
-				.setCaretPosition(LogWindow.getInstance().getMcLogArea().getText().length());
+		try {
+			LogWindow.getInstance().getMcLogArea()
+					.setCaretPosition(LogWindow.getInstance().getMcLogArea().getText().length());
+		} catch (Exception except) {
+		}
 	}
 
 }

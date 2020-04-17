@@ -25,8 +25,11 @@ public class OakNetLinkLogProvider implements ILogProvider {
 		LocalDateTime now = LocalDateTime.now();
 		String msg = String.format("[%S] [INFO] [" + sender.getSimpleName() + "]: %s\n", dtf.format(now), message);
 		LogWindow.getInstance().getOakNetLinkLogArea().append(msg);
-		LogWindow.getInstance().getOakNetLinkLogArea()
-				.setCaretPosition(LogWindow.getInstance().getOakNetLinkLogArea().getText().length());
+		try {
+			LogWindow.getInstance().getOakNetLinkLogArea()
+					.setCaretPosition(LogWindow.getInstance().getOakNetLinkLogArea().getText().length());
+		} catch (Exception e) {
+		}
 		writeToLogFile(msg);
 	}
 
@@ -36,8 +39,11 @@ public class OakNetLinkLogProvider implements ILogProvider {
 		LocalDateTime now = LocalDateTime.now();
 		String msg = String.format("[%S] [WARNING] [" + sender.getSimpleName() + "]: %s\n", dtf.format(now), message);
 		LogWindow.getInstance().getOakNetLinkLogArea().append(msg);
-		LogWindow.getInstance().getOakNetLinkLogArea()
-				.setCaretPosition(LogWindow.getInstance().getOakNetLinkLogArea().getText().length());
+		try {
+			LogWindow.getInstance().getOakNetLinkLogArea()
+					.setCaretPosition(LogWindow.getInstance().getOakNetLinkLogArea().getText().length());
+		} catch (Exception e) {
+		}
 		writeToLogFile(msg);
 	}
 
@@ -47,8 +53,11 @@ public class OakNetLinkLogProvider implements ILogProvider {
 		LocalDateTime now = LocalDateTime.now();
 		String msg = String.format("[%S] [ERROR] [" + sender.getSimpleName() + "]: %s\n", dtf.format(now), message);
 		LogWindow.getInstance().getOakNetLinkLogArea().append(msg);
+		try {
 		LogWindow.getInstance().getOakNetLinkLogArea()
 				.setCaretPosition(LogWindow.getInstance().getOakNetLinkLogArea().getText().length());
+		} catch (Exception e) {
+		}
 		writeToLogFile(msg);
 	}
 

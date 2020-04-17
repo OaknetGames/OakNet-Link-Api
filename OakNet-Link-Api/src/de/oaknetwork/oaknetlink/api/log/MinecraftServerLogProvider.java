@@ -13,16 +13,31 @@ public class MinecraftServerLogProvider implements ILogProvider {
 	@Override
 	public void logInfo(String message, Class<?> sender) {
 		LogWindow.getInstance().getMcServerLogArea().append("[" + sender.getSimpleName() + "]: " + message);
+		try {
+			LogWindow.getInstance().getMcServerLogArea()
+					.setCaretPosition(LogWindow.getInstance().getMcServerLogArea().getText().length());
+		} catch (Exception e) {
+		}
 	}
 
 	@Override
 	public void logWarning(String message, Class<?> sender) {
 		LogWindow.getInstance().getMcServerLogArea().append("[" + sender.getSimpleName() + "]: " + message);
+		try {
+			LogWindow.getInstance().getMcServerLogArea()
+					.setCaretPosition(LogWindow.getInstance().getMcServerLogArea().getText().length());
+		} catch (Exception e) {
+		}
 	}
 
 	@Override
 	public void logError(String message, Class<?> sender) {
 		LogWindow.getInstance().getMcServerLogArea().append("[" + sender.getSimpleName() + "]: " + message);
+		try {
+			LogWindow.getInstance().getMcServerLogArea()
+					.setCaretPosition(LogWindow.getInstance().getMcServerLogArea().getText().length());
+		} catch (Exception e) {
+		}
 	}
 
 	@Override
