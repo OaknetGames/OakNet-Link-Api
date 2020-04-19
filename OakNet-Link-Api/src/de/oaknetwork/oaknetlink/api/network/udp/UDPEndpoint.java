@@ -37,6 +37,7 @@ public class UDPEndpoint {
 	// blocks
 	Object inBlock = new Object();
 	Object outBlock = new Object();
+	Object queueBlock = new Object();
 
 	// Threads
 	Thread loopThread;
@@ -57,6 +58,8 @@ public class UDPEndpoint {
 	private byte status = -1;
 	private byte payLoad = -1;
 	private List<PacketData> outgoingPacketQueue = new ArrayList<PacketData>();
+	// this is the outgoing assembled outgoingPacketQueue.
+	private PacketData currentOutgoingPacketQueue;
 
 	public UDPEndpoint(InetAddress iaddress, int port) {
 		this.udpAddress = iaddress;
@@ -80,7 +83,7 @@ public class UDPEndpoint {
 							// If we sent a packet and wait for an answer, it probably didn't arrive, so we
 							// resent it.
 							if (status == 0) {
-								sendPacket(outgoingPacketQueue.get(0));
+								sendPacket();
 							}
 							// If we are waiting for more subPackets but we don't receive more, send an
 							// error out.
@@ -136,7 +139,7 @@ public class UDPEndpoint {
 							// We received an error
 							if (status == 2 && outgoingPacketQueue.size() > 0) {
 								if (payLoad == outgoingPacketNumber)
-									sendPacket(outgoingPacketQueue.get(0));
+									sendPacket();
 								else
 									Logger.logWarning("Received an error but packet is not current. Ignoring...",
 											UDPEndpoint.class);
@@ -175,14 +178,14 @@ public class UDPEndpoint {
 					// Block until a new Packet has to be sent out or we received an OK
 					synchronized (outBlock) {
 						try {
-							if (outgoingPacketQueue.size() == 0)
-								outBlock.wait();
+							outBlock.wait();
 						} catch (InterruptedException e) {
 							Logger.logWarning("Network Send Thread stopped", UDPEndpoint.class);
 						}
 						try {
 							if (status == -1 && outgoingPacketQueue.size() > 0) {
-								sendPacket(outgoingPacketQueue.get(0));
+								assembleOutgoingQueue();
+								sendPacket();
 							}
 
 						} catch (Exception e) {
@@ -198,15 +201,12 @@ public class UDPEndpoint {
 	}
 
 	/**
-	 * This method is used to send packets to the endpoint. Usually this is done by
-	 * UDPPacket.java
-	 * 
-	 * @param packetToSend the packet to send
+	 * This method is used to send the currentOutgoingQueue to the endpoint.
 	 */
-	public void sendPacket(PacketData packetDataOrig) {
+	private void sendPacket() {
 		status = 0;
 		PacketData packetData = new PacketData();
-		packetData.data = packetDataOrig.data.clone();
+		packetData.data = currentOutgoingPacketQueue.data.clone();
 		short totalSubPackages = packetData.data.length % 506 != 0 ? (byte) (packetData.data.length / 506 + 1)
 				: (byte) (packetData.data.length / 506);
 		short currentSubPackage = 1;
@@ -229,6 +229,27 @@ public class UDPEndpoint {
 			DatagramPacket packetToSend = new DatagramPacket(buffer, 512, udpAddress, udpPort);
 			UDPCommunicator.instance().sendPacketBack(instance, packetToSend);
 			currentSubPackage++;
+		}
+	}
+
+	/**
+	 * This method is used to assemble the currentOutgoingQueue.
+	 *
+	 * It adds the packetLength as header
+	 *
+	 */
+	private void assembleOutgoingQueue() {
+		synchronized (queueBlock) {
+			currentOutgoingPacketQueue = new PacketData();
+			// process each outgoing Packet in queue
+			for (PacketData outgoingPacket : outgoingPacketQueue) {
+				// add the packetLength
+				PacketOutEncoder.encodeInt(currentOutgoingPacketQueue, outgoingPacket.data.length);
+				// add the packet
+				currentOutgoingPacketQueue.appendBytes(outgoingPacket.data);
+			}
+			// add the ending
+			PacketOutEncoder.encodeInt(currentOutgoingPacketQueue, -1);
 		}
 	}
 
@@ -280,11 +301,27 @@ public class UDPEndpoint {
 	 * This is called when the full Packet arrived and we can start processing it.
 	 */
 	public void processFullPacket(PacketData packetData) {
-		try {
-			UDPPacket.decodePacket(packetData, this);
-		} catch (PacketException e) {
-			Logger.logException("An error occured", e, UDPEndpoint.class);
-		}
+		int packetLength = -1;
+		do {
+			try {
+				packetLength = PacketInDecoder.decodeInt(packetData);
+			} catch (PacketException e) {
+				Logger.logException("Can't decode PacketLength", e, UDPEndpoint.class);
+				packetLength = -1;
+			}
+			if (packetLength != -1) {
+				PacketData individualPacketData = new PacketData();
+				individualPacketData.data = new byte[packetLength];
+				System.arraycopy(packetData.data, 0, individualPacketData.data, 0, packetLength);
+				packetData.removeBytes(packetLength);
+				try {
+					UDPPacket.decodePacket(individualPacketData, instance);
+				}catch(Exception e) {
+					Logger.logException("Error while processing a packet", e, UDPEndpoint.class);
+				}
+			}
+
+		} while (packetLength != -1);
 	}
 
 	/**
@@ -383,9 +420,11 @@ public class UDPEndpoint {
 	 * @param bytes
 	 */
 	public void addToOutgoingQueue(PacketData packetData) {
-		outgoingPacketQueue.add(packetData);
-		synchronized (outBlock) {
-			outBlock.notify();
+		synchronized (queueBlock) {
+			outgoingPacketQueue.add(packetData);
+			synchronized (outBlock) {
+				outBlock.notify();
+			}
 		}
 	}
 }
