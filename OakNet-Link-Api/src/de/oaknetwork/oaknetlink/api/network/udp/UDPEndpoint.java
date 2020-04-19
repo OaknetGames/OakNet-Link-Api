@@ -366,8 +366,8 @@ public class UDPEndpoint {
 			throw new PacketException("Recieved unexpected packet");
 		packetData.removeBytes(1);
 
-		short currentSubPacket = PacketInDecoder.decodeShort(packetData);
-		short totalSubPackets = PacketInDecoder.decodeShort(packetData);
+		int currentSubPacket = PacketInDecoder.decodeInt(packetData);
+		int totalSubPackets = PacketInDecoder.decodeInt(packetData);
 
 		if (incomingPacket == null)
 			incomingPacket = new byte[totalSubPackets * 502];
