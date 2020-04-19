@@ -207,9 +207,9 @@ public class UDPEndpoint {
 		status = 0;
 		PacketData packetData = new PacketData();
 		packetData.data = currentOutgoingPacketQueue.data.clone();
-		short totalSubPackages = packetData.data.length % 506 != 0 ? (byte) (packetData.data.length / 506 + 1)
-				: (byte) (packetData.data.length / 506);
-		short currentSubPackage = 1;
+		int totalSubPackages = packetData.data.length % 502 != 0 ? (int) (packetData.data.length / 502 + 1)
+				: (int) (packetData.data.length / 502);
+		int currentSubPackage = 1;
 		while (packetData.data.length > 0) {
 			byte[] buffer = new byte[512];
 			// Add the status, 0 because we are transmiting data
@@ -218,13 +218,13 @@ public class UDPEndpoint {
 			buffer[1] = outgoingPacketNumber;
 			// Add the SubPackage stuff
 			PacketData subPackageData = new PacketData();
-			PacketOutEncoder.encodeShort(subPackageData, currentSubPackage);
-			PacketOutEncoder.encodeShort(subPackageData, totalSubPackages);
+			PacketOutEncoder.encodeInt(subPackageData, currentSubPackage);
+			PacketOutEncoder.encodeInt(subPackageData, totalSubPackages);
 			System.arraycopy(subPackageData.data, 0, buffer, 2, 4);
 			// Add the PackageData
 			System.arraycopy(packetData.data, 0, buffer, 6,
-					packetData.data.length > 506 ? 506 : packetData.data.length);
-			packetData.removeBytes(packetData.data.length > 506 ? 506 : packetData.data.length);
+					packetData.data.length > 502 ? 502 : packetData.data.length);
+			packetData.removeBytes(packetData.data.length > 502 ? 502 : packetData.data.length);
 			// Prepare and send the Packet
 			DatagramPacket packetToSend = new DatagramPacket(buffer, 512, udpAddress, udpPort);
 			UDPCommunicator.instance().sendPacketBack(instance, packetToSend);
@@ -370,7 +370,7 @@ public class UDPEndpoint {
 		short totalSubPackets = PacketInDecoder.decodeShort(packetData);
 
 		if (incomingPacket == null)
-			incomingPacket = new byte[totalSubPackets * 506];
+			incomingPacket = new byte[totalSubPackets * 502];
 
 		if (Constants.NETWORKDEBUG)
 			Logger.logInfo("SubPackage " + currentSubPacket + "/" + totalSubPackets, UDPEndpoint.class);
