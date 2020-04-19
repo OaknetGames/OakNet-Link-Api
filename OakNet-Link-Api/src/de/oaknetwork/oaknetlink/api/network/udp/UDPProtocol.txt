@@ -1,7 +1,7 @@
 The UDP Packets have to be split in 512 byte sub Packets
 
 The packets look like this:
-byte status, byte packetNumber, short subPacketNumber, short subPacketsTotal, byte[] packetData
+byte status, byte packetNumber, int subPacketNumber, int subPacketsTotal, byte[] packetData
 
 
 status -> 0 sendingData; 1 OK; 2 Error
