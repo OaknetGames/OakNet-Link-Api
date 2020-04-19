@@ -12,7 +12,7 @@ public class MinecraftServerLogProvider implements ILogProvider {
 
 	@Override
 	public void logInfo(String message, Class<?> sender) {
-		LogWindow.getInstance().getMcServerLogArea().append("[" + sender.getSimpleName() + "]: " + message);
+		LogWindow.getInstance().getMcServerLogArea().append("[" + sender.getSimpleName() + "]: " + message + "\n");
 		try {
 			LogWindow.getInstance().getMcServerLogArea()
 					.setCaretPosition(LogWindow.getInstance().getMcServerLogArea().getText().length());
@@ -22,7 +22,7 @@ public class MinecraftServerLogProvider implements ILogProvider {
 
 	@Override
 	public void logWarning(String message, Class<?> sender) {
-		LogWindow.getInstance().getMcServerLogArea().append("[" + sender.getSimpleName() + "]: " + message);
+		LogWindow.getInstance().getMcServerLogArea().append("[" + sender.getSimpleName() + "]: " + message + "\n");
 		try {
 			LogWindow.getInstance().getMcServerLogArea()
 					.setCaretPosition(LogWindow.getInstance().getMcServerLogArea().getText().length());
@@ -32,7 +32,7 @@ public class MinecraftServerLogProvider implements ILogProvider {
 
 	@Override
 	public void logError(String message, Class<?> sender) {
-		LogWindow.getInstance().getMcServerLogArea().append("[" + sender.getSimpleName() + "]: " + message);
+		LogWindow.getInstance().getMcServerLogArea().append("[" + sender.getSimpleName() + "]: " + message + "\n");
 		try {
 			LogWindow.getInstance().getMcServerLogArea()
 					.setCaretPosition(LogWindow.getInstance().getMcServerLogArea().getText().length());
