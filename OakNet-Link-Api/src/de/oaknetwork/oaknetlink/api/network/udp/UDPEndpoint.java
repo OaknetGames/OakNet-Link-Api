@@ -11,6 +11,7 @@ import de.oaknetwork.oaknetlink.api.network.tcp.server.Client;
 import de.oaknetwork.oaknetlink.api.network.udp.packets.UDPDisconnectionPacket;
 import de.oaknetwork.oaknetlink.api.network.udp.packets.UDPPacket;
 import de.oaknetwork.oaknetlink.api.network.udp.packets.UDPPingPacket;
+import de.oaknetwork.oaknetlink.api.network.utils.BytePackage;
 import de.oaknetwork.oaknetlink.api.network.utils.PacketData;
 import de.oaknetwork.oaknetlink.api.network.utils.PacketInDecoder;
 import de.oaknetwork.oaknetlink.api.network.utils.PacketOutEncoder;
@@ -243,10 +244,8 @@ public class UDPEndpoint {
 			currentOutgoingPacketQueue = new PacketData();
 			// process each outgoing Packet in queue
 			for (PacketData outgoingPacket : outgoingPacketQueue) {
-				// add the packetLength
-				PacketOutEncoder.encodeInt(currentOutgoingPacketQueue, outgoingPacket.data.length);
 				// add the packet
-				currentOutgoingPacketQueue.appendBytes(outgoingPacket.data);
+				PacketOutEncoder.encodeBytePackage(currentOutgoingPacketQueue, new BytePackage(outgoingPacket.data));
 			}
 			// add the ending
 			PacketOutEncoder.encodeInt(currentOutgoingPacketQueue, -1);
@@ -301,27 +300,21 @@ public class UDPEndpoint {
 	 * This is called when the full Packet arrived and we can start processing it.
 	 */
 	public void processFullPacket(PacketData packetData) {
-		int packetLength = -1;
-		do {
+		while (packetData.data[0] != -1) {
+			BytePackage individualBytePackage;
 			try {
-				packetLength = PacketInDecoder.decodeInt(packetData);
-			} catch (PacketException e) {
-				Logger.logException("Can't decode PacketLength", e, UDPEndpoint.class);
-				packetLength = -1;
-			}
-			if (packetLength != -1) {
+				individualBytePackage = PacketInDecoder.decodeBytePackage(packetData);
 				PacketData individualPacketData = new PacketData();
-				individualPacketData.data = new byte[packetLength];
-				System.arraycopy(packetData.data, 0, individualPacketData.data, 0, packetLength);
-				packetData.removeBytes(packetLength);
+				individualPacketData.appendBytes(individualBytePackage.data);
 				try {
 					UDPPacket.decodePacket(individualPacketData, instance);
-				}catch(Exception e) {
+				} catch (Exception e) {
 					Logger.logException("Error while processing a packet", e, UDPEndpoint.class);
 				}
+			} catch (PacketException e1) {
+				Logger.logWarning("Can't decode Packet", UDPEndpoint.class);
 			}
-
-		} while (packetLength != -1);
+		}
 	}
 
 	/**
