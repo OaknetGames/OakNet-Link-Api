@@ -207,8 +207,8 @@ public class UDPEndpoint {
 		status = 0;
 		PacketData packetData = new PacketData();
 		packetData.data = currentOutgoingPacketQueue.data.clone();
-		int totalSubPackages = packetData.data.length % 502 != 0 ? (int) (packetData.data.length / 502 + 1)
-				: (int) (packetData.data.length / 502);
+		int totalSubPackages = packetData.data.length % 502 != 0 ? (packetData.data.length / 502 + 1)
+				: (packetData.data.length / 502);
 		int currentSubPackage = 1;
 		while (packetData.data.length > 0) {
 			byte[] buffer = new byte[512];
@@ -220,9 +220,9 @@ public class UDPEndpoint {
 			PacketData subPackageData = new PacketData();
 			PacketOutEncoder.encodeInt(subPackageData, currentSubPackage);
 			PacketOutEncoder.encodeInt(subPackageData, totalSubPackages);
-			System.arraycopy(subPackageData.data, 0, buffer, 2, 4);
+			System.arraycopy(subPackageData.data, 0, buffer, 2, 8);
 			// Add the PackageData
-			System.arraycopy(packetData.data, 0, buffer, 6,
+			System.arraycopy(packetData.data, 0, buffer, 10,
 					packetData.data.length > 502 ? 502 : packetData.data.length);
 			packetData.removeBytes(packetData.data.length > 502 ? 502 : packetData.data.length);
 			// Prepare and send the Packet
