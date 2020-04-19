@@ -376,7 +376,7 @@ public class UDPEndpoint {
 			Logger.logInfo("SubPackage " + currentSubPacket + "/" + totalSubPackets, UDPEndpoint.class);
 
 		incomingSubPacketNumber++;
-		System.arraycopy(packetData.data, 0, incomingPacket, (currentSubPacket - 1) * 506, 506);
+		System.arraycopy(packetData.data, 0, incomingPacket, (currentSubPacket - 1) * 502, 502);
 		if (incomingSubPacketNumber == totalSubPackets) {
 			PacketData pData = new PacketData();
 			pData.appendBytes(incomingPacket);
