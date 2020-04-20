@@ -141,6 +141,8 @@ public class UDPEndpoint {
 							}
 							// We received an error
 							if (status == 2 && outgoingPacketQueue.size() > 0) {
+								Logger.logWarning("MLEM",
+										UDPEndpoint.class);
 								if (payLoad == outgoingPacketNumber)
 									sendPacket();
 								else
@@ -187,6 +189,7 @@ public class UDPEndpoint {
 						}
 						try {
 							if (status == -1 && outgoingPacketQueue.size() > 0) {
+								status = 0;
 								assembleOutgoingQueue();
 								sendPacket();
 							}
@@ -251,6 +254,7 @@ public class UDPEndpoint {
 			}
 			// add the ending
 			PacketOutEncoder.encodeInt(currentOutgoingPacketQueue, -1);
+			outgoingPacketQueue.clear();
 		}
 	}
 
