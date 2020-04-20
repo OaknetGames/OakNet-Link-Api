@@ -251,6 +251,8 @@ public class UDPEndpoint {
 				// add the packet
 				PacketOutEncoder.encodeBytePackage(currentOutgoingPacketQueue, new BytePackage(outgoingPacket.data));
 			}
+			// add the ending
+			PacketOutEncoder.encodeInt(currentOutgoingPacketQueue, -1);
 		}
 	}
 
@@ -305,7 +307,7 @@ public class UDPEndpoint {
 		Logger.logInfo("Received Packet From: " + instance.userName, UDPEndpoint.class, MinecraftServerLogProvider.class);
 		Logger.logInfo("DATA: " + Arrays.toString(packetData.data), UDPEndpoint.class, MinecraftServerLogProvider.class);
 		
-		while (packetData.data[0] != -1) {
+		while (packetData.data[0] != -1&&packetData.data[1] != -1&&packetData.data[2] != -1&&packetData.data[3] != -1) {
 			BytePackage individualBytePackage;
 			try {
 				individualBytePackage = PacketInDecoder.decodeBytePackage(packetData);
