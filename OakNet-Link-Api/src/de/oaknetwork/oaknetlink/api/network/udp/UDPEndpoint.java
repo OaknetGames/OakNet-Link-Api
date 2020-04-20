@@ -251,8 +251,6 @@ public class UDPEndpoint {
 				// add the packet
 				PacketOutEncoder.encodeBytePackage(currentOutgoingPacketQueue, new BytePackage(outgoingPacket.data));
 			}
-			// add the ending
-			PacketOutEncoder.encodeInt(currentOutgoingPacketQueue, -1);
 		}
 	}
 
