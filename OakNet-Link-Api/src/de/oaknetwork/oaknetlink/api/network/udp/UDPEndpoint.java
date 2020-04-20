@@ -78,7 +78,7 @@ public class UDPEndpoint {
 					while (connected) {
 						// Ping
 						if (debug) {
-							Logger.logInfo("Status: " + outgoingPacketQueue.size(), UDPEndpoint.class);
+							Logger.logInfo("Status: " + status + " Queue: " + outgoingPacketQueue.size() + " Is Something going out? " + (currentOutgoingPacketQueue!=null), UDPEndpoint.class);
 							UDPPingPacket.sendPacket(instance);
 						}
 						// Every 2 seconds
