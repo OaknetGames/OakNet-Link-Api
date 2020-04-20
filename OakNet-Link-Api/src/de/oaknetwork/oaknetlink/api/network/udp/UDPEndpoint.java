@@ -156,7 +156,6 @@ public class UDPEndpoint {
 										outgoingPacketNumber++;
 										if (outgoingPacketNumber > 100)
 											outgoingPacketNumber = 1;
-										outgoingPacketQueue.remove(0);
 										status = -1;
 									}
 								} else {
