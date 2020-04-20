@@ -140,7 +140,7 @@ public class UDPEndpoint {
 								incomingPacketQueue.remove(0);
 							}
 							// We received an error
-							if (status == 2 && outgoingPacketQueue.size() > 0) {
+							if (status == 2 && currentOutgoingPacketQueue!=null) {
 								Logger.logWarning("MLEM",
 										UDPEndpoint.class);
 								if (payLoad == outgoingPacketNumber)
@@ -152,11 +152,12 @@ public class UDPEndpoint {
 							// We received an ok
 							if (status == 1) {
 								if (payLoad == outgoingPacketNumber) {
-									if (outgoingPacketQueue.size() > 0) {
+									if (currentOutgoingPacketQueue!=null) {
 										outgoingPacketNumber++;
 										if (outgoingPacketNumber > 100)
 											outgoingPacketNumber = 1;
 										status = -1;
+										currentOutgoingPacketQueue=null;
 									}
 								} else {
 									Logger.logWarning("Received an ok but packet is not current. Ignoring...",
