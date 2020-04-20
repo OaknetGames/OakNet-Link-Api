@@ -3,8 +3,10 @@ package de.oaknetwork.oaknetlink.api.network.udp;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import de.oaknetwork.oaknetlink.api.log.Logger;
+import de.oaknetwork.oaknetlink.api.log.MinecraftServerLogProvider;
 import de.oaknetwork.oaknetlink.api.mcinterface.DummyClient;
 import de.oaknetwork.oaknetlink.api.network.PacketException;
 import de.oaknetwork.oaknetlink.api.network.tcp.server.Client;
@@ -205,6 +207,8 @@ public class UDPEndpoint {
 	 * This method is used to send the currentOutgoingQueue to the endpoint.
 	 */
 	private void sendPacket() {
+		Logger.logInfo("Send Packet To: " + instance.userName, UDPEndpoint.class, MinecraftServerLogProvider.class);
+		Logger.logInfo("DATA: " + Arrays.toString(currentOutgoingPacketQueue.data), UDPEndpoint.class, MinecraftServerLogProvider.class);
 		status = 0;
 		PacketData packetData = new PacketData();
 		packetData.data = currentOutgoingPacketQueue.data.clone();
@@ -300,6 +304,9 @@ public class UDPEndpoint {
 	 * This is called when the full Packet arrived and we can start processing it.
 	 */
 	public void processFullPacket(PacketData packetData) {
+		Logger.logInfo("Received Packet From: " + instance.userName, UDPEndpoint.class, MinecraftServerLogProvider.class);
+		Logger.logInfo("DATA: " + Arrays.toString(packetData.data), UDPEndpoint.class, MinecraftServerLogProvider.class);
+		
 		while (packetData.data[0] != -1) {
 			BytePackage individualBytePackage;
 			try {
