@@ -1,7 +1,7 @@
 package de.oaknetwork.oaknetlink.api.mcinterface;
 
+import java.io.DataInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
@@ -11,6 +11,8 @@ import de.oaknetwork.oaknetlink.api.network.tcp.server.Client;
 import de.oaknetwork.oaknetlink.api.network.udp.UDPEndpoint;
 import de.oaknetwork.oaknetlink.api.network.udp.packets.UDPMinecraftDataPacket;
 import de.oaknetwork.oaknetlink.api.network.utils.BytePackage;
+import de.oaknetwork.oaknetlink.api.network.utils.PacketData;
+import de.oaknetwork.oaknetlink.api.utils.Tuple;
 
 /**
  * This is a Server which accepts connections from Minecraft Clients and routes
@@ -55,9 +57,9 @@ public class DummyServer {
 					try {
 						connected = true;
 						// Create the InputStream
-						InputStream in = null;
+						DataInputStream in = null;
 						try {
-							in = client.getInputStream();
+							in = new DataInputStream(client.getInputStream());
 						} catch (IOException e1) {
 							Logger.logException("Can't get Inputstream", e1, DummyServer.class);
 							return;
@@ -65,12 +67,15 @@ public class DummyServer {
 						// Network loop below
 						while (connected) {
 							try {
-								if(in.available()>0) {
-									byte[] data = new byte[in.available()];
-									in.read(data);
-									UDPMinecraftDataPacket.sendPacket(host, new BytePackage(data));
-								}
-								Thread.sleep(4);
+								// Decode Packet Length
+								Tuple<Integer, PacketData> decodedData = MinecraftPacketInDecoder.decodeVarInt(in);
+								int packetLength = decodedData.value1;
+								byte[] data = new byte[packetLength];
+								
+								in.readFully(data, 0, packetLength);
+								
+								decodedData.value2.appendBytes(data);
+								UDPMinecraftDataPacket.sendPacket(host, new BytePackage(decodedData.value2.data));
 							} catch (SocketException e) {
 								if (e.getMessage().contains("Connection reset")) {
 									closeConnection("Reset by peer");

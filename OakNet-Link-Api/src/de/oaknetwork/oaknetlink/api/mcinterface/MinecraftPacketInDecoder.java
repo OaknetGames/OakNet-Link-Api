@@ -1,7 +1,7 @@
 package de.oaknetwork.oaknetlink.api.mcinterface;
 
+import java.io.DataInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 
 import de.oaknetwork.oaknetlink.api.network.utils.PacketData;
 import de.oaknetwork.oaknetlink.api.utils.Tuple;
@@ -16,7 +16,7 @@ public class MinecraftPacketInDecoder {
 	/** 
 	 * Decodes an Integer with variable size.
 	**/
-	public static Tuple<Integer, PacketData> decodeVarInt(InputStream istream) throws IOException {
+	public static Tuple<Integer, PacketData> decodeVarInt(DataInputStream istream) throws IOException {
 		int numRead = 0;
 		int result = 0;
 		byte read;
@@ -25,7 +25,7 @@ public class MinecraftPacketInDecoder {
 		packetData.data = new byte[0];
 		do {
 			
-			tempRead = (byte) istream.read();
+			tempRead = istream.read();
 			if(tempRead == -1)
 				throw new IOException("Socket closed");
 			read = (byte) tempRead;
