@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net5.0</TargetFramework>
+    <RootNamespace>OakNet_Link_Api</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="OakNetLink">
+      <HintPath>lib\OakNetLink.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>
