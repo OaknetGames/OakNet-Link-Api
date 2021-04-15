@@ -8,7 +8,9 @@ The Mod consist of two parts:
 
 - the Wrapper: The actual mod (loaded by forge), different for each version of the game
 
-- the Api: This is the same for each version of game, independent
+- the UI: This is the same for each version of game, independent
+
+- the Network Api: This is the same for each version of game, independent
 
 The Communication between the two parts is made possible with two classes:
 
@@ -19,27 +21,7 @@ The Communication between the two parts is made possible with two classes:
 # Network Concepts:
 The general idea of the communication is the following:
 
-- Game Traffic:
-
-  Host's game <-> McServer <-> API <-> UDP PeerToPeer <-> API <-> Peer's game.
-
-- Other Traffic
-  
-  Api <-> Master-Server
-  
-In detail:
-
-- TCP: Minecraft interface
-
-  Here the Api communicates with either the McServer or the McClient
-
-- TCP: Between Master-Server and Client
-
-  Here is the communication for ServerLists, OakNet-Link Chat, PeerToPeer endpoint exchange, Server-Passwords, etc
-
-- UDP: Between Master-Server and Client || Endpoint and Endpoint
-
-  Here the Master-Server is used for the UDP hole punching. The endpoints are using UDP for their PeerToPeer stuff.
+Needs to be rewritten...
 
 # How to setup the IDE
 
