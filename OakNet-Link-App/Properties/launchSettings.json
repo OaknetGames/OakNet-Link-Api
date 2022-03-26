@@ -1,0 +1,18 @@
+{
+  "profiles": {
+    "OakNet-Link-App": {
+      "commandName": "Project",
+      "remoteDebugEnabled": false,
+      "authenticationMode": "Windows",
+      "remoteDebugMachine": "172.21.113.135",
+      "nativeDebugging": true
+    },
+    "Profil \"1\"": {
+      "commandName": "Project",
+      "remoteDebugEnabled": true,
+      "authenticationMode": "Windows",
+      "remoteDebugMachine": "172.21.113.135",
+      "nativeDebugging": true
+    }
+  }
+}

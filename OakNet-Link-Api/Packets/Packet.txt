@@ -1,0 +1,4 @@
+﻿A Packet is limited to 508 bytes!!!!
+Reliable Packets are limited to 500bytes!!!
+
+//TODO is this still a thing?

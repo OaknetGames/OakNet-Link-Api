@@ -1,0 +1,227 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.2/css/all.css" />
+    <!-- Google Fonts Roboto -->
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" />
+    <!-- MDB -->
+    <link rel="stylesheet" href="css/mdb.dark.min.css" />
+    <title>OakNet Link</title>
+</head>
+
+<body style="-moz-user-select: none; -webkit-user-select: none; -ms-user-select:none; user-select:none;"
+      unselectable="on"
+      onselectstart="return false;">
+    <!-- Navbar -->
+    <nav class="navbar bg-dark d-flex justify-content-between sticky-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <img src="img/oaknetlogo.png"
+                     height="50"
+                     alt=""
+                     loading="lazy" />
+            </a>
+            <!-- Tabs -->
+            <ul class="nav nav-tabs" id="ex1" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link active"
+                       id="tab-1"
+                       data-mdb-toggle="tab"
+                       href="#tab-content-1"
+                       role="tab"
+                       aria-controls="tab-content-1"
+                       aria-selected="true">Browse Games</a>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link"
+                       id="tab-2"
+                       data-mdb-toggle="tab"
+                       href="#tab-content-2"
+                       role="tab"
+                       aria-controls="tab-content-2"
+                       aria-selected="false">My Servers</a>
+                </li>
+            </ul>
+            <div class="d-flex align-items-stretch">
+
+                <div class="me-2 mt-2 text-center" id="connectionStateLabel"></div>
+
+                <div class="dropdown">
+
+                </div>
+                <button class="btn btn-dark dropdown-toggle" id="logExpandButton" type="button" data-mdb-toggle="dropdown" aria-expanded="false">
+                    Log
+                </button>
+
+                <div class="dropdown-menu dropdown-menu-end" style="width: 50%;">
+                    <div class="form-outline">
+                        <textarea readonly class="form-control overflow-auto" style="height: 75vh" ;" id="logField"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <!-- Page Content-->
+    <div class="container">
+        <!-- Tabs content -->
+        <div class="tab-content " id="page-content">
+            <div class="tab-pane fade show active d-flex justify-content-center flex-wrap"
+                 id="tab-content-1"
+                 role="tabpanel"
+                 aria-labelledby="tab-1">
+                <!-- Server List Modal -->
+                <div class="modal fade"
+                     id="server-list-modal"
+                     data-mdb-backdrop="false"
+                     data-mdb-keyboard="false"
+                     tabindex="-1"
+                     aria-labelledby="staticBackdropLabel"
+                     aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg" style="margin-top: 100px; height: calc(100% - 130px); min-height: calc(100% - 130px);">
+                        <div class="modal-content shadow-6-strong">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="server-list-title">Server List</h5>
+                                <button type="button"
+                                        class="btn btn-primary">
+                                    Create New Server
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="list-group list-group-flush">
+                                    <button type="button"
+                                            class="list-group-item list-group-item-action"
+                                            aria-current="true"
+                                            id="server-1">
+                                        Cras justo odio
+                                    </button>
+                                    <button type="button" class="list-group-item list-group-item-action">
+                                        Dapibus ac facilisis in
+                                    </button>
+                                    <button type="button" class="list-group-item list-group-item-action">
+                                        Morbi leo risus
+                                    </button>
+                                    <button type="button" class="list-group-item list-group-item-action">
+                                        Porta ac consectetur ac
+                                    </button>
+                                    <button type="button" class="list-group-item list-group-item-action">
+                                        Vestibulum at eros
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">
+                                    Close
+                                </button>
+                                <button type="button" class="btn btn-primary" disabled>Connect</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Server List Modal -->
+                <div class="modal fade"
+                     id="server-list-modal"
+                     data-mdb-backdrop="false"
+                     data-mdb-keyboard="false"
+                     tabindex="-1"
+                     aria-labelledby="staticBackdropLabel"
+                     aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg" style="margin-top: 100px; height: calc(100% - 130px); min-height: calc(100% - 130px);">
+                        <div class="modal-content shadow-6-strong">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="server-list-title">Server List</h5>
+                                <button type="button"
+                                        class="btn btn-primary">
+                                    Create New Server
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="list-group list-group-flush">
+                                    <button type="button"
+                                            class="list-group-item list-group-item-action"
+                                            aria-current="true"
+                                            id="server-1">
+                                        Cras justo odio
+                                    </button>
+                                    <button type="button" class="list-group-item list-group-item-action">
+                                        Dapibus ac facilisis in
+                                    </button>
+                                    <button type="button" class="list-group-item list-group-item-action">
+                                        Morbi leo risus
+                                    </button>
+                                    <button type="button" class="list-group-item list-group-item-action">
+                                        Porta ac consectetur ac
+                                    </button>
+                                    <button type="button" class="list-group-item list-group-item-action">
+                                        Vestibulum at eros
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">
+                                    Close
+                                </button>
+                                <button type="button" class="btn btn-primary" disabled>Connect</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- Enter Canonical Name Modal -->
+                <div class="modal fade"
+                     id="enter-canonical-name-modal"
+                     data-mdb-backdrop="false"
+                     data-mdb-keyboard="false"
+                     tabindex="-1"
+                     aria-labelledby="staticBackdropLabel"
+                     aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg" style="margin-top: 100px; height: calc(100% - 130px); min-height: calc(100% - 130px);">
+                        <div class="modal-content shadow-6-strong">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="enter-canonical-name-title">Set canonical name</h5>
+                            </div>
+                            <div class="modal-body">
+                                <div class="row g-3 align-items-center">
+                                    <div class="form-outline col-auto">
+                                        <input type="text" id="canonicalNameInput" class="form-control" aria-describedby="cnlabel" />
+                                        <label class="form-label" for="canonicalNameInput">name</label>
+                                    </div>
+                                    <div class="col-auto">
+                                        <span id="cnlabel" class="form-text"> .oaknet.link </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">
+                                    Close
+                                </button>
+                                <button type="button" class="btn btn-primary" data-mdb-dismiss="modal" onclick="setCanonicalName();">set Name</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="cards">
+
+                </div>
+
+            </div>
+            <div class="tab-pane fade d-flex justify-content-center flex-wrap" id="tab-content-2"
+                 role="tabpanel"
+                 aria-labelledby="tab-2">
+            </div>
+        </div>
+    </div>
+
+
+    <script type="text/javascript" src="js/mdb.min.js"></script>
+    <script type="text/javascript" src="js/script.js"></script>
+</body>
+
+</html>
