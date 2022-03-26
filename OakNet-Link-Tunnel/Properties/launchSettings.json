@@ -1,0 +1,19 @@
+{
+  "profiles": {
+    "OakNet-Link-Tunnel": {
+      "commandName": "Project",
+      "remoteDebugEnabled": false,
+      "authenticationMode": "None",
+      "remoteDebugMachine": "",
+      "nativeDebugging": true
+    },
+    "Profil \"1\"": {
+      "commandName": "Project",
+      "workingDirectory": "E:\\Coding\\OakNet-Link-New\\OakNet-Link-Tunnel\\bin\\Debug\\net6.0",
+      "remoteDebugEnabled": true,
+      "authenticationMode": "None",
+      "remoteDebugMachine": "192.168.2.115:4026",
+      "nativeDebugging": true
+    }
+  }
+}

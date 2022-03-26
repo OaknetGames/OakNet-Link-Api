@@ -1,0 +1,12 @@
+﻿How is the Protocol build:
+
+byte 1 & 2 (ushort) packetLength (inkl. the packetID) (last 7 Bit are Status)
+Status: 7.th bit is broadcast
+		6.th bit is reliable
+		5.th bit is ack
+byte 3 service ID (0 = internal, 1 = Sessions, 2 = Ip Tunnel)
+byte 4 packetID
+if reliable or ack
+	byte 5,6,7,8  reliable ID
+
+the following bytes are the PacketData
