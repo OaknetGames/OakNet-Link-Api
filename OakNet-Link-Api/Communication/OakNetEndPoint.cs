@@ -15,6 +15,7 @@ namespace OakNetLink.Api.Communication
         internal Dictionary<int, ReliablePacket> reliableOutQueue = new Dictionary<int, ReliablePacket>();
         internal Dictionary<int, ReliablePacket> reliableInQueue = new Dictionary<int, ReliablePacket>();
         internal DateTime lastReceived;
+        internal List<ONLPlugin> semaphore;
 
         int reliableInId = 0;
         int reliableOutId = 0;
@@ -25,11 +26,14 @@ namespace OakNetLink.Api.Communication
 
         public int Port { get; internal set; }
 
+        public Guid PeerID { get; internal set; }
+
         public ConnectionState ConnectionState { get; set; }
 
-        internal OakNetEndPoint(IPAddress iPAddress, int port) {
+        internal OakNetEndPoint(IPAddress iPAddress, int port, Guid peerID) {
             this.IpAddress = iPAddress;
             this.Port = port;
+            this.PeerID = peerID;
             Ping = 999;
             ConnectionState = ConnectionState.Disconnected;
         }
@@ -159,6 +163,7 @@ namespace OakNetLink.Api.Communication
                     break;
                 case ConnectionState.Connecting:
                     var connectionRequestPacket = new ConnectionRequestPacket();
+                    
                     Task.Factory.StartNew(() =>
                     {
                         while(ConnectionState != ConnectionState.Connected)

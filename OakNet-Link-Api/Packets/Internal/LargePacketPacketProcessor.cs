@@ -54,15 +54,15 @@ namespace OakNetLink.Api.Packets.Internal
             int i = 0;
             byte[] data;
             LargePacketPacket packetToSend;
-            while (packetData.Length - i > 500)
+            while (packetData.Length - i > 484)
             {
-                data = new byte[500];
+                data = new byte[484];
                 Array.Copy(packetData, i, data, 0, data.Length);
                 packetToSend = new LargePacketPacket();
                 packetToSend.data = data;
                 packetToSend.lastPacket = 0;
                 Communicator.instance.sendPacket(PacketProcessor.encodePacket(packetToSend), receiver, broadcast, true, false);
-                i += 500;
+                i += 484;
             }
             data = new byte[packetData.Length - i];
             Array.Copy(packetData, i, data, 0, data.Length);

@@ -11,12 +11,22 @@ namespace OakNetLink.Api
 {
     public static class ONL
     {
+
         /// <summary>
         /// This is required to add your own Packets to the System
         /// </summary>
         public static void registerPlugin(ONLPlugin plugin)
         {
             PluginManager.addPlugin(plugin);
+        }
+
+        /// <summary>
+        ///  This sets the clients own PeerId
+        /// </summary>
+        /// <param name="ownId">The Guid to set</param>
+        public static void setOwnGuid(Guid ownId)
+        {
+            OakNetEndPointManager.ownID = ownId;
         }
 
         public static partial class Event
@@ -30,6 +40,17 @@ namespace OakNetLink.Api
                     message = msg;
                 }
             }
+            public class ConnectionRequestEventArgs : EventArgs
+            {
+                public bool accepted=false;
+                public Guid peerId;
+
+                public ConnectionRequestEventArgs(Guid peerId)
+                {
+                    this.peerId = peerId;
+                }
+            }
+
             public class DisconnectEventArgs : EventArgs
             {
                 public string reason;
@@ -47,6 +68,11 @@ namespace OakNetLink.Api
             /// </summary>
             public static EventHandler Log { get; set; }
 
+            /// <summary>
+            /// This EventHandler will be called when an endpoint wants to connect
+            /// It receives ConnectionRequestEventArgs
+            /// </summary>
+            public static EventHandler ConnectionRequest { get; set; }
             /// <summary>
             /// This EventHandler will be called when an endpoint connects
             /// The passed object is the OakNetEndpoint
@@ -76,12 +102,12 @@ namespace OakNetLink.Api
 
         public static class Endpoint
         {
-            public static OakNetEndPoint ConnectToEndpoint(string ip, int port)
+            public static OakNetEndPoint ConnectToEndpoint(string ip, int port, Guid peerID)
             {
                 if (Communicator.instance == null)
-                    new Communicator();
+                    new Communicator(OakNetEndPointManager.ownID);
                 Logger.log("Connecting to Endpoint: "+ ip + ":" + port);
-                var newEndpoint = OakNetEndPointManager.Notify(IPAddress.Parse(ip), port);
+                var newEndpoint = OakNetEndPointManager.Notify(IPAddress.Parse(ip), port, peerID);
                 newEndpoint.ConnectionState = ConnectionState.Connecting;
                 newEndpoint.tick();
                 return newEndpoint;
@@ -110,7 +136,7 @@ namespace OakNetLink.Api
             /// <param name="port"></param>
             public static void StartServer(string address = "127.0.0.1", int port = 6868, bool allowBroadcasts = false)
             {
-                new Communicator(port, true, allowBroadcasts);
+                new Communicator(OakNetEndPointManager.ownID, port, true, allowBroadcasts);
                 Logger.log("Starting new OakNet-Link MasterServer on port " + port);
             }
 
@@ -120,9 +146,9 @@ namespace OakNetLink.Api
             public static void Connect(string address = "master.oaknet.link", int port = 6868)
             {
                 if (Communicator.instance == null)
-                    new Communicator();
+                    new Communicator(OakNetEndPointManager.ownID);
                 Logger.log("Connecting to OakNet-Link MasterServer");
-                OakNetEndPointManager.MasterServerEndpoint = new OakNetEndPoint(Dns.GetHostAddresses(address).First(), port);
+                OakNetEndPointManager.MasterServerEndpoint = new OakNetEndPoint(Dns.GetHostAddresses(address).First(), port, Guid.Empty);
                 OakNetEndPointManager.MasterServerEndpoint.ConnectionState = ConnectionState.Connecting;
                 OakNetEndPointManager.MasterServerEndpoint.tick();
             }
@@ -141,57 +167,6 @@ namespace OakNetLink.Api
         }
 
         /// <summary>
-        /// You can use a ManagerServer for your specific game/program
-        /// It takes part as a peer which can everyone connect to as well as send specific packets to
-        /// Because the ManagerServer is just another peer in the network, you have to make sure to register the same packets as on the Client side.
-        /// This server needs to be reachable in the web
-        /// </summary>
-        public static class Manager
-        {
-            public static OakNetEndPoint EndPoint { get { return OakNetEndPointManager.ManagerServerEndpoint; } }
-
-            /// <summary>
-            /// Call this function to start a new ManagerServer
-            /// </summary>
-            /// <param name="address"></param>
-            /// <param name="port"></param>
-            public static void StartServer(string address = "127.0.0.1", int port = 6869)
-            {
-                new Communicator(port);
-                Logger.log("Starting new OakNet-Link ManagerServer on port " + port);
-            }
-
-            /// <summary>
-            /// Use this function to connect to a ManagerServer
-            /// </summary>
-            public static void Connect(string address = "manager.link.oaknetwork.de", int port = 6869)
-            {
-                if (Communicator.instance == null)
-                    new Communicator();
-                Logger.log("Connecting to OakNetL-Link MasterServer");
-                OakNetEndPointManager.MasterServerEndpoint = new OakNetEndPoint(Dns.GetHostAddresses(address).First(), port);
-                OakNetEndPointManager.MasterServerEndpoint.ConnectionState = ConnectionState.Connecting;
-                OakNetEndPointManager.MasterServerEndpoint.tick();
-            }
-            /// <summary>
-            /// Use this function to send a broadcast to all endpoints connected to the ManagerServer
-            /// </summary>
-            public static void SendBroadcast(OakNetLink.Api.Packets.Packet packet, bool reliable)
-            {
-                Communicator.instance.sendPacket(PacketProcessor.encodePacket(packet), OakNetEndPointManager.MasterServerEndpoint, true, reliable, false);
-            }
-
-            /// <summary>
-            /// Use this function to send a packet to the ManagerServer
-            /// </summary>
-            public static void SendPacket(OakNetLink.Api.Packets.Packet packet, bool reliable)
-            {
-                Communicator.instance.sendPacket(PacketProcessor.encodePacket(packet), OakNetEndPointManager.MasterServerEndpoint, false, reliable, false);
-            }
-
-        }
-
-        /// <summary>
         /// Turn Server are used to relay traffic for peers which cannot take part in the network directly.
         /// Users which support UPnP Port Forwarding could also act as Turn Server. TODO investigate that idea further
         /// Every Turn Server will contact the MasterServer to anounce themselve in the Network
@@ -205,7 +180,7 @@ namespace OakNetLink.Api
             /// <param name="port"></param>
             public static void StartServer(string address = "127.0.0.1", int port = 6870, string masterServerAdress="master.link.oaknet.work")
             {
-                new Communicator(port);
+                new Communicator(OakNetEndPointManager.ownID, port);
                 Logger.log("Starting new OakNet-Link TurnServer on port " + port);
             } 
         }

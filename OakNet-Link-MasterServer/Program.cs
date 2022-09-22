@@ -16,8 +16,8 @@ namespace OakNetLink.MasterServer
             ONL.Event.Disconnection += (obj, args) => Console.WriteLine((args as ONL.Event.DisconnectEventArgs).endpoint.IpAddress.ToString() + ":" + (args as ONL.Event.DisconnectEventArgs).endpoint.Port + " disconnected: " + (args as ONL.Event.DisconnectEventArgs).reason);
             ONL.Event.ConnectionEstablished += (obj, args) => Console.WriteLine((obj as OakNetEndPoint).IpAddress + ":" + (obj as OakNetEndPoint).Port + " Connected!");
             ONL.Event.ConnectionLost += (obj, args) => Console.WriteLine("LostConnection!");
+            ONL.Event.ConnectionRequest += (obj, args) => { Console.WriteLine((obj as OakNetEndPoint).IpAddress + " requested Connection"); (args as ONL.Event.ConnectionRequestEventArgs).accepted = true; };
 #pragma warning restore CS8602 // Dereferenzierung eines möglichen Nullverweises.
-
 
             //Register ONL Plugins
             ONL.registerPlugin(new TunnelPlugin());

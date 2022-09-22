@@ -6,6 +6,5 @@ namespace OakNetLink.Api.Packets.Internal
 {
     internal class ConnectionRequestPacket : Packet
     {
-
     }
 }

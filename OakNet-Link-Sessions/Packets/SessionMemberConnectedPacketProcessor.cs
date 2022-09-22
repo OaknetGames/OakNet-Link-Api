@@ -17,9 +17,9 @@ namespace OakNetLink.Sessions.Packets
                 return null;
             var address = IPAddress.Parse(sessionMemberConnectedPacket.ConnectedMember.Substring(0, sessionMemberConnectedPacket.ConnectedMember.LastIndexOf(":")));
             var port = Convert.ToInt32(sessionMemberConnectedPacket.ConnectedMember.Split(':').Last());
-            var newEndpoint = OakNetEndPointManager.Notify(address, port);
-            newEndpoint.ConnectionState = ConnectionState.Connecting;
-            newEndpoint.tick();
+            //var newEndpoint = OakNetEndPointManager.Notify(address, port);
+            //newEndpoint.ConnectionState = ConnectionState.Connecting;
+            //newEndpoint.tick();
             return null;
         }
     }

@@ -16,13 +16,15 @@ namespace OakNetLink.Api.Communication
 
         internal bool isServer;
         internal bool allowBroadcasts;
+        internal Guid ownID;
 
         public static Communicator instance;
 
-        
-        public Communicator(int port = 0, bool server = false, bool allowBroadcasts = true){
+
+        public Communicator(Guid ownID, int port = 0, bool server = false, bool allowBroadcasts = true){
             //Logger.log("Creating new Communicator");
             instance = this;
+            this.ownID = ownID;
             isServer = server;
             this.allowBroadcasts = allowBroadcasts;
             udpClient = new UdpClient(AddressFamily.InterNetwork);
@@ -58,10 +60,15 @@ namespace OakNetLink.Api.Communication
                         continue;
                     }
 
-                    // notify our EndPoint Helper and get the OakNetEndPoint
-                    var endPoint = OakNetEndPointManager.Notify(remoteIpEndPoint.Address, remoteIpEndPoint.Port);
-                    endPoint.lastReceived = DateTime.Now;
+                    var guidBytes = new byte[16];
+                    Array.Copy(buffer, 0, guidBytes, 0, 16);
+                    byte[] temp = (byte[])buffer.Clone();
+                    buffer = new byte[temp.Length-16];
+                    Array.Copy(temp, 16, buffer, 0, buffer.Length);
 
+                    var peerID = new Guid(guidBytes);
+                    var endPoint = OakNetEndPointManager.Notify(remoteIpEndPoint.Address, remoteIpEndPoint.Port, peerID);
+                    endPoint.lastReceived = DateTime.Now;
                     // decode bytes to short
                     var packetLength = PacketDecoder.DecodeUShort(ref buffer);
                     // extract the 7 status bits
@@ -163,7 +170,7 @@ namespace OakNetLink.Api.Communication
             if (receiver.ConnectionState == ConnectionState.Disconnected)
                 return;
 
-            if (packet.Length > 506)
+            if (packet.Length > 490)
             {
                 LargePacketPacketProcessor.makeLargePacket(packet, receiver, broadcast);
                 return;
@@ -173,24 +180,27 @@ namespace OakNetLink.Api.Communication
             byte[] newPacket;
 
             if (reliable)
-                newPacket = new byte[packet.Length + 6];
+                newPacket = new byte[packet.Length + 6 + 16];
             else
-                newPacket = new byte[packet.Length + 2];
+                newPacket = new byte[packet.Length + 2 + 16];
+
+            //add ownID
+            Array.Copy(OakNetEndPointManager.ownID.ToByteArray(), newPacket, 16);
 
             var packetLength = new byte[0];
             PacketEncoder.EncodeUShort(Convert.ToUInt16(packet.Length), ref packetLength);
-            Array.Copy(packetLength, 0, newPacket, 0, packetLength.Length);
+            Array.Copy(packetLength, 0, newPacket, 16, packetLength.Length);
             var reliableId = 0;
             if (reliable)
             {
                 var reliableIdBytes = new byte[0];
                 reliableId = receiver.nextReliableOutId();
                 PacketEncoder.EncodeInt(reliableId, ref reliableIdBytes);
-                Array.Copy(reliableIdBytes, 0, newPacket, 2, reliableIdBytes.Length);
-                Array.Copy(packet, 0, newPacket, 6, packet.Length);
+                Array.Copy(reliableIdBytes, 0, newPacket, 2+16, reliableIdBytes.Length);
+                Array.Copy(packet, 0, newPacket, 6+16, packet.Length);
             }
             else
-                Array.Copy(packet, 0, newPacket, 2, packet.Length);
+                Array.Copy(packet, 0, newPacket, 2+16, packet.Length);
             // Build the status
             var status = 0b00000000;
             if (broadcast)
@@ -200,7 +210,7 @@ namespace OakNetLink.Api.Communication
             if (ack)
                 status |= 0b00100000;
             // we send big endian so the least significant bit is in the second byte
-            newPacket[0] = (byte)((packet[0] & 0b00000001) | status);
+            newPacket[0+16] = (byte)((packet[0] & 0b00000001) | status);
             sendData(newPacket, receiver);
 
             if (reliable)
@@ -218,6 +228,8 @@ namespace OakNetLink.Api.Communication
                 });
             }
         }
+
+        internal Guid getGuid() => ownID;
 
         internal void ackReliable(int id, OakNetEndPoint endPoint)
         {

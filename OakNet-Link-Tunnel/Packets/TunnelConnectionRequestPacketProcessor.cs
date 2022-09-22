@@ -27,6 +27,7 @@ namespace OakNetLink.Tunnel.Packets
             otherPacket.Address = endpoint.IpAddress.ToString();
             otherPacket.Port = endpoint.Port;
             otherPacket.IP = TunnelPlugin.Manager.getAddress(endpoint);
+            otherPacket.PeerID = endpoint.PeerID.ToByteArray();
             receipient.sendPacket(otherPacket, true);
             return null;
         }

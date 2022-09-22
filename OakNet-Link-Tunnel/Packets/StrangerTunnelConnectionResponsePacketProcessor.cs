@@ -15,7 +15,7 @@ namespace OakNetLink.Tunnel.Packets
             var responsePacket = packet as StrangerTunnelConnectionResponsePacket;
             if (responsePacket == null) return null;
 
-            var receipient = OakNetEndPointManager.GetEndPoint(responsePacket.Address, responsePacket.Port);
+            var receipient = OakNetEndPointManager.GetEndPoint(new Guid(responsePacket.PeerID));
             if (receipient == null) return null;
 
             var newResponse = new TunnelConnectionResponsePacket();
@@ -23,6 +23,7 @@ namespace OakNetLink.Tunnel.Packets
             {
                 newResponse.Address = endpoint.IpAddress.ToString();
                 newResponse.Port = endpoint.Port;
+                newResponse.PeerID = endpoint.PeerID.ToByteArray();
                 newResponse.Message = "accepted";
             }
             newResponse.IP = TunnelPlugin.Manager.getAddress(endpoint);

@@ -18,6 +18,7 @@ namespace OakNetLink.Tunnel.Packets
             var response = new StrangerTunnelConnectionResponsePacket();
             response.Address = requestPacket.Address;
             response.Port = requestPacket.Port;
+            response.PeerID = requestPacket.PeerID;
             Logger.log($"Endpoint {requestPacket.Address}:{requestPacket.Port} requested connection");
             // TODO ask for permission, Note: 60 second time 
             if (true)
@@ -25,7 +26,7 @@ namespace OakNetLink.Tunnel.Packets
                 response.Response = "accepted";
                 Task.Factory.StartNew(() =>
                 {
-                    var newEndpoint = ONL.Endpoint.ConnectToEndpoint(requestPacket.Address, requestPacket.Port);
+                    var newEndpoint = ONL.Endpoint.ConnectToEndpoint(requestPacket.Address, requestPacket.Port, new Guid(requestPacket.PeerID));
                     TunnelConnectionHelper.addEndpoint(requestPacket.IP, newEndpoint);
                 });
             }

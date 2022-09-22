@@ -12,5 +12,6 @@ namespace OakNetLink.Tunnel.Packets
         public string Address { get; set; }
         public int Port { get; set; }
         public string Response { get; set; }
+        public byte[] PeerID { get; set; }
     }
 }

@@ -19,7 +19,7 @@ namespace OakNetLink.Tunnel.Packets
             if(responsePacket.Message == "accepted")
             {
                 Logger.log("other Endpoint accepted the connection!");
-                var newEndpoint = ONL.Endpoint.ConnectToEndpoint(responsePacket.Address, responsePacket.Port);
+                var newEndpoint = ONL.Endpoint.ConnectToEndpoint(responsePacket.Address, responsePacket.Port, new Guid(responsePacket.PeerID));
                 TunnelConnectionHelper.addEndpoint(responsePacket.IP, newEndpoint);
             }
             else

@@ -24,12 +24,12 @@ namespace OakNetLink.Api
 			bytes[bytes.Length - 1] = (byte)(data & 0b00000000_11111111);
 		}
 
-		/// <summary>
-		/// Encodes a ushort in bytes and put them in an array
-		/// <param name="data">The ushort to encode.</param>
-		/// <param name="bytes">The byte array to put the encoded data.</param>
-		/// </summary>
-		internal static void EncodeUShort(ushort data, ref byte[] bytes)
+        /// <summary>
+        /// Encodes a ushort in bytes and put them in an array
+        /// <param name="data">The ushort to encode.</param>
+        /// <param name="bytes">The byte array to put the encoded data.</param>
+        /// </summary>
+        internal static void EncodeUShort(ushort data, ref byte[] bytes)
 		{
 			var oldData = bytes;
 			bytes = new byte[bytes.Length + 2];

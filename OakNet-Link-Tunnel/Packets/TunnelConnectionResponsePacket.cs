@@ -12,6 +12,7 @@ namespace OakNetLink.Tunnel.Packets
         public string Address { get; set; }
         public int IP { get; set; }
         public int Port { get; set; }
+        public byte[] PeerID { get; set; }
         public string Message { get; set; }
     }
 }

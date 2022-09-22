@@ -10,7 +10,7 @@ namespace OakNetLink.Api.Communication
     public class OakNetEndPointManager
     {
         // All connected endpoints
-        static Dictionary<string, OakNetEndPoint> endPoints = new Dictionary<string,OakNetEndPoint>();
+        static Dictionary<Guid, OakNetEndPoint> endPoints = new Dictionary<Guid,OakNetEndPoint>();
 
         // All available TurnServer
         static List<OakNetEndPoint> turnServerEndpoints = new List<OakNetEndPoint>();
@@ -21,17 +21,28 @@ namespace OakNetLink.Api.Communication
         // ManagerServer endpoint
         public static OakNetEndPoint ManagerServerEndpoint { get; internal set; }
 
-        public static OakNetEndPoint GetEndPoint(string address, int port)
+        public static Guid ownID;
+
+        public static OakNetEndPoint GetEndPoint(Guid uid)
         {
-            return endPoints.GetValueOrDefault(address+":"+port);
+            return endPoints.GetValueOrDefault(uid);
         }
 
-        public static OakNetEndPoint Notify(IPAddress iPAddress, int port)
+        public static OakNetEndPoint Notify(IPAddress iPAddress, int port, Guid peerID)
         {
             OakNetEndPoint ep;
-            var result = endPoints.TryGetValue(iPAddress.ToString()+":"+port, out ep);
+            var result = endPoints.TryGetValue(peerID, out ep);
             if (result)
+            {
+                // If we are connecting right now, the known IP address port combination may differ from the actual peers info 
+                // due to different Nat-Types, so we update in that case
+                if(ep.ConnectionState == ConnectionState.Connecting)
+                {
+                    ep.IpAddress = iPAddress;
+                    ep.Port = port;
+                }
                 return ep;
+            }
 
             if (MasterServerEndpoint?.IpAddress.Equals(iPAddress)==true && MasterServerEndpoint?.Port == port)
                 return MasterServerEndpoint;
@@ -39,11 +50,12 @@ namespace OakNetLink.Api.Communication
             if (ManagerServerEndpoint?.IpAddress.Equals(iPAddress) == true && ManagerServerEndpoint?.Port == port)
                 return MasterServerEndpoint;
 
-            var newEndpoint = new OakNetEndPoint(iPAddress, port);
+            var newEndpoint = new OakNetEndPoint(iPAddress, port, peerID);
             lock (endPoints)
             {
                 //Logger.log("New endpoint: " + iPAddress.ToString() + ":" + port);
-                endPoints.Add(iPAddress.ToString() + ":" + port, newEndpoint);
+                endPoints.Add(peerID, newEndpoint);
+                
             }
             return newEndpoint;
         }

@@ -39,10 +39,15 @@ namespace OakNetLink.App
             ONL.Event.Disconnection += (obj, args) =>
             {
                 Console.WriteLine((args as ONL.Event.DisconnectEventArgs).endpoint.IpAddress.ToString() + ":" + (args as ONL.Event.DisconnectEventArgs).endpoint.Port + " disconnected: " + (args as ONL.Event.DisconnectEventArgs).reason);
-                string time = DateTime.Now.ToLongTimeString(); 
+                string time = DateTime.Now.ToLongTimeString();
                 lock (log)
                     log.Add("[" + time + "]: " + (args as ONL.Event.DisconnectEventArgs).endpoint.IpAddress.ToString() + ":" + (args as ONL.Event.DisconnectEventArgs).endpoint.Port + " disconnected: " + (args as ONL.Event.DisconnectEventArgs).reason);
 
+            };
+            ONL.Event.ConnectionRequest += (obj, args) =>
+            {
+                var newArgs = args as ONL.Event.ConnectionRequestEventArgs;
+                newArgs.accepted = true;
             };
             ONL.Event.ConnectionEstablished += (obj, args) =>
             {
@@ -60,10 +65,12 @@ namespace OakNetLink.App
                     log.Add("[" + time + "]: " + "LostConnection!");
             };
 
+            ONL.setOwnGuid(Guid.NewGuid());
+
             // register the plugin
             ONL.registerPlugin(new TunnelPlugin());
 
-            var ipaddress = "192.168.2.42";
+            var ipaddress = "ipv4.oaknet.work";
             ONL.MasterServer.Connect(ipaddress, 6868);
 
             
