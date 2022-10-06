@@ -1,6 +1,6 @@
 ﻿using OakNetLink.Api;
 using OakNetLink.Api.Communication;
-using OakNetLink.Tunnel;
+using OakNetLink.Sessions;
 using System;
 
 namespace OakNetLink.MasterServer
@@ -20,10 +20,7 @@ namespace OakNetLink.MasterServer
 #pragma warning restore CS8602 // Dereferenzierung eines möglichen Nullverweises.
 
             //Register ONL Plugins
-            ONL.registerPlugin(new TunnelPlugin());
-
-            //Configure TunnelPlugin
-            TunnelPlugin.Manager = new AddressManager();
+            ONL.registerPlugin(new SessionsPlugin());
 
             //Start the Server
             ONL.MasterServer.StartServer();

@@ -2,7 +2,9 @@
 using OakNetLink.Api.Packets.Internal;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text;
 
 namespace OakNetLink.Api.Packets
 {
@@ -37,79 +39,62 @@ namespace OakNetLink.Api.Packets
             return _packets.Where((entry) => entry.Value == packet).FirstOrDefault().Key;
         }
 
-        public static byte[] encodePacket(Packet packet)
+        /// <summary>
+        /// This method encodes PacketBase objects into binary data, it also adds the PacketId  
+        /// </summary>
+        /// <param name="packet">PacketBase to encode</param>
+        public static BinaryWriter EncodePacket(PacketBase packet)
         {
             //if (packet.GetType() != typeof(PingPacket) && packet.GetType() != typeof(PongPacket))
             //    Logger.log("--> " + packet.GetType());
             var packetID = getPacketID(packet.GetType());
-            var packetData = new byte[0];
+            var packetData = new BinaryWriter(new MemoryStream());
             if (packetID > ushort.MaxValue)
                 throw new OverflowException("The packetID " + packetID + " is to big");
-            PacketEncoder.EncodeUShort((ushort) packetID, ref packetData);
-            foreach (var fieldInfo in packet.GetType().GetFields())
-            {
-                if (fieldInfo.FieldType == typeof(short))
-                {
-                    PacketEncoder.EncodeShort((short)fieldInfo.GetValue(packet), ref packetData);
-                    continue;
-                }
-                if (fieldInfo.FieldType == typeof(ushort))
-                {
-                    PacketEncoder.EncodeUShort((ushort)fieldInfo.GetValue(packet), ref packetData);
-                    continue;
-                }
-                if (fieldInfo.FieldType == typeof(int))
-                {
-                    PacketEncoder.EncodeInt((int)fieldInfo.GetValue(packet), ref packetData);
-                    continue;
-                }
-                if (fieldInfo.FieldType == typeof(char))
-                {
-                    PacketEncoder.EncodeChar((char)fieldInfo.GetValue(packet), ref packetData);
-                    continue;
-                }
-                if (fieldInfo.FieldType == typeof(string))
-                {
-                    PacketEncoder.EncodeString((string)fieldInfo.GetValue(packet), ref packetData);
-                    continue;
-                }
-                if (fieldInfo.FieldType == typeof(byte[]))
-                {
-                    PacketEncoder.EncodeByteArray((byte[])fieldInfo.GetValue(packet), ref packetData);
-                    continue;
-                }
-                throw new NotImplementedException(fieldInfo.FieldType.ToString() + " is not a supported field type for a packet");
-            }
+            if (packet.GetType().GetFields().Count() > 0)
+                throw new Exception("Fields in packet are not supported. Use properties instead");
+            
             foreach (var propertyInfo in packet.GetType().GetProperties())
             {
+                if (propertyInfo.PropertyType == typeof(byte))
+                {
+                    packetData.Write((byte)propertyInfo.GetValue(packet)!);
+                    continue;
+                }
                 if (propertyInfo.PropertyType == typeof(short))
                 {
-                    PacketEncoder.EncodeShort((short)propertyInfo.GetValue(packet), ref packetData);
+                    packetData.Write((short)propertyInfo.GetValue(packet)!);
                     continue;
                 }
                 if (propertyInfo.PropertyType == typeof(ushort))
                 {
-                    PacketEncoder.EncodeUShort((ushort)propertyInfo.GetValue(packet), ref packetData);
+                    packetData.Write((ushort)propertyInfo.GetValue(packet)!);
+                    continue;
+                }
+                if (propertyInfo.PropertyType == typeof(uint))
+                {
+                    packetData.Write((uint)propertyInfo.GetValue(packet)!);
                     continue;
                 }
                 if (propertyInfo.PropertyType == typeof(int))
                 {
-                    PacketEncoder.EncodeInt((int)propertyInfo.GetValue(packet), ref packetData);
+                    packetData.Write((int)propertyInfo.GetValue(packet)!);
                     continue;
                 }
                 if (propertyInfo.PropertyType == typeof(char))
                 {
-                    PacketEncoder.EncodeChar((char)propertyInfo.GetValue(packet), ref packetData);
+                    packetData.Write((char)propertyInfo.GetValue(packet)!);
                     continue;
                 }
                 if (propertyInfo.PropertyType == typeof(string))
                 {
-                    PacketEncoder.EncodeString((string)propertyInfo.GetValue(packet), ref packetData);
+                    packetData.Write((string)propertyInfo.GetValue(packet)!);
                     continue;
                 }
                 if (propertyInfo.PropertyType == typeof(byte[]))
                 {
-                    PacketEncoder.EncodeByteArray((byte[])propertyInfo.GetValue(packet), ref packetData);
+                    packetData.Write(((byte[])propertyInfo.GetValue(packet)!).Length);
+                    packetData.Write((byte[])propertyInfo.GetValue(packet)!);
                     continue;
                 }
                 throw new NotImplementedException(propertyInfo.PropertyType.ToString() + " is not a supported Property type for a packet");
@@ -117,79 +102,78 @@ namespace OakNetLink.Api.Packets
             return packetData;
         }
 
-        public static Packet decodePacket(byte[] packetData, OakNetEndPoint endPoint){
-            var packetID = PacketDecoder.DecodeUShort(ref packetData);
-            var packetType = getPacketType(packetID);
-            //if(packetType != typeof (PingPacket) && packetType != typeof(PongPacket)) 
-                //Logger.log("<-- " + packetType);
-            var packet = (Packet) Activator.CreateInstance(packetType);
-            foreach (var fieldInfo in packetType.GetFields())
+        /// <summary>
+        /// This method decodes binary data into the corresponding PacketBase Object.
+        /// It also constructs the corresponding PacketProcessor and calls its processPacket method
+        /// </summary>
+        /// <param name="packetData">The data to decode</param>
+        /// <param name="client">The client who sent this packet</param>
+        /// <returns>A PacketBase which should be returned to the Sender, null if nothing shall be returned</returns>
+        public static PacketBase? DecodePacket(byte[] packetData, OakNetEndPoint client)
+        {
+            var reader = new BinaryReader(new MemoryStream(packetData));
+
+            var packetId = reader.ReadInt32();
+            var packetType = getPacketType(packetId);
+
+            if (packetType.GetFields().Count() > 0)
             {
-                if (fieldInfo.FieldType == typeof(short))
-                {
-                    fieldInfo.SetValue(packet, PacketDecoder.DecodeShort(ref packetData));
-                    continue;
-                }
-                if (fieldInfo.FieldType == typeof(ushort))
-                {
-                    fieldInfo.SetValue(packet, PacketDecoder.DecodeUShort(ref packetData));
-                    continue;
-                }
-                if (fieldInfo.FieldType == typeof(int))
-                {
-                    fieldInfo.SetValue(packet, PacketDecoder.DecodeInt(ref packetData));
-                    continue;
-                }
-                if (fieldInfo.FieldType == typeof(char))
-                {
-                    fieldInfo.SetValue(packet, PacketDecoder.DecodeChar(ref packetData));
-                    continue;
-                }
-                if (fieldInfo.FieldType == typeof(string))
-                {
-                    fieldInfo.SetValue(packet, PacketDecoder.DecodeString(ref packetData));
-                    continue;
-                }
-                if (fieldInfo.FieldType == typeof(byte[]))
-                {
-                    fieldInfo.SetValue(packet, PacketDecoder.DecodeByteArray(ref packetData));
-                    continue;
-                }
+                throw new Exception("Fields in packet are not supported. Use properties instead");
             }
+
+            var packet = (PacketBase)Activator.CreateInstance(packetType)!;
+
+
             foreach (var propertyInfo in packetType.GetProperties())
             {
+                if (propertyInfo.PropertyType == typeof(byte))
+                {
+                    propertyInfo.SetValue(packet, reader.ReadByte());
+                    continue;
+                }
                 if (propertyInfo.PropertyType == typeof(short))
                 {
-                    propertyInfo.SetValue(packet, PacketDecoder.DecodeShort(ref packetData));
+                    propertyInfo.SetValue(packet, reader.ReadInt16());
                     continue;
                 }
                 if (propertyInfo.PropertyType == typeof(ushort))
                 {
-                    propertyInfo.SetValue(packet, PacketDecoder.DecodeUShort(ref packetData));
+                    propertyInfo.SetValue(packet, reader.ReadUInt16());
+                    continue;
+                }
+                if (propertyInfo.PropertyType == typeof(uint))
+                {
+                    propertyInfo.SetValue(packet, reader.ReadUInt32());
                     continue;
                 }
                 if (propertyInfo.PropertyType == typeof(int))
                 {
-                    propertyInfo.SetValue(packet, PacketDecoder.DecodeInt(ref packetData));
+                    propertyInfo.SetValue(packet, reader.ReadInt32());
                     continue;
                 }
                 if (propertyInfo.PropertyType == typeof(char))
                 {
-                    propertyInfo.SetValue(packet, PacketDecoder.DecodeChar(ref packetData));
+                    propertyInfo.SetValue(packet, reader.ReadChar());
                     continue;
                 }
                 if (propertyInfo.PropertyType == typeof(string))
                 {
-                    propertyInfo.SetValue(packet, PacketDecoder.DecodeString(ref packetData));
+                    propertyInfo.SetValue(packet, reader.ReadString());
                     continue;
                 }
                 if (propertyInfo.PropertyType == typeof(byte[]))
                 {
-                    propertyInfo.SetValue(packet, PacketDecoder.DecodeByteArray(ref packetData));
+                    var length = reader.ReadInt32();
+                    propertyInfo.SetValue(packet, reader.ReadBytes(length));
                     continue;
                 }
             }
-            return ((PacketProcessor) Activator.CreateInstance(_processors[packetID])).processPacket(packet, endPoint);
+
+            Type processorType;
+            if (_processors.TryGetValue(packetId, out processorType))
+                // KnownPacket
+                return ((PacketProcessor)Activator.CreateInstance(processorType)!).ProcessPacket(packet, client);
+            return null;
         }
         /// <summary>
         /// This method needs to be overriden by each individual PacketProcessor
@@ -198,6 +182,6 @@ namespace OakNetLink.Api.Packets
         /// </summary>
         /// <param name="packet"></param>
         /// <returns>The packet which should be sent back to the sender, null if nothing should be sent</returns>
-        public abstract Packet processPacket(Packet packet, OakNetEndPoint endpoint);
+        public abstract PacketBase ProcessPacket(PacketBase packet, OakNetEndPoint endpoint);
     }
 }

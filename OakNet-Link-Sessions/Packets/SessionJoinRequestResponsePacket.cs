@@ -5,7 +5,7 @@ using System.Text;
 
 namespace OakNetLink.Sessions.Packets
 {
-    internal class SessionJoinRequestResponsePacket : Packet
+    internal class SessionJoinRequestResponsePacket : PacketBase
     {
         public string? ResponseMessage { get; set; }
         public string? Endpoints { get; set; }

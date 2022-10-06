@@ -9,7 +9,7 @@ namespace OakNetLink.Sessions.Packets
 {
     internal class SessionJoinRequestPacketProcessor : PacketProcessor
     {
-        public override Packet? processPacket(Packet packet, OakNetEndPoint endpoint)
+        public override PacketBase? ProcessPacket(PacketBase packet, OakNetEndPoint endpoint)
         {
             var sessionJoinRequestPacket = packet as SessionJoinRequestPacket;
             if (sessionJoinRequestPacket == null)
@@ -32,7 +32,7 @@ namespace OakNetLink.Sessions.Packets
             foreach (var sessionPeer in session.OakNetEndPoints)
             {
                 var memberJoinedPacket = new SessionMemberConnectedPacket() { ConnectedMember = $"{endpoint.IpAddress.ToString()}:{endpoint.Port}" };
-                Communicator.instance.sendPacket(PacketProcessor.encodePacket(memberJoinedPacket), sessionPeer, false, true, false);
+                Communicator.instance.sendPacket(PacketProcessor.EncodePacket(memberJoinedPacket), sessionPeer, false, true, false);
             }
             session.oakNetEndPoints.Add(endpoint);
             return new SessionJoinRequestResponsePacket() { ResponseMessage = "Success", Endpoints = peers };

@@ -20,7 +20,7 @@ namespace OakNetLink.Sessions
 
         public static void FetchSessions()
         {
-            Communicator.instance.sendPacket(PacketProcessor.encodePacket(new SessionFetchListPacket()), OakNetEndPointManager.MasterServerEndpoint, false, true, false);
+            Communicator.instance.sendPacket(PacketProcessor.EncodePacket(new SessionFetchListPacket()), OakNetEndPointManager.MasterServerEndpoint, false, true, false);
          }
 
         public static bool CreateNewSession(string name, string password, OakNetEndPoint creator)

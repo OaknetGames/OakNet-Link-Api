@@ -5,7 +5,7 @@ namespace OakNetLink.Api.Packets.Internal
 {
     internal class ConnectionRequestPacketProcessor : PacketProcessor
     {
-        public override Packet processPacket(Packet packet, OakNetEndPoint endpoint)
+        public override PacketBase ProcessPacket(PacketBase packet, OakNetEndPoint endpoint)
         {
             var request = packet as ConnectionRequestPacket;
             

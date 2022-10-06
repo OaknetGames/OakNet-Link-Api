@@ -4,7 +4,7 @@ using System.Text;
 
 namespace OakNetLink.Api.Packets.Internal
 {
-    internal class ConnectionRequestPacket : Packet
+    internal class ConnectionRequestPacket : PacketBase
     {
     }
 }

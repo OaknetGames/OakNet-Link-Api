@@ -113,9 +113,9 @@ namespace OakNetLink.Api
                 return newEndpoint;
             }
 
-            public static void SendPacket(OakNetLink.Api.Packets.Packet packet, OakNetEndPoint endPoint, bool reliable)
+            public static void SendPacket(OakNetLink.Api.Packets.PacketBase packet, OakNetEndPoint endPoint, bool reliable)
             {
-                Communicator.instance.sendPacket(PacketProcessor.encodePacket(packet), endPoint, false, reliable, false);
+                Communicator.instance.sendPacket(PacketProcessor.EncodePacket(packet), endPoint, false, reliable, false);
             }
         }
 
@@ -155,14 +155,14 @@ namespace OakNetLink.Api
             /// <summary>
             /// Use this function to send a broadcast to all endpoints connected to the MasterServer
             /// </summary>
-            public static void SendBroadcast(OakNetLink.Api.Packets.Packet packet, bool reliable)
+            public static void SendBroadcast(OakNetLink.Api.Packets.PacketBase packet, bool reliable)
             {
-                Communicator.instance.sendPacket(PacketProcessor.encodePacket(packet), OakNetEndPointManager.MasterServerEndpoint, broadcast:true, reliable:reliable, ack:false);
+                Communicator.instance.sendPacket(PacketProcessor.EncodePacket(packet), OakNetEndPointManager.MasterServerEndpoint, broadcast:true, reliable:reliable, ack:false);
             }
 
-            public static void SendPacket(OakNetLink.Api.Packets.Packet packet, bool reliable)
+            public static void SendPacket(OakNetLink.Api.Packets.PacketBase packet, bool reliable)
             {
-                Communicator.instance.sendPacket(PacketProcessor.encodePacket(packet), OakNetEndPointManager.MasterServerEndpoint, broadcast:false, reliable: reliable, ack:false);
+                Communicator.instance.sendPacket(PacketProcessor.EncodePacket(packet), OakNetEndPointManager.MasterServerEndpoint, broadcast:false, reliable: reliable, ack:false);
             }
         }
 

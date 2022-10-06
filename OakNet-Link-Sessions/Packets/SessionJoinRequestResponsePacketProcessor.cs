@@ -10,14 +10,14 @@ namespace OakNetLink.Sessions.Packets
 {
     internal class SessionJoinRequestResponsePacketProcessor : PacketProcessor
     {
-        public override Packet? processPacket(Packet packet, OakNetEndPoint endpoint)
+        public override PacketBase? ProcessPacket(PacketBase packet, OakNetEndPoint endpoint)
         {
             var sessionJoinRequestResponsePacket = packet as SessionJoinRequestResponsePacket;
             if(sessionJoinRequestResponsePacket == null)
                 return null;
             if(sessionJoinRequestResponsePacket.ResponseMessage != "Success")
             {
-                Sessions.Event.SessionJoinDenied?.Invoke(sessionJoinRequestResponsePacket?.ResponseMessage, EventArgs.Empty);
+                SessionsPlugin.Event.SessionJoinDenied?.Invoke(sessionJoinRequestResponsePacket?.ResponseMessage, EventArgs.Empty);
                 return null;
             }
            
@@ -31,7 +31,7 @@ namespace OakNetLink.Sessions.Packets
                     //newEndpoint.ConnectionState = ConnectionState.Connecting;
                     //newEndpoint.tick();
                 }
-            Sessions.Event.SessionJoinSuccess?.Invoke(null, EventArgs.Empty);
+            SessionsPlugin.Event.SessionJoinSuccess?.Invoke(null, EventArgs.Empty);
             return null;
         }
     }

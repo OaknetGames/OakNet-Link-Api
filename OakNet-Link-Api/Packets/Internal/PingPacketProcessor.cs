@@ -8,7 +8,7 @@ namespace OakNetLink.Api.Packets
 {
     internal class PingPacketProcessor : PacketProcessor
     {
-        public override Packet processPacket(Packet packet, OakNetEndPoint endPoint)
+        public override PacketBase ProcessPacket(PacketBase packet, OakNetEndPoint endPoint)
         {
             var pingPacket = (PingPacket)packet;
             var pongPacket = new PongPacket();

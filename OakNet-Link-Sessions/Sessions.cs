@@ -10,9 +10,9 @@ using OakNetLink.Api;
 
 namespace OakNetLink.Sessions
 {
-    public class Sessions : ONLPlugin
+    public class SessionsPlugin : ONLPlugin
     {
-        public Sessions() : base(1)
+        public SessionsPlugin() : base(1)
         {
             ONL.Event.Disconnection += (sender, args) => {
                 if (args is ONL.Event.DisconnectEventArgs disargs)
@@ -80,7 +80,7 @@ namespace OakNetLink.Sessions
             var createSessionPacket = new SessionCreatePacket();
             createSessionPacket.SessionName = name.Replace(";", "_");
             createSessionPacket.SessionPassword = password;
-            Communicator.instance.sendPacket(PacketProcessor.encodePacket(createSessionPacket), ONL.MasterServer.EndPoint, false, true, false);
+            Communicator.instance.sendPacket(PacketProcessor.EncodePacket(createSessionPacket), ONL.MasterServer.EndPoint, false, true, false);
         }
 
         public static void JoinSession(string name, string password)
@@ -88,28 +88,28 @@ namespace OakNetLink.Sessions
             var sessionJoinRequestPacket = new SessionJoinRequestPacket();
             sessionJoinRequestPacket.SessionName = name.Replace(";", "_");
             sessionJoinRequestPacket.SessionPassword = password;
-            Communicator.instance.sendPacket(PacketProcessor.encodePacket(sessionJoinRequestPacket), ONL.MasterServer.EndPoint, false, true, false);
+            Communicator.instance.sendPacket(PacketProcessor.EncodePacket(sessionJoinRequestPacket), ONL.MasterServer.EndPoint, false, true, false);
         }
 
         /// <summary>
         /// Use this function to send a broadcast to all endpoints in the session, except yourself
         /// </summary>
-        public static void SendBroadcast(OakNetLink.Api.Packets.Packet packet, bool reliable)
+        public static void SendBroadcast(OakNetLink.Api.Packets.PacketBase packet, bool reliable)
         {
             foreach (var endpoint in OakNetEndPointManager.ConnectedEndpoints())
             {
-                Communicator.instance.sendPacket(PacketProcessor.encodePacket(packet), endpoint, true, reliable, false);
+                Communicator.instance.sendPacket(PacketProcessor.EncodePacket(packet), endpoint, true, reliable, false);
             }
         }
 
         /// <summary>
         /// Use this function to send a packet to a specific endpoint in the session
         /// </summary>
-        public static void SendPacket(OakNetLink.Api.Packets.Packet packet, bool reliable, OakNetEndPoint receiver)
+        public static void SendPacket(OakNetLink.Api.Packets.PacketBase packet, bool reliable, OakNetEndPoint receiver)
         {
             if (!OakNetEndPointManager.ConnectedEndpoints().Contains(receiver))
                 return;
-            Communicator.instance.sendPacket(PacketProcessor.encodePacket(packet), receiver, false, reliable, false);
+            Communicator.instance.sendPacket(PacketProcessor.EncodePacket(packet), receiver, false, reliable, false);
         }
 
     }

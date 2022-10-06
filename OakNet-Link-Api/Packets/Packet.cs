@@ -7,7 +7,7 @@ namespace OakNetLink.Api.Packets
     /// <summary>
     /// This is the base class of all Packets
     /// </summary>
-    public class Packet
+    public class PacketBase
     {
 
     }

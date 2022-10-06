@@ -9,7 +9,7 @@ namespace OakNetLink.Sessions.Packets
 {
     class SessionCreatePacketProcessor : PacketProcessor
     {
-        public override Packet? processPacket(Packet packet, OakNetEndPoint endpoint)
+        public override PacketBase? ProcessPacket(PacketBase packet, OakNetEndPoint endpoint)
         {
             var sessionCreatePacket = packet as SessionCreatePacket;
             if (sessionCreatePacket == null)

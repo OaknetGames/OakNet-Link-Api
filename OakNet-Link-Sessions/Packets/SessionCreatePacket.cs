@@ -5,7 +5,7 @@ using System.Text;
 
 namespace OakNetLink.Sessions.Packets
 {
-    internal class SessionCreatePacket : Packet
+    internal class SessionCreatePacket : PacketBase
     {
         public string? SessionName { get; set; }
         public string? SessionPassword { get; set; }

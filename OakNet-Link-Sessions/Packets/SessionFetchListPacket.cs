@@ -5,7 +5,7 @@ using System.Text;
 
 namespace OakNetLink.Sessions.Packets
 {
-    internal class SessionFetchListPacket : Packet
+    internal class SessionFetchListPacket : PacketBase
     {
     }
 }

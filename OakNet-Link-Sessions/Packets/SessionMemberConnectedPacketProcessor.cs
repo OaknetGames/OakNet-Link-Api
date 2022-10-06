@@ -10,7 +10,7 @@ namespace OakNetLink.Sessions.Packets
 {
     internal class SessionMemberConnectedPacketProcessor : PacketProcessor
     {
-        public override Packet? processPacket(Packet packet, OakNetEndPoint endpoint)
+        public override PacketBase? ProcessPacket(PacketBase packet, OakNetEndPoint endpoint)
         {
             var sessionMemberConnectedPacket = packet as SessionMemberConnectedPacket;
             if (sessionMemberConnectedPacket == null)

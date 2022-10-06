@@ -8,7 +8,7 @@ namespace OakNetLink.Sessions.Packets
 {
     internal class SessionListResponsePacketProcessor : PacketProcessor
     {
-        public override Packet? processPacket(Packet packet, OakNetEndPoint endpoint)
+        public override PacketBase? ProcessPacket(PacketBase packet, OakNetEndPoint endpoint)
         {
             var sessionListResponsePacket = packet as SessionListResponsePacket;
             var sessions = sessionListResponsePacket?.Sessions.Split(';');
@@ -18,7 +18,7 @@ namespace OakNetLink.Sessions.Packets
                 {
                     SessionManager.AvailableSessions.Add(new Session() { Name = session });
                 }
-            Sessions.Event.SessionListUpdated?.Invoke(null, EventArgs.Empty);
+            SessionsPlugin.Event.SessionListUpdated?.Invoke(null, EventArgs.Empty);
             return null;
         }
     }

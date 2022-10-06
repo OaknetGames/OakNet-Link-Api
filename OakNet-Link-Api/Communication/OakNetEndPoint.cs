@@ -38,7 +38,7 @@ namespace OakNetLink.Api.Communication
             ConnectionState = ConnectionState.Disconnected;
         }
 
-        public void sendPacket(Packet packet, bool reliable)
+        public void sendPacket(PacketBase packet, bool reliable)
         {
             ONL.Endpoint.SendPacket(packet, this, reliable);
         }
@@ -76,18 +76,18 @@ namespace OakNetLink.Api.Communication
 
         internal void handlePacket(byte[] buffer, bool broadcast, bool reliable)
         {
-            var answer = PacketProcessor.decodePacket(buffer, this);
+            var answer = PacketProcessor.DecodePacket(buffer, this);
             if (broadcast)
             {
                 if (answer != null)
                     foreach (var ep in OakNetEndPointManager.ConnectedEndpoints())
                     {
-                        Communicator.instance.sendPacket(PacketProcessor.encodePacket(answer), ep, true, reliable, false);
+                        Communicator.instance.sendPacket(PacketProcessor.EncodePacket(answer), ep, true, reliable, false);
                     }
             }
             else
                 if (answer != null)
-                Communicator.instance.sendPacket(PacketProcessor.encodePacket(answer), this, false, reliable, false);
+                Communicator.instance.sendPacket(PacketProcessor.EncodePacket(answer), this, false, reliable, false);
         }
 
         internal void checkReliableOut()
@@ -168,7 +168,7 @@ namespace OakNetLink.Api.Communication
                     {
                         while(ConnectionState != ConnectionState.Connected)
                         {
-                            Communicator.instance.sendPacket(PacketProcessor.encodePacket(connectionRequestPacket), receiver: this, broadcast: false, reliable: false, ack: false);
+                            Communicator.instance.sendPacket(PacketProcessor.EncodePacket(connectionRequestPacket), receiver: this, broadcast: false, reliable: false, ack: false);
                             Thread.Sleep(250);
                             if (connectionTries > 20)
                             {

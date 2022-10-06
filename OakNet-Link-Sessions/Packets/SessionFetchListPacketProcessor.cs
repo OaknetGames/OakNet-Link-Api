@@ -9,7 +9,7 @@ namespace OakNetLink.Sessions.Packets
 {
     internal class SessionFetchListPacketProcessor : PacketProcessor
     {
-        public override Packet processPacket(Packet packet, OakNetEndPoint endpoint)
+        public override PacketBase ProcessPacket(PacketBase packet, OakNetEndPoint endpoint)
         {
             if (SessionManager.AvailableSessions == null || SessionManager.AvailableSessions.Count == 0)
                 return new SessionListResponsePacket() { Sessions = "" };

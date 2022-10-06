@@ -7,7 +7,7 @@ namespace OakNetLink.Api.Packets
 {
     public class PongPacketProcessor : PacketProcessor
     {
-        public override Packet processPacket(Packet packet, OakNetEndPoint endpoint)
+        public override PacketBase ProcessPacket(PacketBase packet, OakNetEndPoint endpoint)
         {
             var pongPacket = (PongPacket) packet;
             endpoint.Ping = Environment.TickCount - pongPacket.timestamp;

@@ -4,7 +4,7 @@ using System.Text;
 
 namespace OakNetLink.Api.Packets
 {
-    internal class PingPacket : Packet
+    internal class PingPacket : PacketBase
     {
         public int timestamp;
     }

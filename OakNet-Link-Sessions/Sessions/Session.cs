@@ -8,8 +8,10 @@ namespace OakNetLink.Sessions
 {
     public class Session
     {
-        public String? Name { get; internal set; }
-        public String? Password { get; internal set; }
+        public string? Name { get; internal set; }
+        public string? Password { get; internal set; }
+        public byte[]? Payload { get; internal set; }
+
         internal List<OakNetEndPoint> oakNetEndPoints = new List<OakNetEndPoint>();
         public IEnumerable<OakNetEndPoint> OakNetEndPoints { get { return oakNetEndPoints.AsEnumerable(); } }
             

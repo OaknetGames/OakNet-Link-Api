@@ -3,12 +3,13 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Text;
+using System.IO;
 
 namespace OakNetLink.Api.Packets.Internal
 {
     internal class LargePacketPacketProcessor : PacketProcessor
     {
-        public override Packet processPacket(Packet packet, OakNetEndPoint endpoint)
+        public override PacketBase ProcessPacket(PacketBase packet, OakNetEndPoint endpoint)
         {
             var largePacketPacket = packet as LargePacketPacket;
 
@@ -31,7 +32,7 @@ namespace OakNetLink.Api.Packets.Internal
                     {
                         foreach (var ep in OakNetEndPointManager.ConnectedEndpoints())
                         {
-                            Communicator.instance.sendPacket(reAssembledPacketData, endpoint, false, true, false);
+                            Communicator.instance.sendPacket(new BinaryWriter(new MemoryStream(reAssembledPacketData)), endpoint, false, true, false);
                         }
                     }
                 }
@@ -49,27 +50,25 @@ namespace OakNetLink.Api.Packets.Internal
 
         public static Dictionary<OakNetEndPoint, List<LargePacketPacket>> queue = new Dictionary<OakNetEndPoint, List<LargePacketPacket>>();
 
-        public static void makeLargePacket(byte[] packetData, OakNetEndPoint receiver, bool broadcast)
+        public static void MakeLargePacket(BinaryReader reader, OakNetEndPoint receiver, bool broadcast)
         {
-            int i = 0;
+            long i = 0;
             byte[] data;
             LargePacketPacket packetToSend;
-            while (packetData.Length - i > 484)
+            while (reader.BaseStream.Length - i > 484)
             {
-                data = new byte[484];
-                Array.Copy(packetData, i, data, 0, data.Length);
+                data = reader.ReadBytes(484);
                 packetToSend = new LargePacketPacket();
                 packetToSend.data = data;
                 packetToSend.lastPacket = 0;
-                Communicator.instance.sendPacket(PacketProcessor.encodePacket(packetToSend), receiver, broadcast, true, false);
+                Communicator.instance.sendPacket(PacketProcessor.EncodePacket(packetToSend), receiver, broadcast, true, false);
                 i += 484;
             }
-            data = new byte[packetData.Length - i];
-            Array.Copy(packetData, i, data, 0, data.Length);
+            data = reader.ReadBytes((int)(reader.BaseStream.Length - i));
             packetToSend = new LargePacketPacket();
             packetToSend.data = data;
             packetToSend.lastPacket = (short)(((broadcast ? 1 : 0) << 1) + 1);
-            Communicator.instance.sendPacket(PacketProcessor.encodePacket(packetToSend), receiver, broadcast, true, false);
+            Communicator.instance.sendPacket(PacketProcessor.EncodePacket(packetToSend), receiver, broadcast, true, false);
         }
     }
 }

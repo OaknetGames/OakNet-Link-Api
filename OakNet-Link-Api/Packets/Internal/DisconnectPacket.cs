@@ -4,7 +4,7 @@ using System.Text;
 
 namespace OakNetLink.Api.Packets.Internal
 {
-    internal class DisconnectPacket : Packet
+    internal class DisconnectPacket : PacketBase
     {
         public string Message { get; set; }
     }
