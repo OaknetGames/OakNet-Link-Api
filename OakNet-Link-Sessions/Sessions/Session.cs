@@ -11,6 +11,7 @@ namespace OakNetLink.Sessions
         public string? Name { get; internal set; }
         public string? Password { get; internal set; }
         public byte[]? Payload { get; internal set; }
+        public bool HasPassword { get; internal set; } = false;
 
         internal List<OakNetEndPoint> oakNetEndPoints = new List<OakNetEndPoint>();
         public IEnumerable<OakNetEndPoint> OakNetEndPoints { get { return oakNetEndPoints.AsEnumerable(); } }

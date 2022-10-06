@@ -1,19 +1,13 @@
 # OakNet-Link-New
-The Project goal is to provide easy access to Client-Server based Multiplayer games for everyone. 
+The Project goal is to provide easy access to Peer to Peer based Multiplayer games for everyone. 
 
-# Basic Concept
-Connecting to a private IP address in the OakNet-Link network establishes a peer to peer VPN tunnel to redirect the games traffic.
 
 # Current Status (rough overview):
+Nat Detection : Not implemented
+
 Peer to peer connection establishment: working but mostly untested
 
-Peer to peer tunnels: working but mostly untested
-
-App: in development
-
-Server management: not started yet
-
-DNS system: in planning and concepting 
+Sessions:  untested
 
 # Network Concepts:
 Needs to be rewritten...

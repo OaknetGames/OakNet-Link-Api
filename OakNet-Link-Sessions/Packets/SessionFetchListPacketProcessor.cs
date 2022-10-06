@@ -12,14 +12,19 @@ namespace OakNetLink.Sessions.Packets
         public override PacketBase ProcessPacket(PacketBase packet, OakNetEndPoint endpoint)
         {
             if (SessionManager.AvailableSessions == null || SessionManager.AvailableSessions.Count == 0)
-                return new SessionListResponsePacket() { Sessions = "" };
+                return new SessionListResponsePacket() { SessionData = new byte[] { 0 } };
 
-            string sessions = SessionManager.AvailableSessions.FirstOrDefault().Name;
-            foreach(var session in SessionManager.AvailableSessions.Skip(1))
+            var writer = new BinaryWriter(new MemoryStream());
+            writer.Write(SessionManager.AvailableSessions.Count);
+            foreach(var session in SessionManager.AvailableSessions)
             {
-                sessions += ";" + session.Name;
+                writer.Write(session.Name != null ? session.Name : "");         // Session Name
+                writer.Write(session.HasPassword ? (byte)1 : (byte)0);          // Has Password
+                writer.Write(session.Payload!=null? session.Payload.Length : 0);// Payload Length
+                if (session.Payload != null)
+                    writer.Write(session.Payload);                              // Payload
             }
-            return new SessionListResponsePacket() { Sessions = sessions };
+            return new SessionListResponsePacket() { SessionData = ((MemoryStream) writer.BaseStream).ToArray() };
         }
     }
 }

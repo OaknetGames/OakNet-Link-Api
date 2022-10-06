@@ -23,12 +23,12 @@ namespace OakNetLink.Sessions
             Communicator.instance.sendPacket(PacketProcessor.EncodePacket(new SessionFetchListPacket()), OakNetEndPointManager.MasterServerEndpoint, false, true, false);
          }
 
-        public static bool CreateNewSession(string name, string password, OakNetEndPoint creator)
+        public static bool CreateNewSession(string name, string password, byte[]? payload, OakNetEndPoint creator)
         {
             if (sessions.Any((session) => session.Name == name))
                 return false;
 
-            var newSession = new Session() { Name = name, Password = password };
+            var newSession = new Session() { Name = name, Password = password, HasPassword = password != "",  Payload = payload };
             newSession.oakNetEndPoints.Add(creator);
             sessions.Add(newSession);
             return true;

@@ -7,8 +7,9 @@ namespace OakNetLink.Sessions.Packets
 {
     internal class SessionCreatePacket : PacketBase
     {
-        public string? SessionName { get; set; }
-        public string? SessionPassword { get; set; }
+        public string SessionName { get; set; } = "";
+        public string SessionPassword { get; set; } = "";
+        public byte[]? Payload { get; set; }
 
     }
 }
