@@ -4,9 +4,11 @@ byte 1 & 2 (ushort) packetLength (inkl. the packetID) (last 7 Bit are Status)
 Status: 7.th bit is broadcast
 		6.th bit is reliable
 		5.th bit is ack
-byte 3 service ID (0 = internal, 1 = Sessions, 2 = Ip Tunnel)
-byte 4 packetID
+byte 4 - 20 Sender GUID
 if reliable or ack
-	byte 5,6,7,8  reliable ID
+	byte 21,22,23,24  reliable ID
+
+byte 21 | 25 service ID (0 = internal, 1 = Sessions, 2 = Ip Tunnel)
+byte 22 | 26 packetID
 
 the following bytes are the PacketData
