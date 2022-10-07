@@ -24,6 +24,7 @@ namespace OakNetLink.Sessions.Packets
             var newEndpoint = OakNetEndPointManager.Notify(address, port, guid);
             newEndpoint.ConnectionState = ConnectionState.Connecting;
             newEndpoint.tick();
+            SessionManager.ActiveSession?.oakNetEndPoints.Add(newEndpoint);
             return null;
         }
     }

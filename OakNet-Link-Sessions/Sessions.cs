@@ -86,6 +86,11 @@ namespace OakNetLink.Sessions
             createSessionPacket.SessionName = name.Replace(";", "_");
             createSessionPacket.SessionPassword = password;
             createSessionPacket.Payload = payload;
+            var session = new Session();
+            session.Name = name;
+            session.Password = password;
+            session.Payload = payload;
+            SessionManager.TrialSession  = session;
             Communicator.instance.sendPacket(PacketProcessor.EncodePacket(createSessionPacket), ONL.MasterServer.EndPoint, false, true, false);
         }
 
