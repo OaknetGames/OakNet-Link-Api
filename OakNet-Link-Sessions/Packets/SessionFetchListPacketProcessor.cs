@@ -12,7 +12,7 @@ namespace OakNetLink.Sessions.Packets
         public override PacketBase ProcessPacket(PacketBase packet, OakNetEndPoint endpoint)
         {
             if (SessionManager.AvailableSessions == null || SessionManager.AvailableSessions.Count == 0)
-                return new SessionListResponsePacket() { SessionData = new byte[] { 0 } };
+                return new SessionListResponsePacket() { SessionData = new byte[] { 0, 0, 0, 0 } };
 
             var writer = new BinaryWriter(new MemoryStream());
             writer.Write(SessionManager.AvailableSessions.Count);
