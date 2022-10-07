@@ -12,9 +12,9 @@ namespace OakNetLink.Api.Packets
     {
         //TODO I like singeltons, why isn't this is singleton? 
         //Key is the PacketID, value the processor type
-        static Dictionary<int, Type> _processors = new Dictionary<int, Type>();
+        static Dictionary<ushort, Type> _processors = new Dictionary<ushort, Type>();
         //Key is the PacketID, value the packet type
-        static Dictionary<int, Type> _packets = new Dictionary<int, Type>();
+        static Dictionary<ushort, Type> _packets = new Dictionary<ushort, Type>();
 
         /// <summary>
         /// This method registers a PacketProcessor which is used to
@@ -22,19 +22,19 @@ namespace OakNetLink.Api.Packets
         /// </summary>
         /// <param name="processor">The type of the PacketProcessor</param>
         /// <param name="packet">The type of the Packet to process</param>
-        internal static void addPacketProcessor(Type processor, Type packet, int id)
+        internal static void addPacketProcessor(Type processor, Type packet, ushort id)
         {
             Logger.log("Registered packet with ID: " + ((id & 0xff00) >> 8) + "." + (id & 0xff));
             _packets.Add(id, packet);
             _processors.Add(id, processor);
         }
 
-        static Type getPacketType(int packetID)
+        static Type getPacketType(ushort packetID)
         {
             return _packets.Where((entry) => entry.Key == packetID).FirstOrDefault().Value;
         }
 
-        static int getPacketID(Type packet)
+        static ushort getPacketID(Type packet)
         {
             return _packets.Where((entry) => entry.Value == packet).FirstOrDefault().Key;
         }
@@ -45,14 +45,15 @@ namespace OakNetLink.Api.Packets
         /// <param name="packet">PacketBase to encode</param>
         public static BinaryWriter EncodePacket(PacketBase packet)
         {
-            //if (packet.GetType() != typeof(PingPacket) && packet.GetType() != typeof(PongPacket))
-            //    Logger.log("--> " + packet.GetType());
+            if (packet.GetType() != typeof(PingPacket) && packet.GetType() != typeof(PongPacket))
+                Logger.log("--> " + packet.GetType());
             var packetID = getPacketID(packet.GetType());
             var packetData = new BinaryWriter(new MemoryStream());
             if (packetID > ushort.MaxValue)
                 throw new OverflowException("The packetID " + packetID + " is to big");
             if (packet.GetType().GetFields().Count() > 0)
                 throw new Exception("Fields in packet are not supported. Use properties instead");
+            packetData.Write(packetID);
             
             foreach (var propertyInfo in packet.GetType().GetProperties())
             {
@@ -111,10 +112,16 @@ namespace OakNetLink.Api.Packets
         /// <returns>A PacketBase which should be returned to the Sender, null if nothing shall be returned</returns>
         public static PacketBase? DecodePacket(byte[] packetData, OakNetEndPoint client)
         {
+            
             var reader = new BinaryReader(new MemoryStream(packetData));
 
-            var packetId = reader.ReadInt32();
+            var packetId = reader.ReadUInt16();
             var packetType = getPacketType(packetId);
+
+            if (packetType == null) { throw new Exception("Received Unknown Packet"); }
+
+            if (packetType != typeof(PingPacket) && packetType != typeof(PongPacket))
+                Logger.log("<-- " + packetType);
 
             if (packetType.GetFields().Count() > 0)
             {

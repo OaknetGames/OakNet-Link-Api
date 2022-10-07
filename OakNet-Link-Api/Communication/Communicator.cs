@@ -86,7 +86,7 @@ namespace OakNetLink.Api.Communication
                         var reliableID = reader.ReadInt32();
                         // send ack
                         ackReliable(reliableID, endPoint);
-                        endPoint.addReliableIn(reliableID, buffer, broadcast);
+                        endPoint.addReliableIn(reliableID, reader.ReadBytes((int)(reader.BaseStream.Length - reader.BaseStream.Position)), broadcast);
                         continue;
                     }
 
@@ -114,8 +114,9 @@ namespace OakNetLink.Api.Communication
                         continue;
                     }
 
+                    var packetData = reader.ReadBytes((int) (reader.BaseStream.Length - reader.BaseStream.Position));
                     //Handle Packets
-                    endPoint.handlePacket(buffer, broadcast, false);
+                    endPoint.handlePacket(packetData, broadcast, false);
                 }
             });
             networkThread.IsBackground = true;
@@ -146,7 +147,7 @@ namespace OakNetLink.Api.Communication
                     void sendPing(OakNetEndPoint endPoint)
                     {
                         var pingPacket = new PingPacket();
-                        pingPacket.timestamp = Environment.TickCount;
+                        pingPacket.Timestamp = Environment.TickCount;
                         sendPacket(PacketProcessor.EncodePacket(pingPacket), endPoint, false, false, false);
                     }
 
@@ -166,25 +167,19 @@ namespace OakNetLink.Api.Communication
         }
 
         public void sendPacket(BinaryWriter packet, OakNetEndPoint receiver, bool broadcast, bool reliable, bool ack)
-        { 
+        {
+            var metaWriter = new BinaryWriter(new MemoryStream());
             if (receiver.ConnectionState == ConnectionState.Disconnected)
                 return;
-            // search to the beginning
-            packet.BaseStream.Seek(0, SeekOrigin.Begin);
             // add ownID
-            packet.Write(OakNetEndPointManager.ownID.ToByteArray());
+            metaWriter.Write(OakNetEndPointManager.ownID.ToByteArray());
             // add reliable stuff
             var reliableId = 0;
             if (reliable)
             {
                 reliableId = receiver.nextReliableOutId();
-                packet.Write(reliableId);
+                metaWriter.Write(reliableId);
             }
-            // search to the beginning
-            packet.BaseStream.Seek(0, SeekOrigin.Begin);
-
-            // add the packetLength
-            packet.Write(Convert.ToUInt16(packet.BaseStream.Length));
 
             // Build the status
             var status = 0b00000000;
@@ -194,9 +189,18 @@ namespace OakNetLink.Api.Communication
                 status |= 0b01000000;
             if (ack)
                 status |= 0b00100000;
-            // we send big endian so the least significant bit is in the second byte
-            var data = ((MemoryStream) packet.BaseStream).ToArray();
-            data[0] = (byte)((data[0] & 0b00000001) | status);
+            // we send little endian so the least significant bit is in the first byte
+            packet.Flush();
+
+            // build Packet Size + Meta + PacketData
+            var data = new byte[2 + metaWriter.BaseStream.Length + packet.BaseStream.Length];
+            var size = (ushort) (metaWriter.BaseStream.Length + packet.BaseStream.Length);
+            data[0] = (byte) (size % 0x100);
+            data[1] = (byte)(((size / 0x100) & 0b00000001) | status);
+            metaWriter.BaseStream.Seek(0, SeekOrigin.Begin);
+            metaWriter.BaseStream.Read(data, 2 , (int) metaWriter.BaseStream.Length);
+            packet.BaseStream.Seek(0, SeekOrigin.Begin);
+            packet.BaseStream.Read(data, 2 + (int) metaWriter.BaseStream.Length, (int) packet.BaseStream.Length);
 
             if (data.Length > 490)
             {

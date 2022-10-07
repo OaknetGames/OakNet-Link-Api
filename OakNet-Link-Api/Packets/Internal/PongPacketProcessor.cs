@@ -10,7 +10,7 @@ namespace OakNetLink.Api.Packets
         public override PacketBase ProcessPacket(PacketBase packet, OakNetEndPoint endpoint)
         {
             var pongPacket = (PongPacket) packet;
-            endpoint.Ping = Environment.TickCount - pongPacket.timestamp;
+            endpoint.Ping = Environment.TickCount - pongPacket.Timestamp;
             return null;
         }
     }

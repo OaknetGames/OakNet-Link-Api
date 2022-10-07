@@ -21,7 +21,7 @@ namespace OakNetLink.Api.Communication
         // ManagerServer endpoint
         public static OakNetEndPoint ManagerServerEndpoint { get; internal set; }
 
-        public static Guid ownID;
+        public static Guid ownID = Guid.NewGuid();
 
         public static OakNetEndPoint GetEndPoint(Guid uid)
         {
@@ -45,7 +45,10 @@ namespace OakNetLink.Api.Communication
             }
 
             if (MasterServerEndpoint?.IpAddress.Equals(iPAddress)==true && MasterServerEndpoint?.Port == port)
+            {
+                MasterServerEndpoint.PeerID = peerID;
                 return MasterServerEndpoint;
+            }
 
             if (ManagerServerEndpoint?.IpAddress.Equals(iPAddress) == true && ManagerServerEndpoint?.Port == port)
                 return MasterServerEndpoint;

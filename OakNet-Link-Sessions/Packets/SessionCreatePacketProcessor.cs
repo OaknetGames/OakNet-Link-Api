@@ -16,12 +16,12 @@ namespace OakNetLink.Sessions.Packets
                 return null;
             if (SessionManager.CreateNewSession(sessionCreatePacket.SessionName, sessionCreatePacket.SessionPassword, sessionCreatePacket.Payload, endpoint))
             {
-                Logger.log(endpoint.IpAddress.ToString() + " created new Session: " + sessionCreatePacket.SessionName);
+                Logger.log(endpoint.PeerID + " created new Session: " + sessionCreatePacket.SessionName);
                 return new SessionCreateResponsePacket() { responseMessage = "Success" };
             }
             else
             {
-                Logger.log(endpoint.IpAddress.ToString() + " tried creating a new Session: " + sessionCreatePacket.SessionName + " but it already existed.");
+                Logger.log(endpoint.PeerID + " tried creating a new Session: " + sessionCreatePacket.SessionName + " but it already existed.");
                 return new SessionCreateResponsePacket() { responseMessage = "SessionAlreadyExists" };
             }
         }

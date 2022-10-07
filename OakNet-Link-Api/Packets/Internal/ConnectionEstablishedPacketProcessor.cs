@@ -8,7 +8,7 @@ namespace OakNetLink.Api.Packets.Internal
         {
             endpoint.ConnectionState = ConnectionState.Connected;
             endpoint.tick();
-            ONL.Event.ConnectionEstablished.Invoke(endpoint, null);
+            ONL.Event.ConnectionEstablished?.Invoke(endpoint, null);
             return null;
         }
     }

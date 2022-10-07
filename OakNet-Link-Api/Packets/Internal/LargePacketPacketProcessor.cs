@@ -19,14 +19,14 @@ namespace OakNetLink.Api.Packets.Internal
                     queue.Add(endpoint, new List<LargePacketPacket>());
                 queue[endpoint].Add(largePacketPacket);
             }
-            if (largePacketPacket.lastPacket > 0)
+            if (largePacketPacket.LastPacket > 0)
             {
                 byte[] reAssembledPacketData;
                 lock (queue)
                 {
-                    reAssembledPacketData = queue[endpoint].SelectMany((p) => p.data).ToArray();
+                    reAssembledPacketData = queue[endpoint].SelectMany((p) => p.Data).ToArray();
                 }
-                if (Communicator.instance.isServer && ((largePacketPacket.lastPacket) >> 1) == 1)
+                if (Communicator.instance.isServer && ((largePacketPacket.LastPacket) >> 1) == 1)
                 {
                     if (Communicator.instance.allowBroadcasts)
                     {
@@ -37,7 +37,7 @@ namespace OakNetLink.Api.Packets.Internal
                     }
                 }
                 else
-                    endpoint.handlePacket(reAssembledPacketData, ((largePacketPacket.lastPacket&0x0000000000000010)>>1)==1, true);
+                    endpoint.handlePacket(reAssembledPacketData, ((largePacketPacket.LastPacket&0x0000000000000010)>>1)==1, true);
 
                 lock (queue)
                 {
@@ -59,15 +59,15 @@ namespace OakNetLink.Api.Packets.Internal
             {
                 data = reader.ReadBytes(484);
                 packetToSend = new LargePacketPacket();
-                packetToSend.data = data;
-                packetToSend.lastPacket = 0;
+                packetToSend.Data = data;
+                packetToSend.LastPacket = 0;
                 Communicator.instance.sendPacket(PacketProcessor.EncodePacket(packetToSend), receiver, broadcast, true, false);
                 i += 484;
             }
             data = reader.ReadBytes((int)(reader.BaseStream.Length - i));
             packetToSend = new LargePacketPacket();
-            packetToSend.data = data;
-            packetToSend.lastPacket = (short)(((broadcast ? 1 : 0) << 1) + 1);
+            packetToSend.Data = data;
+            packetToSend.LastPacket = (short)(((broadcast ? 1 : 0) << 1) + 1);
             Communicator.instance.sendPacket(PacketProcessor.EncodePacket(packetToSend), receiver, broadcast, true, false);
         }
     }

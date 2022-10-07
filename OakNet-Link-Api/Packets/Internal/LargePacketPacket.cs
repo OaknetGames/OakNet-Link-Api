@@ -7,7 +7,7 @@ namespace OakNetLink.Api.Packets.Internal
 {
     internal class LargePacketPacket : PacketBase
     {
-        public byte[] data;
-        public short lastPacket;
+        public byte[] Data { get; set; }
+        public short LastPacket { get; set; }
     }
 }

@@ -6,6 +6,6 @@ namespace OakNetLink.Api.Packets
 {
     internal class PingPacket : PacketBase
     {
-        public int timestamp;
+        public int Timestamp { get; set; }
     }
 }

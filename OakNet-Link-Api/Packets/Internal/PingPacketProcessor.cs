@@ -12,7 +12,7 @@ namespace OakNetLink.Api.Packets
         {
             var pingPacket = (PingPacket)packet;
             var pongPacket = new PongPacket();
-            pongPacket.timestamp = pingPacket.timestamp;
+            pongPacket.Timestamp = pingPacket.Timestamp;
             return pongPacket;
         }
     }
