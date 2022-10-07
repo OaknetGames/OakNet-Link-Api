@@ -70,6 +70,11 @@ namespace OakNetLink.Sessions
             return SessionManager.AvailableSessions;
         }
 
+        public static Session? ActiveSession()
+        {
+            return SessionManager.ActiveSession;
+        }
+
         public static void FetchSessions()
         {
             SessionManager.FetchSessions();
@@ -84,10 +89,11 @@ namespace OakNetLink.Sessions
             Communicator.instance.sendPacket(PacketProcessor.EncodePacket(createSessionPacket), ONL.MasterServer.EndPoint, false, true, false);
         }
 
-        public static void JoinSession(string name, string password)
+        public static void JoinSession(Session session, string password)
         {
+            SessionManager.TrialSession = session;
             var sessionJoinRequestPacket = new SessionJoinRequestPacket();
-            sessionJoinRequestPacket.SessionName = name.Replace(";", "_");
+            sessionJoinRequestPacket.SessionName = session.Name.Replace(";", "_");
             sessionJoinRequestPacket.SessionPassword = password;
             Communicator.instance.sendPacket(PacketProcessor.EncodePacket(sessionJoinRequestPacket), ONL.MasterServer.EndPoint, false, true, false);
         }

@@ -16,6 +16,7 @@ namespace OakNetLink.Sessions
 
         static List<Session> sessions = new List<Session>();
 
+        public static Session? TrialSession { get; set; }
         public static Session? ActiveSession { get; set; }
 
         public static void FetchSessions()

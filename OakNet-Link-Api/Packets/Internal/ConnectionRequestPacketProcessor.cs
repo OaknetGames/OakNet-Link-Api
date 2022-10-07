@@ -12,11 +12,13 @@ namespace OakNetLink.Api.Packets.Internal
             if (request == null) return null;
 
             var response = new ConnectionEstablishedPacket();
-            var args = new ONL.Event.ConnectionRequestEventArgs(endpoint.PeerID);
-            ONL.Event.ConnectionRequest(endpoint, args);
-            if (!args.accepted)
-                return null;
-
+            if(ONL.Event.ConnectionRequest != null)
+            {
+                var args = new ONL.Event.ConnectionRequestEventArgs(endpoint.PeerID);
+                ONL.Event.ConnectionRequest.Invoke(endpoint, args);
+                if (!args.accepted)
+                    return null;
+            }
             if (Communicator.instance.isServer)
             {
                 endpoint.ConnectionState = ConnectionState.Connected;

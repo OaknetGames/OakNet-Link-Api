@@ -20,17 +20,24 @@ namespace OakNetLink.Sessions.Packets
                 SessionsPlugin.Event.SessionJoinDenied?.Invoke(sessionJoinRequestResponsePacket?.ResponseMessage, EventArgs.Empty);
                 return null;
             }
-           
-            var endpoints = sessionJoinRequestResponsePacket?.Endpoints?.Split(';');
-            if(endpoints!= null)
-                foreach(var endpointData in endpoints)
-                {
-                    var ipAddress = endpointData.Substring(0, endpointData.LastIndexOf(":"));
-                    var port = endpointData.Split(':').Last();
-                    //var newEndpoint = OakNetEndPointManager.Notify(IPAddress.Parse(ipAddress), Convert.ToInt32(port));
-                    //newEndpoint.ConnectionState = ConnectionState.Connecting;
-                    //newEndpoint.tick();
-                }
+
+            SessionManager.ActiveSession = SessionManager.TrialSession;
+            SessionManager.TrialSession = null;
+
+            var endpoints = sessionJoinRequestResponsePacket!.endpointsData!;
+            var reader = new BinaryReader(new MemoryStream(endpoints));
+            var count = reader.ReadInt32();
+            for (int i = 0; i < count; i++)
+            {
+                var address = new IPAddress(reader.ReadBytes(4));
+                var port = reader.ReadInt32();
+                var guid = new Guid(reader.ReadBytes(16));
+
+                var newEndpoint = OakNetEndPointManager.Notify(address, port, guid);
+                newEndpoint.ConnectionState = ConnectionState.Connecting;
+                newEndpoint.tick();
+                SessionManager.ActiveSession!.oakNetEndPoints.Add(newEndpoint);
+            }
             SessionsPlugin.Event.SessionJoinSuccess?.Invoke(null, EventArgs.Empty);
             return null;
         }

@@ -15,11 +15,15 @@ namespace OakNetLink.Sessions.Packets
             var sessionMemberConnectedPacket = packet as SessionMemberConnectedPacket;
             if (sessionMemberConnectedPacket == null)
                 return null;
-            var address = IPAddress.Parse(sessionMemberConnectedPacket.ConnectedMember.Substring(0, sessionMemberConnectedPacket.ConnectedMember.LastIndexOf(":")));
-            var port = Convert.ToInt32(sessionMemberConnectedPacket.ConnectedMember.Split(':').Last());
-            //var newEndpoint = OakNetEndPointManager.Notify(address, port);
-            //newEndpoint.ConnectionState = ConnectionState.Connecting;
-            //newEndpoint.tick();
+            var meberData = sessionMemberConnectedPacket!.memberData!;
+            var reader = new BinaryReader(new MemoryStream(meberData));
+
+            var address = new IPAddress(reader.ReadBytes(4));
+            var port = reader.ReadInt32();
+            var guid = new Guid(reader.ReadBytes(16));
+            var newEndpoint = OakNetEndPointManager.Notify(address, port, guid);
+            newEndpoint.ConnectionState = ConnectionState.Connecting;
+            newEndpoint.tick();
             return null;
         }
     }

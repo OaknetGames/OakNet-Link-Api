@@ -23,19 +23,28 @@ namespace OakNetLink.Sessions.Packets
             if(session.Password != sessionJoinRequestPacket.SessionPassword)
                 return new SessionJoinRequestResponsePacket() { ResponseMessage = "WrongPassword" };
 
-            var peers = session.OakNetEndPoints.FirstOrDefault().IpAddress + ":" + session.OakNetEndPoints.FirstOrDefault().Port;
-            foreach (var sessionPeer in session.OakNetEndPoints.Skip(1))
+            var writerSessionJoinRequestResponsePacket = new BinaryWriter(new MemoryStream());
+            writerSessionJoinRequestResponsePacket.Write(session.OakNetEndPoints.Count());
+            foreach (var sessionPeer in session.OakNetEndPoints)
             {
-                peers += ";" + sessionPeer.IpAddress + ":" + sessionPeer.Port;
+                writerSessionJoinRequestResponsePacket.Write(sessionPeer.IpAddress.GetAddressBytes());
+                writerSessionJoinRequestResponsePacket.Write(sessionPeer.Port);
+                writerSessionJoinRequestResponsePacket.Write(sessionPeer.PeerID.ToByteArray());
+
             }
+            var writerMemberJoinedPacket = new BinaryWriter(new MemoryStream());
+            writerMemberJoinedPacket.Write(endpoint.IpAddress.GetAddressBytes());
+            writerMemberJoinedPacket.Write(endpoint.Port);
+            writerMemberJoinedPacket.Write(endpoint.PeerID.ToByteArray());
 
             foreach (var sessionPeer in session.OakNetEndPoints)
             {
-                var memberJoinedPacket = new SessionMemberConnectedPacket() { ConnectedMember = $"{endpoint.IpAddress.ToString()}:{endpoint.Port}" };
+                
+                var memberJoinedPacket = new SessionMemberConnectedPacket() { memberData=((MemoryStream) writerMemberJoinedPacket.BaseStream).ToArray() };
                 Communicator.instance.sendPacket(PacketProcessor.EncodePacket(memberJoinedPacket), sessionPeer, false, true, false);
             }
             session.oakNetEndPoints.Add(endpoint);
-            return new SessionJoinRequestResponsePacket() { ResponseMessage = "Success", Endpoints = peers };
+            return new SessionJoinRequestResponsePacket() { ResponseMessage = "Success", endpointsData = ((MemoryStream)writerSessionJoinRequestResponsePacket.BaseStream).ToArray() };
         }
     }
 }

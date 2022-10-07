@@ -7,6 +7,6 @@ namespace OakNetLink.Sessions.Packets
 {
     internal class SessionMemberConnectedPacket : PacketBase
     {
-        public string? ConnectedMember { get; set; }
+        public byte[]? memberData { get; set; } 
     }
 }
