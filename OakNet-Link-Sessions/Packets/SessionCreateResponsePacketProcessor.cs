@@ -16,12 +16,12 @@ namespace OakNetLink.Sessions.Packets
 
             if(sessionCreateResponsePacket?.responseMessage != "Success")
             {
-                SessionManager.ActiveSession = SessionManager.TrialSession;
                 SessionManager.TrialSession = null;
                 SessionsPlugin.Event.SessionCreationFailed?.Invoke(sessionCreateResponsePacket?.responseMessage, EventArgs.Empty);
             }
             else
             {
+                SessionManager.ActiveSession = SessionManager.TrialSession;
                 SessionManager.TrialSession = null;
                 SessionsPlugin.Event.SessionCreationSuccess?.Invoke(null, EventArgs.Empty);
             }
