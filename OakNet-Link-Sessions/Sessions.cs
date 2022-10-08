@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using OakNetLink.Api;
+using OakNet_Link_Sessions.Packets;
 
 namespace OakNetLink.Sessions
 {
@@ -16,7 +17,7 @@ namespace OakNetLink.Sessions
         {
             ONL.Event.Disconnection += (sender, args) => {
                 if (args is ONL.Event.DisconnectEventArgs disargs)
-                    SessionManager.EndPointDisconnected(disargs.endpoint);
+                    SessionManager.EndPointLeft(disargs.endpoint);
             };
         }
 
@@ -31,6 +32,7 @@ namespace OakNetLink.Sessions
             result.Add(typeof(SessionJoinRequestPacket), typeof(SessionJoinRequestPacketProcessor));
             result.Add(typeof(SessionJoinRequestResponsePacket), typeof(SessionJoinRequestResponsePacketProcessor));
             result.Add(typeof(SessionMemberConnectedPacket), typeof(SessionMemberConnectedPacketProcessor));
+            result.Add(typeof(SessionLeftPacket), typeof(SessionLeftPacketProcessor));
             return result;
         }
 
@@ -101,6 +103,13 @@ namespace OakNetLink.Sessions
             sessionJoinRequestPacket.SessionName = session.Name.Replace(";", "_");
             sessionJoinRequestPacket.SessionPassword = password;
             Communicator.instance.sendPacket(PacketProcessor.EncodePacket(sessionJoinRequestPacket), ONL.MasterServer.EndPoint, false, true, false);
+        }
+
+        public static void leaveActiveSession(string msg = "Left Session")
+        {
+            ActiveSession()?.oakNetEndPoints.ForEach(p => { p.Disconnect(msg); });
+            var sessionLeftPacket = new SessionLeftPacket();
+            ONL.MasterServer.SendPacket(sessionLeftPacket, true);
         }
 
         /// <summary>

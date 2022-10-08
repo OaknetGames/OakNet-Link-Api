@@ -43,6 +43,18 @@ namespace OakNetLink.Api.Communication
             ONL.Endpoint.SendPacket(packet, this, reliable);
         }
 
+        public void Disconnect(string message)
+        {
+            var disconnectPacket = new DisconnectPacket();
+            disconnectPacket.Message = message;
+            sendPacket(disconnectPacket, false);
+            ConnectionState = ConnectionState.Disconnected;
+            tick();
+            OakNetEndPointManager.remove(this);
+            var args = new ONL.Event.DisconnectEventArgs(this, message);
+            ONL.Event.Disconnection?.Invoke(this, args);
+        }
+
         internal void addReliableIn(int reliableId, byte[] buffer, bool broadcast)
         {
             lock (reliableInQueue) 

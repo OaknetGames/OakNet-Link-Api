@@ -1,16 +1,19 @@
 ﻿using OakNetLink.Api.Communication;
+using OakNetLink.Api.Packets;
+using OakNetLink.Sessions;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
-namespace OakNetLink.Api.Packets.Internal
+namespace OakNet_Link_Sessions.Packets
 {
-    internal class DisconnectPacketProcessor : PacketProcessor
+    public class SessionLeftPacketProcessor : PacketProcessor
     {
         public override PacketBase ProcessPacket(PacketBase packet, OakNetEndPoint endpoint)
         {
-            var disconnectPacket = packet as DisconnectPacket;
-            endpoint.Disconnect(disconnectPacket.Message);
+            SessionManager.EndPointLeft(endpoint);
             return null;
         }
     }

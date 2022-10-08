@@ -35,7 +35,7 @@ namespace OakNetLink.Sessions
             return true;
         }
         
-        public static void EndPointDisconnected(OakNetEndPoint endPoint)
+        public static void EndPointLeft(OakNetEndPoint endPoint)
         {
             foreach(var session in sessions.ToList())
             {

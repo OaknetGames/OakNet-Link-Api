@@ -157,7 +157,7 @@ namespace OakNetLink.Api.Communication
                             return;
                         if (DateTime.Now - endPoint.lastReceived > TimeSpan.FromSeconds(3))
                         {
-                            disconnect(endPoint, "Timed out!");
+                            endPoint.Disconnect("Timed out!");
                         }
                     }
                 }
@@ -256,15 +256,7 @@ namespace OakNetLink.Api.Communication
 
             // Verify sent Bytes
             if (bytesSend != data.Length)
-                disconnect(endPoint, "Send wrong number of bytes");
-        }
-
-        internal void disconnect(OakNetEndPoint endPoint, string reason)
-        {
-            endPoint.ConnectionState = ConnectionState.Disconnected;
-            endPoint.tick();
-            OakNetEndPointManager.remove(endPoint);
-            ONL.Event.Disconnection?.Invoke(null, new ONL.Event.DisconnectEventArgs(endPoint, reason));
+                endPoint.Disconnect("Send wrong number of bytes");
         }
     }
 }

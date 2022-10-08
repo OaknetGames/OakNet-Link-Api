@@ -86,15 +86,5 @@ namespace OakNetLink.Api.Communication
                     endPoints.Remove(endPoints.Where((kp) => kp.Value == endpoint).FirstOrDefault().Key);
             }
         }
-
-        //TODO is this relevant? This layer should have nothing to do with sessions...
-        public static void Update()
-        {
-            if(endPoints.Count==0)
-            {
-                // TODO Are we alone in the Session?
-            }
-        }
-
     }
 }
