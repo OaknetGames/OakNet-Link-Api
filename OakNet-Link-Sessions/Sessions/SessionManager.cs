@@ -24,12 +24,12 @@ namespace OakNetLink.Sessions
             Communicator.instance.sendPacket(PacketProcessor.EncodePacket(new SessionFetchListPacket()), OakNetEndPointManager.MasterServerEndpoint, false, true, false);
          }
 
-        public static bool CreateNewSession(string name, string password, byte[]? payload, OakNetEndPoint creator)
+        public static bool CreateNewSession(string name, string password, int maxPlayers, byte[]? payload, OakNetEndPoint creator)
         {
             if (sessions.Any((session) => session.Name == name))
                 return false;
 
-            var newSession = new Session() { Name = name, Password = password, HasPassword = password != "",  Payload = payload };
+            var newSession = new Session() { Name = name, Password = password, MaxPlayers = maxPlayers, HasPassword = password != "",  Payload = payload };
             newSession.oakNetEndPoints.Add(creator);
             sessions.Add(newSession);
             return true;
@@ -39,6 +39,10 @@ namespace OakNetLink.Sessions
         {
             foreach(var session in sessions.ToList())
             {
+                if(session == ActiveSession && session.oakNetEndPoints.Contains(endPoint))
+                    ActiveSession.CurrentPlayerCount--;
+                
+                
                 if (session.oakNetEndPoints.Contains(endPoint))
                     session.oakNetEndPoints.Remove(endPoint);
                 

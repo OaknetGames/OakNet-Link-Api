@@ -20,7 +20,11 @@ namespace OakNetLink.Sessions.Packets
             if (session == null)
                 return new SessionJoinRequestResponsePacket() { ResponseMessage = "SessionNotFound" };
 
-            if(session.Password != sessionJoinRequestPacket.SessionPassword)
+            if(session.MaxPlayers == session.CurrentPlayerCount)
+                return new SessionJoinRequestResponsePacket() { ResponseMessage = "SessionFull" };
+
+
+            if (session.Password != sessionJoinRequestPacket.SessionPassword)
                 return new SessionJoinRequestResponsePacket() { ResponseMessage = "WrongPassword" };
 
             var writerSessionJoinRequestResponsePacket = new BinaryWriter(new MemoryStream());
@@ -44,6 +48,7 @@ namespace OakNetLink.Sessions.Packets
                 Communicator.instance.sendPacket(PacketProcessor.EncodePacket(memberJoinedPacket), sessionPeer, false, true, false);
             }
             session.oakNetEndPoints.Add(endpoint);
+            session.CurrentPlayerCount++;
             return new SessionJoinRequestResponsePacket() { ResponseMessage = "Success", endpointsData = ((MemoryStream)writerSessionJoinRequestResponsePacket.BaseStream).ToArray() };
         }
     }

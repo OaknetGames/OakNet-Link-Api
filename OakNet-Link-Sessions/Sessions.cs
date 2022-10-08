@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using OakNetLink.Api;
-using OakNet_Link_Sessions.Packets;
+using OakNetLink.Sessions.Packets;
 
 namespace OakNetLink.Sessions
 {
@@ -82,15 +82,17 @@ namespace OakNetLink.Sessions
             SessionManager.FetchSessions();
         }
 
-        public static void CreateNewSession(string name, string password, byte[] payload)
+        public static void CreateNewSession(string name, string password, int maxPlayers, byte[] payload)
         {
             var createSessionPacket = new SessionCreatePacket();
             createSessionPacket.SessionName = name.Replace(";", "_");
             createSessionPacket.SessionPassword = password;
+            createSessionPacket.MaxPlayers = maxPlayers;
             createSessionPacket.Payload = payload;
             var session = new Session();
             session.Name = name;
             session.Password = password;
+            session.MaxPlayers = maxPlayers;
             session.Payload = payload;
             SessionManager.TrialSession  = session;
             Communicator.instance.sendPacket(PacketProcessor.EncodePacket(createSessionPacket), ONL.MasterServer.EndPoint, false, true, false);
@@ -110,6 +112,7 @@ namespace OakNetLink.Sessions
             ActiveSession()?.oakNetEndPoints.ForEach(p => { p.Disconnect(msg); });
             var sessionLeftPacket = new SessionLeftPacket();
             ONL.MasterServer.SendPacket(sessionLeftPacket, true);
+            SessionManager.ActiveSession = null;
         }
 
         /// <summary>

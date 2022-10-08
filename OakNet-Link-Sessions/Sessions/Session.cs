@@ -10,6 +10,8 @@ namespace OakNetLink.Sessions
     {
         public string Name { get; internal set; } = "";
         public string Password { get; internal set; } = "";
+        public int CurrentPlayerCount { get; internal set; }
+        public int MaxPlayers { get; internal set; }
         public byte[] Payload { get; internal set; } = new byte[0];
         public bool HasPassword { get; internal set; } = false;
 

@@ -15,6 +15,8 @@ namespace OakNetLink.Sessions.Packets
             var sessionMemberConnectedPacket = packet as SessionMemberConnectedPacket;
             if (sessionMemberConnectedPacket == null)
                 return null;
+            if(SessionManager.ActiveSession == null) 
+                return new SessionLeftPacket();
             var meberData = sessionMemberConnectedPacket!.memberData!;
             var reader = new BinaryReader(new MemoryStream(meberData));
 
@@ -24,7 +26,8 @@ namespace OakNetLink.Sessions.Packets
             var newEndpoint = OakNetEndPointManager.Notify(address, port, guid);
             newEndpoint.ConnectionState = ConnectionState.Connecting;
             newEndpoint.tick();
-            SessionManager.ActiveSession?.oakNetEndPoints.Add(newEndpoint);
+            SessionManager.ActiveSession.oakNetEndPoints.Add(newEndpoint);
+            SessionManager.ActiveSession.CurrentPlayerCount++;
             return null;
         }
     }

@@ -20,6 +20,8 @@ namespace OakNetLink.Sessions.Packets
             {
                 writer.Write(session.Name != null ? session.Name : "");         // Session Name
                 writer.Write(session.HasPassword ? (byte)1 : (byte)0);          // Has Password
+                writer.Write(session.oakNetEndPoints.Count);                    // CurrentPlayers Count
+                writer.Write(session.MaxPlayers);                               // MaxPlayers Count
                 writer.Write(session.Payload!=null? session.Payload.Length : 0);// Payload Length
                 if (session.Payload != null)
                     writer.Write(session.Payload);                              // Payload

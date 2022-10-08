@@ -14,7 +14,7 @@ namespace OakNetLink.Sessions.Packets
             var sessionCreatePacket = packet as SessionCreatePacket;
             if (sessionCreatePacket == null)
                 return null;
-            if (SessionManager.CreateNewSession(sessionCreatePacket.SessionName, sessionCreatePacket.SessionPassword, sessionCreatePacket.Payload, endpoint))
+            if (SessionManager.CreateNewSession(sessionCreatePacket.SessionName, sessionCreatePacket.SessionPassword, sessionCreatePacket.MaxPlayers, sessionCreatePacket.Payload, endpoint))
             {
                 Logger.log(endpoint.PeerID + " created new Session: " + sessionCreatePacket.SessionName);
                 return new SessionCreateResponsePacket() { responseMessage = "Success" };

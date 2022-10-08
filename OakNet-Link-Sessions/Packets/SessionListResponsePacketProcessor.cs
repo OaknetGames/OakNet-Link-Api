@@ -19,6 +19,8 @@ namespace OakNetLink.Sessions.Packets
                 var session = new Session();
                 session.Name = reader.ReadString();
                 session.HasPassword = reader.ReadByte() == 1;
+                session.CurrentPlayerCount = reader.ReadInt32();
+                session.MaxPlayers = reader.ReadInt32();
                 session.Payload = reader.ReadBytes(reader.ReadInt32());
                 SessionManager.AvailableSessions.Add(session);
             }

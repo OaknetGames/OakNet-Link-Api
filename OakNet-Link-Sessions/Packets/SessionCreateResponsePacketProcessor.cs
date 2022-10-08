@@ -22,6 +22,7 @@ namespace OakNetLink.Sessions.Packets
             else
             {
                 SessionManager.ActiveSession = SessionManager.TrialSession;
+                SessionManager.ActiveSession!.CurrentPlayerCount++;
                 SessionManager.TrialSession = null;
                 SessionsPlugin.Event.SessionCreationSuccess?.Invoke(null, EventArgs.Empty);
             }

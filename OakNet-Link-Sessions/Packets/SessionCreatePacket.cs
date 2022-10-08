@@ -9,6 +9,7 @@ namespace OakNetLink.Sessions.Packets
     {
         public string SessionName { get; set; } = "";
         public string SessionPassword { get; set; } = "";
+        public int MaxPlayers { get; set; } 
         public byte[] Payload { get; set; } = new byte[0];
 
     }

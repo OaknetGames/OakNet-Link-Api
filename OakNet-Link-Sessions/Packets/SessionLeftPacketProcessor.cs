@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OakNet_Link_Sessions.Packets
+namespace OakNetLink.Sessions.Packets
 {
     public class SessionLeftPacketProcessor : PacketProcessor
     {
