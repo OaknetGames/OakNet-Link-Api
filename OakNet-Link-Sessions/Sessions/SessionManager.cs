@@ -7,6 +7,7 @@ using OakNetLink.Api.Packets.Internal;
 using OakNetLink.Api.Packets;
 using OakNetLink.Sessions.Packets;
 using OakNetLink.Api;
+using static System.Collections.Specialized.BitVector32;
 
 namespace OakNetLink.Sessions
 {
@@ -37,12 +38,15 @@ namespace OakNetLink.Sessions
         
         public static void EndPointLeft(OakNetEndPoint endPoint)
         {
+            if (ActiveSession!= null && ActiveSession.oakNetEndPoints.Contains(endPoint))
+            {
+                ActiveSession.oakNetEndPoints.Remove(endPoint);
+                ActiveSession.CurrentPlayerCount--;
+                return;
+            }
+
             foreach(var session in sessions.ToList())
             {
-                if(session == ActiveSession && session.oakNetEndPoints.Contains(endPoint))
-                    ActiveSession.CurrentPlayerCount--;
-                
-                
                 if (session.oakNetEndPoints.Contains(endPoint))
                     session.oakNetEndPoints.Remove(endPoint);
                 
