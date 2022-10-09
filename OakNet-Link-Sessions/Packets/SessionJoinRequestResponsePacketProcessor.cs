@@ -38,6 +38,7 @@ namespace OakNetLink.Sessions.Packets
                 newEndpoint.tick();
                 SessionManager.ActiveSession!.oakNetEndPoints.Add(newEndpoint);
             }
+            SessionManager.ActiveSession!.CurrentPlayerCount = count + 1;
             SessionsPlugin.Event.SessionJoinSuccess?.Invoke(null, EventArgs.Empty);
             return null;
         }

@@ -107,9 +107,9 @@ namespace OakNetLink.Sessions
             Communicator.instance.sendPacket(PacketProcessor.EncodePacket(sessionJoinRequestPacket), ONL.MasterServer.EndPoint, false, true, false);
         }
 
-        public static void leaveActiveSession(string msg = "Left Session")
+        public static void LeaveActiveSession(string msg = "Left Session")
         {
-            ActiveSession()?.oakNetEndPoints.ForEach(p => { p.Disconnect(msg); });
+            ActiveSession()?.oakNetEndPoints.ToList().ForEach(p => { p.Disconnect(msg); });
             var sessionLeftPacket = new SessionLeftPacket();
             ONL.MasterServer.SendPacket(sessionLeftPacket, true);
             SessionManager.ActiveSession = null;

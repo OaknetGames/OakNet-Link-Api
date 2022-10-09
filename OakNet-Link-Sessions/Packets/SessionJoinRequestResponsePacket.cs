@@ -7,8 +7,8 @@ namespace OakNetLink.Sessions.Packets
 {
     internal class SessionJoinRequestResponsePacket : PacketBase
     {
-        public string? ResponseMessage { get; set; }
-        public byte[]? endpointsData { get; set; }
+        public string ResponseMessage { get; set; } = "";
+        public byte[] endpointsData { get; set; } = new byte[0];
 
         /***
          * int32 playerCount
