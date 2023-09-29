@@ -1,0 +1,28 @@
+﻿0. silvan.oaknet.link <- 192.168.42.10
+
+0. skylar.oaknet.link <- 192.168.42.32
+192.168.42.0/24
+
+
+
+1. Stranger asks MasterServer to connect to specific IP
+	ClientA -> "TunnelConnectionRequest" -> Master
+
+2.1 If Ip doesn't belongs to a Client Master sends an Error
+	Master -> "TunnelConnectionResponse" -> ClientA
+
+2.2 Ip Exists Request to other Client
+	Master -> "StrangerTunnelConnectionRequest" -> ClientB
+
+3. Other client decides if the connection is allowed
+	ClientB -> "StrangerTunnelConnectionResponse" -> Master
+   If allowed ClientB beginns the holepunch process (Handled by the underlying API)
+	ClientB ==> ClientA 
+
+4. Master tell first Client if connection can be established
+	Master -> "TunnelConnectionResponse" -> ClientA
+   If allowed
+	ClientA ==> ClientB
+
+5. Connection Established
+	ClientA <==> ClientB

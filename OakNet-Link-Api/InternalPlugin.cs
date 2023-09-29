@@ -33,16 +33,16 @@ namespace OakNetLink.Api
             };
         }
 
-   
-        public override Dictionary<Type, Type> registerPackets()
+
+        public override List<Type> registerPackets()
         {
-            var packets = new Dictionary<Type, Type>();
-            packets.Add(typeof(PingPacket), typeof(PingPacketProcessor));
-            packets.Add(typeof(PongPacket), typeof(PongPacketProcessor));
-            packets.Add(typeof(ConnectionRequestPacket), typeof(ConnectionRequestPacketProcessor));
-            packets.Add(typeof(ConnectionEstablishedPacket), typeof(ConnectionEstablishedPacketProcessor));
-            packets.Add(typeof(DisconnectPacket), typeof(DisconnectPacketProcessor));
-            packets.Add(typeof(LargePacketPacket), typeof(LargePacketPacketProcessor));
+            var packets = new List<Type>();
+            packets.Add(typeof(PingPacket));
+            packets.Add(typeof(PongPacket));
+            packets.Add(typeof(ConnectionRequestPacket));
+            packets.Add(typeof(ConnectionEstablishedPacket));
+            packets.Add(typeof(DisconnectPacket));
+            packets.Add(typeof(LargePacketPacket));
             return packets;
         }
     }

@@ -21,6 +21,6 @@ namespace OakNetLink.Api
         *  returns a Dictionary with the key being the type of the packet and 
         *  the value being the type of the corresponding packet processor
         **/
-        public abstract Dictionary<Type, Type> registerPackets();
+        public abstract List<Type> registerPackets();
     }
 }

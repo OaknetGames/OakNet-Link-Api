@@ -11,8 +11,6 @@ namespace OakNetLink.Api.Packets
     public abstract class PacketProcessor 
     {
         //TODO I like singeltons, why isn't this is singleton? 
-        //Key is the PacketID, value the processor type
-        static Dictionary<ushort, Type> _processors = new Dictionary<ushort, Type>();
         //Key is the PacketID, value the packet type
         static Dictionary<ushort, Type> _packets = new Dictionary<ushort, Type>();
 
@@ -20,13 +18,11 @@ namespace OakNetLink.Api.Packets
         /// This method registers a PacketProcessor which is used to
         /// process a specific packet
         /// </summary>
-        /// <param name="processor">The type of the PacketProcessor</param>
         /// <param name="packet">The type of the Packet to process</param>
-        internal static void addPacketProcessor(Type processor, Type packet, ushort id)
+        internal static void addPacket(Type packet, ushort id)
         {
             Logger.log("Registered packet with ID: " + ((id & 0xff00) >> 8) + "." + (id & 0xff));
             _packets.Add(id, packet);
-            _processors.Add(id, processor);
         }
 
         static Type getPacketType(ushort packetID)
@@ -110,7 +106,7 @@ namespace OakNetLink.Api.Packets
         /// <param name="packetData">The data to decode</param>
         /// <param name="client">The client who sent this packet</param>
         /// <returns>A PacketBase which should be returned to the Sender, null if nothing shall be returned</returns>
-        public static PacketBase? DecodePacket(byte[] packetData, OakNetEndPoint client)
+        public static PacketBase DecodePacket(byte[] packetData, OakNetEndPoint client)
         {
             
             var reader = new BinaryReader(new MemoryStream(packetData));
@@ -175,20 +171,8 @@ namespace OakNetLink.Api.Packets
                     continue;
                 }
             }
-
-            Type processorType;
-            if (_processors.TryGetValue(packetId, out processorType))
-                // KnownPacket
-                return ((PacketProcessor)Activator.CreateInstance(processorType)!).ProcessPacket(packet, client);
+            packet.ProcessPacket(client);
             return null;
         }
-        /// <summary>
-        /// This method needs to be overriden by each individual PacketProcessor
-        /// If you want to send a packet back to the sender, your processor can return this packet here
-        /// If you don't want to send a packet back, just return null
-        /// </summary>
-        /// <param name="packet"></param>
-        /// <returns>The packet which should be sent back to the sender, null if nothing should be sent</returns>
-        public abstract PacketBase ProcessPacket(PacketBase packet, OakNetEndPoint endpoint);
     }
 }

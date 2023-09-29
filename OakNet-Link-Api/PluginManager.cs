@@ -18,9 +18,9 @@ namespace OakNetLink.Api
                 plugins.Add(internalPlugin.pluginID, internalPlugin);
                 Logger.log("Registered internal plugin");
                 ushort id_ = (ushort) (internalPlugin.pluginID << 8);
-                foreach (var kvp in internalPlugin.registerPackets())
+                foreach (var packet in internalPlugin.registerPackets())
                 {
-                    PacketProcessor.addPacketProcessor(kvp.Value, kvp.Key, id_++);
+                    PacketProcessor.addPacket(packet, id_++);
                 }
             }
             if (plugins.ContainsKey(plugin.pluginID))
@@ -28,9 +28,9 @@ namespace OakNetLink.Api
             plugins.Add(plugin.pluginID, plugin);
             ushort id = (ushort) (plugin.pluginID << 8);
             Logger.log("Registered plugin with ID: " + plugin.pluginID);
-            foreach (var kvp in plugin.registerPackets())
+            foreach (var packet in plugin.registerPackets())
             {
-                PacketProcessor.addPacketProcessor(kvp.Value, kvp.Key, id++);
+                PacketProcessor.addPacket(packet, id++);
             }
         }
     }

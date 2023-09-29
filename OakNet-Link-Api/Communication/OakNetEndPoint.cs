@@ -15,7 +15,7 @@ namespace OakNetLink.Api.Communication
         internal Dictionary<int, ReliablePacket> reliableOutQueue = new Dictionary<int, ReliablePacket>();
         internal Dictionary<int, ReliablePacket> reliableInQueue = new Dictionary<int, ReliablePacket>();
         internal DateTime lastReceived;
-        internal List<ONLPlugin> semaphore;
+        //internal List<ONLPlugin> semaphore;
 
         int reliableInId = 0;
         int reliableOutId = 0;

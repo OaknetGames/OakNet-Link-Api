@@ -29,7 +29,7 @@ namespace OakNetLink.Api.Communication
             isServer = server;
             this.allowBroadcasts = allowBroadcasts;
             udpClient = new UdpClient(AddressFamily.InterNetwork);
-            IPEndPoint localEndPoint = new IPEndPoint(IPAddress.Any, port);
+            var localEndPoint = new IPEndPoint(IPAddress.Any, port);
             udpClient.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
             //FIX FOR MICROSOFT STUPIDNESS
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
@@ -47,7 +47,7 @@ namespace OakNetLink.Api.Communication
                 while (true)
                 {
                     //IPEndPoint object will allow us to read datagrams sent from any source.
-                    IPEndPoint remoteIpEndPoint = new IPEndPoint(IPAddress.Any, 0);
+                    var remoteIpEndPoint = new IPEndPoint(IPAddress.Any, 0);
 
                     byte[] buffer = new byte[0];
                     try
@@ -204,7 +204,7 @@ namespace OakNetLink.Api.Communication
 
             if (data.Length > 490)
             {
-                LargePacketPacketProcessor.MakeLargePacket(new BinaryReader(new MemoryStream(data)), receiver, broadcast);
+                LargePacketPacket.MakeLargePacket(new BinaryReader(new MemoryStream(data)), receiver, broadcast);
                 return;
             }
 
@@ -230,7 +230,7 @@ namespace OakNetLink.Api.Communication
 
         internal void ackReliable(int id, OakNetEndPoint endPoint)
         {
-            BinaryWriter writer = new BinaryWriter(new MemoryStream());
+            var writer = new BinaryWriter(new MemoryStream());
             writer.Write(id);
             sendPacket(writer, endPoint, false, false, true);
         }

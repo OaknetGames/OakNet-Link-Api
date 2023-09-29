@@ -7,7 +7,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using OakNetLink.Api;
-using OakNetLink.Sessions.Packets;
 
 namespace OakNetLink.Sessions
 {
@@ -22,17 +21,17 @@ namespace OakNetLink.Sessions
         }
 
 
-        public override Dictionary<Type, Type> registerPackets()
+        public override List<Type> registerPackets()
         {
-            var result = new Dictionary<Type, Type>();
-            result.Add(typeof(SessionCreatePacket), typeof(SessionCreatePacketProcessor));
-            result.Add(typeof(SessionCreateResponsePacket), typeof(SessionCreateResponsePacketProcessor));
-            result.Add(typeof(SessionFetchListPacket), typeof(SessionFetchListPacketProcessor));
-            result.Add(typeof(SessionListResponsePacket), typeof(SessionListResponsePacketProcessor));
-            result.Add(typeof(SessionJoinRequestPacket), typeof(SessionJoinRequestPacketProcessor));
-            result.Add(typeof(SessionJoinRequestResponsePacket), typeof(SessionJoinRequestResponsePacketProcessor));
-            result.Add(typeof(SessionMemberConnectedPacket), typeof(SessionMemberConnectedPacketProcessor));
-            result.Add(typeof(SessionLeftPacket), typeof(SessionLeftPacketProcessor));
+            var result = new List<Type>();
+            result.Add(typeof(SessionCreatePacket));
+            result.Add(typeof(SessionCreateResponsePacket));
+            result.Add(typeof(SessionFetchListPacket));
+            result.Add(typeof(SessionListResponsePacket));
+            result.Add(typeof(SessionJoinRequestPacket));
+            result.Add(typeof(SessionJoinRequestResponsePacket));
+            result.Add(typeof(SessionMemberConnectedPacket));
+            result.Add(typeof(SessionLeftPacket));
             return result;
         }
 

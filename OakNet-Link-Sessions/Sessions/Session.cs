@@ -12,7 +12,7 @@ namespace OakNetLink.Sessions
         public string Password { get; internal set; } = "";
         public int CurrentPlayerCount { get; internal set; }
         public int MaxPlayers { get; internal set; }
-        public byte[] Payload { get; internal set; } = new byte[0];
+        public byte[]? Payload { get; internal set; } = new byte[0];
         public bool HasPassword { get; internal set; } = false;
 
         internal List<OakNetEndPoint> oakNetEndPoints = new List<OakNetEndPoint>();
