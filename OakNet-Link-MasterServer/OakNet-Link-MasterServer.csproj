@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\OakNet-Link-Api\OakNet-Link-API.csproj" />
+    <ProjectReference Include="..\OakNet-Link-Api\OakNet-Link-Api.csproj" />
     <ProjectReference Include="..\OakNet-Link-Sessions\OakNet-Link-Sessions.csproj" />
   </ItemGroup>
 
