@@ -171,8 +171,7 @@ namespace OakNetLink.Api.Packets
                     continue;
                 }
             }
-            packet.ProcessPacket(client);
-            return null;
+            return packet.ProcessPacket(client);
         }
     }
 }
