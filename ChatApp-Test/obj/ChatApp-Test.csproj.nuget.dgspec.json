@@ -1,0 +1,190 @@
+{
+  "format": 1,
+  "restore": {
+    "C:\\Users\\Skylar\\Desktop\\Projects\\OakNet\\ChatApp-Test\\ChatApp-Test.csproj": {}
+  },
+  "projects": {
+    "C:\\Users\\Skylar\\Desktop\\Projects\\OakNet\\ChatApp-Test\\ChatApp-Test.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\Skylar\\Desktop\\Projects\\OakNet\\ChatApp-Test\\ChatApp-Test.csproj",
+        "projectName": "ChatApp-Test",
+        "projectPath": "C:\\Users\\Skylar\\Desktop\\Projects\\OakNet\\ChatApp-Test\\ChatApp-Test.csproj",
+        "packagesPath": "C:\\Users\\Skylar\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Skylar\\Desktop\\Projects\\OakNet\\ChatApp-Test\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\Skylar\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {
+              "C:\\Users\\Skylar\\Desktop\\Projects\\OakNet\\OakNet-Link-Api\\OakNet-Link-API.csproj": {
+                "projectPath": "C:\\Users\\Skylar\\Desktop\\Projects\\OakNet\\OakNet-Link-Api\\OakNet-Link-API.csproj"
+              },
+              "C:\\Users\\Skylar\\Desktop\\Projects\\OakNet\\OakNet-Link-Sessions\\OakNet-Link-Sessions.csproj": {
+                "projectPath": "C:\\Users\\Skylar\\Desktop\\Projects\\OakNet\\OakNet-Link-Sessions\\OakNet-Link-Sessions.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.401\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Users\\Skylar\\Desktop\\Projects\\OakNet\\OakNet-Link-Api\\OakNet-Link-API.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\Skylar\\Desktop\\Projects\\OakNet\\OakNet-Link-Api\\OakNet-Link-API.csproj",
+        "projectName": "OakNet-Link-API",
+        "projectPath": "C:\\Users\\Skylar\\Desktop\\Projects\\OakNet\\OakNet-Link-Api\\OakNet-Link-API.csproj",
+        "packagesPath": "C:\\Users\\Skylar\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Skylar\\Desktop\\Projects\\OakNet\\OakNet-Link-Api\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\Skylar\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "dependencies": {
+            "System.Runtime": {
+              "target": "Package",
+              "version": "[4.3.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.401\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Users\\Skylar\\Desktop\\Projects\\OakNet\\OakNet-Link-Sessions\\OakNet-Link-Sessions.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\Skylar\\Desktop\\Projects\\OakNet\\OakNet-Link-Sessions\\OakNet-Link-Sessions.csproj",
+        "projectName": "OakNet-Link-Sessions",
+        "projectPath": "C:\\Users\\Skylar\\Desktop\\Projects\\OakNet\\OakNet-Link-Sessions\\OakNet-Link-Sessions.csproj",
+        "packagesPath": "C:\\Users\\Skylar\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Skylar\\Desktop\\Projects\\OakNet\\OakNet-Link-Sessions\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\Skylar\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {
+              "C:\\Users\\Skylar\\Desktop\\Projects\\OakNet\\OakNet-Link-Api\\OakNet-Link-Api.csproj": {
+                "projectPath": "C:\\Users\\Skylar\\Desktop\\Projects\\OakNet\\OakNet-Link-Api\\OakNet-Link-Api.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.401\\RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}
