@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OakNet-Link-Tunnel", "OakNe
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OakNet-Link-WinTunDriver", "OakNet-Link-WinTunDriver\OakNet-Link-WinTunDriver.vcxproj", "{65BD2428-DE5F-42FF-9B94-BD4008219254}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatApp-Test", "ChatApp-Test\ChatApp-Test.csproj", "{DA3E4DF6-0656-4659-BBDD-32D457C3C2C4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -83,6 +85,18 @@ Global
 		{65BD2428-DE5F-42FF-9B94-BD4008219254}.Release|x64.Build.0 = Release|x64
 		{65BD2428-DE5F-42FF-9B94-BD4008219254}.Release|x86.ActiveCfg = Release|Win32
 		{65BD2428-DE5F-42FF-9B94-BD4008219254}.Release|x86.Build.0 = Release|Win32
+		{DA3E4DF6-0656-4659-BBDD-32D457C3C2C4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DA3E4DF6-0656-4659-BBDD-32D457C3C2C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DA3E4DF6-0656-4659-BBDD-32D457C3C2C4}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{DA3E4DF6-0656-4659-BBDD-32D457C3C2C4}.Debug|x64.Build.0 = Debug|Any CPU
+		{DA3E4DF6-0656-4659-BBDD-32D457C3C2C4}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{DA3E4DF6-0656-4659-BBDD-32D457C3C2C4}.Debug|x86.Build.0 = Debug|Any CPU
+		{DA3E4DF6-0656-4659-BBDD-32D457C3C2C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DA3E4DF6-0656-4659-BBDD-32D457C3C2C4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DA3E4DF6-0656-4659-BBDD-32D457C3C2C4}.Release|x64.ActiveCfg = Release|Any CPU
+		{DA3E4DF6-0656-4659-BBDD-32D457C3C2C4}.Release|x64.Build.0 = Release|Any CPU
+		{DA3E4DF6-0656-4659-BBDD-32D457C3C2C4}.Release|x86.ActiveCfg = Release|Any CPU
+		{DA3E4DF6-0656-4659-BBDD-32D457C3C2C4}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
